@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" layout="admin-2columns-left">
+    <update handle="editor"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Smile\Retailer\Block\Adminhtml\Retailer\Edit" name="smile.retailer.retailer.edit"/>
+        </referenceContainer>
+
+        <referenceContainer name="left">
+            <block class="Smile\Retailer\Block\Adminhtml\Retailer\Edit\Tabs" name="smile.retailer.retailer.edit.tabs" />
+        </referenceContainer>
+
+        <referenceContainer name="page.main.actions">
+            <block class="Magento\Backend\Block\Store\Switcher" name="store_switcher">
+                <action method="setUseConfirm">
+                    <argument name="params" xsi:type="string">1</argument>
+                </action>
+            </block>
+        </referenceContainer>
+
+        <referenceContainer name="js">
+            <block class="Magento\Framework\View\Element\Template" template="Magento_Catalog::catalog/wysiwyg/js.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

@@ -15,7 +15,7 @@
         <item name="buttons" xsi:type="array">
             <item name="add" xsi:type="array">
                 <item name="name" xsi:type="string">add</item>
-                <item name="label" xsi:type="string" translate="true">Add New Page</item>
+                <item name="label" xsi:type="string" translate="true">Add New Retailer</item>
                 <item name="class" xsi:type="string">primary</item>
                 <item name="url" xsi:type="string">*/*/new</item>
             </item>
@@ -65,7 +65,7 @@
             </argument>
             <filterSelect name="store_id">
                 <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Smile\Retailer\Ui\Component\Listing\Column\Cms\Options</argument>
+                    <argument name="class" xsi:type="string">Smile\Retailer\Ui\Component\Listing\Column\Retailer\Options</argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
