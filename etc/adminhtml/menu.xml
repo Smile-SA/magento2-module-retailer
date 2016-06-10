@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+
+        <!-- Manage Retailers -->
+        <add id="Smile_Retailer::retailers"
+             title="Retailers"
+             module="Smile_Retailer"
+             sortOrder="20"
+             parent="Smile_Seller::sellers_menu"
+             action="smile_retailer/retailer/"
+             resource="Magento_Catalog::retailers"/>
+
+        <!-- Manage services -->
+        <add id="Smile_Retailer::services"
+             title="Services"
+             module="Smile_Retailer"
+             sortOrder="30"
+             parent="Smile_Seller::sellers_menu"
+             action="smile_retailer/service/"
+             resource="Magento_Catalog::services"/>
+    </menu>
+</config>
