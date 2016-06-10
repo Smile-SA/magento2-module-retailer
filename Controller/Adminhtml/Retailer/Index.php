@@ -54,8 +54,6 @@ class Index extends Action
     {
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->setActiveMenu($this->getProperty('active_menu'));
-        $resultPage->getConfig()->getTitle()->prepend(__($this->getProperty('entities_name')));
 
         return $resultPage;
     }
