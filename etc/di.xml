@@ -17,6 +17,8 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
+    <preference for="Smile\Retailer\Api\RetailerRepositoryInterface" type="Smile\Retailer\Model\RetailerRepository" />
+
     <virtualType name="Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory" type="Smile\Seller\Model\ResourceModel\Seller\CollectionFactory">
         <arguments>
             <argument name="instanceName" xsi:type="string">Smile\Retailer\Model\ResourceModel\Retailer\Collection</argument>

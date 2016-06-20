@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Retailer grid layout
+ * Retailer create layout
  *
  * DISCLAIMER
  *
@@ -15,11 +15,10 @@
  * @license   Apache License Version 2.0
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="styles"/>
-    <body>
-        <referenceContainer name="content">
-            <uiComponent name="smile_retailer_listing"/>
-        </referenceContainer>
-    </body>
+    <update handle="editor"/>
+    <referenceContainer name="content">
+        <uiComponent name="smile_retailer_form"/>
+    </referenceContainer>
 </page>

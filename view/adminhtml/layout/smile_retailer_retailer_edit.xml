@@ -1,25 +1,35 @@
 <?xml version="1.0"?>
+<!--
+/**
+ * Retailer edit layout
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this module to newer
+ * versions in the future.
+ *
+ * @category  Smile
+ * @package   Smile\Retailer
+ * @author    Romain RUAUD <romain.ruaud@smile.fr>
+ * @copyright 2016 Smile
+ * @license   Apache License Version 2.0
+ */
+-->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" layout="admin-2columns-left">
-    <update handle="editor"/>
+    <update handle="smile_retailer_retailer_new"/>
+    <update handle="styles"/>
     <body>
-        <referenceContainer name="content">
-            <block class="Smile\Retailer\Block\Adminhtml\Retailer\Edit" name="smile.retailer.retailer.edit"/>
-        </referenceContainer>
-
-        <referenceContainer name="left">
-            <block class="Smile\Retailer\Block\Adminhtml\Retailer\Edit\Tabs" name="smile.retailer.retailer.edit.tabs" />
-        </referenceContainer>
-
+        <referenceBlock name="page.title">
+            <action method="setTitleClass">
+                <argument name="class" xsi:type="string">complex</argument>
+            </action>
+        </referenceBlock>
         <referenceContainer name="page.main.actions">
             <block class="Magento\Backend\Block\Store\Switcher" name="store_switcher">
                 <action method="setUseConfirm">
                     <argument name="params" xsi:type="string">1</argument>
                 </action>
             </block>
-        </referenceContainer>
-
-        <referenceContainer name="js">
-            <block class="Magento\Framework\View\Element\Template" template="Magento_Catalog::catalog/wysiwyg/js.phtml"/>
         </referenceContainer>
     </body>
 </page>

@@ -15,45 +15,25 @@
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
 use Magento\Backend\App\Action;
-use Magento\Backend\App\Action\Context;
-use Magento\Framework\View\Result\PageFactory;
+use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
 
 /**
- * Retailer Setup class : contains EAV Attributes declarations.
+ * Retailer Adminhtml Index controller.
  *
  * @category Smile
  * @package  Smile\Retailer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class Index extends Action
+class Index extends AbstractRetailer
 {
-    /**
-     * Page factory.
-     *
-     * @var \Magento\Framework\View\Result\PageFactory
-     */
-    protected $resultPageFactory;
-
-    /**
-     * Constructor.
-     *
-     * @param \Magento\Backend\App\Action\Context        $context           Application context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory Result Page factory
-     */
-    public function __construct(Context $context, PageFactory $resultPageFactory)
-    {
-        $this->resultPageFactory = $resultPageFactory;
-
-        parent::__construct($context);
-    }
-
     /**
      * {@inheritdoc}
      */
     public function execute()
     {
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
-        $resultPage = $this->resultPageFactory->create();
+        $resultPage = $this->createPage();
+        $resultPage->getConfig()->getTitle()->prepend(__('Retailers List'));
 
         return $resultPage;
     }
