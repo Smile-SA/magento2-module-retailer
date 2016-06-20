@@ -23,10 +23,11 @@
     </argument>
     <dataSource name="smile_retailer_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Smile\Retailer\Ui\Component\DataProvider</argument>
+            <argument name="class" xsi:type="string">Smile\Seller\Ui\Component\DataProvider</argument>
             <argument name="name" xsi:type="string">smile_retailer_listing_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">page_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="collectionFactory" xsi:type="object">Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
@@ -65,7 +66,7 @@
             </argument>
             <filterSelect name="store_id">
                 <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Smile\Retailer\Ui\Component\Listing\Column\Retailer\Options</argument>
+                    <argument name="class" xsi:type="string">Smile\Seller\Ui\Component\Listing\Column\Seller\Options</argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
