@@ -15,30 +15,39 @@
  * @license   Apache License Version 2.0
  */
 -->
-<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">smile_retailer_form.smile_retailer_form_data_source</item>
             <item name="deps" xsi:type="string">smile_retailer_form.smile_retailer_form_data_source</item>
-            <item name="namespace" xsi:type="string">smile_retailer_form</item>
         </item>
+        <item name="label" xsi:type="string" translate="true">Retailer Information</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
         <item name="buttons" xsi:type="array">
             <item name="back" xsi:type="string">Smile\Retailer\Block\Adminhtml\Seller\Edit\Button\Back</item>
             <item name="save" xsi:type="string">Smile\Retailer\Block\Adminhtml\Seller\Edit\Button\Save</item>
+            <item name="delete" xsi:type="string">Smile\Retailer\Block\Adminhtml\Seller\Edit\Button\Delete</item>
+            <item name="save_and_continue" xsi:type="string">Smile\Retailer\Block\Adminhtml\Seller\Edit\Button\SaveAndContinue</item>
         </item>
-        <item name="template" xsi:type="string">templates/form/collapsible</item>
         <item name="config" xsi:type="array">
-            <item name="reloadItem" xsi:type="string">smile_retailer-details.attribute_set_id:value</item>
+            <item name="dataScope" xsi:type="string">data</item>
+            <item name="namespace" xsi:type="string">smile_retailer_form</item>
         </item>
-        <item name="childrenFromMeta" xsi:type="boolean">true</item>
+        <item name="reverseMetadataMerge" xsi:type="boolean">true</item>
     </argument>
     <dataSource name="smile_retailer_form_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Smile\Seller\Ui\DataProvider\Seller\Form\SellerDataProvider</argument>
+            <argument name="class" xsi:type="string">Smile\Seller\Ui\Component\Seller\Form\DataProvider</argument>
             <argument name="name" xsi:type="string">smile_retailer_form_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="collectionFactory" xsi:type="object">Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="submit_url" xsi:type="url" path="smile_retailer/retailer/save"/>
+                </item>
+            </argument>
         </argument>
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
@@ -46,4 +55,70 @@
             </item>
         </argument>
     </dataSource>
+    <fieldset name="general">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string"/>
+            </item>
+        </argument>
+        <field name="id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="dataScope" xsi:type="string">id</item>
+                    <item name="source" xsi:type="string">retailer</item>
+                </item>
+            </argument>
+        </field>
+        <field name="name">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="label" xsi:type="string" translate="true">Retailer Name</item>
+                    <item name="dataScope" xsi:type="string">name</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="source" xsi:type="string">retailer</item>
+                </item>
+            </argument>
+        </field>
+        <field name="seller_code">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="label" xsi:type="string" translate="true">Seller Code</item>
+                    <item name="dataScope" xsi:type="string">seller_code</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="source" xsi:type="string">retailer</item>
+                </item>
+            </argument>
+        </field>
+        <field name="is_active">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">10</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="dataScope" xsi:type="string">is_active</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">Enable Retailer</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="string">1</item>
+                        <item name="false" xsi:type="string">0</item>
+                    </item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">false</item>
+                    </item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="default" xsi:type="string">1</item>
+                    <item name="source" xsi:type="string">retailer</item>
+                </item>
+            </argument>
+        </field>
+    </fieldset>
 </form>

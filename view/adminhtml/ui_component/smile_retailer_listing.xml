@@ -27,15 +27,15 @@
                 <item name="name" xsi:type="string">add</item>
                 <item name="label" xsi:type="string" translate="true">Add New Retailer</item>
                 <item name="class" xsi:type="string">primary</item>
-                <item name="url" xsi:type="string">*/*/new</item>
+                <item name="url" xsi:type="string">*/*/create</item>
             </item>
         </item>
     </argument>
     <dataSource name="smile_retailer_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Smile\Seller\Ui\Component\DataProvider</argument>
+            <argument name="class" xsi:type="string">Smile\Seller\Ui\Component\Seller\Listing\DataProvider</argument>
             <argument name="name" xsi:type="string">smile_retailer_listing_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">page_id</argument>
+            <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="collectionFactory" xsi:type="object">Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory</argument>
             <argument name="data" xsi:type="array">
@@ -43,7 +43,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
                     <item name="update_url" xsi:type="url" path="mui/index/render"/>
                     <item name="storageConfig" xsi:type="array">
-                        <item name="indexField" xsi:type="string">page_id</item>
+                        <item name="indexField" xsi:type="string">entity_id</item>
                     </item>
                 </item>
             </argument>
@@ -57,7 +57,6 @@
         </argument>
         <bookmark name="bookmarks"/>
         <columnsControls name="columns_controls"/>
-        <filterSearch name="fulltext"/>
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -74,22 +73,6 @@
                     <item name="column" xsi:type="string">column</item>
                 </item>
             </argument>
-            <filterSelect name="store_id">
-                <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Smile\Seller\Ui\Component\Listing\Column\Seller\Options</argument>
-                </argument>
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="provider" xsi:type="string">${ $.parentName }</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">componentType = column, index = ${ $.index }:visible</item>
-                        </item>
-                        <item name="dataScope" xsi:type="string">store_id</item>
-                        <item name="label" xsi:type="string" translate="true">Store View</item>
-                        <item name="captionValue" xsi:type="string">0</item>
-                    </item>
-                </argument>
-            </filterSelect>
         </filters>
         <massaction name="listing_massaction">
             <action name="delete">

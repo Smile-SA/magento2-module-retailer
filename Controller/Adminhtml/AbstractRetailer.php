@@ -13,6 +13,9 @@
 namespace Smile\Retailer\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 use Smile\Retailer\Api\RetailerRepositoryInterface;
 use Smile\Seller\Model\SellerFactory;
@@ -32,9 +35,14 @@ abstract class AbstractRetailer extends Action
     protected $resultPageFactory = null;
 
     /**
+     * @var \Magento\Framework\Controller\Result\ForwardFactory|null
+     */
+    protected $resultForwardFactory = null;
+
+    /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $coreRegistry;
 
@@ -53,23 +61,26 @@ abstract class AbstractRetailer extends Action
     /**
      * Abstract constructor.
      *
-     * @param \Magento\Backend\App\Action\Context        $context             Application context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory   Tesult Page factory
-     * @param \Magento\Framework\Registry                $coreRegistry        Application registry
-     * @param RetailerRepositoryInterface                $retailerRepository  Retailer Repository
-     * @param SellerFactory                              $retailerFactory     Retailer Factory
+     * @param Context                     $context              Application context
+     * @param PageFactory                 $resultPageFactory    Result Page factory
+     * @param ForwardFactory              $resultForwardFactory Result forward factory
+     * @param Registry                    $coreRegistry         Application registry
+     * @param RetailerRepositoryInterface $retailerRepository   Retailer Repository
+     * @param SellerFactory               $retailerFactory      Retailer Factory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
+        Context $context,
         PageFactory $resultPageFactory,
-        \Magento\Framework\Registry $coreRegistry,
+        ForwardFactory $resultForwardFactory,
+        Registry $coreRegistry,
         RetailerRepositoryInterface $retailerRepository,
         SellerFactory $retailerFactory
     ) {
-        $this->resultPageFactory   = $resultPageFactory;
-        $this->coreRegistry        = $coreRegistry;
-        $this->retailerRepository  = $retailerRepository;
-        $this->retailerFactory     = $retailerFactory;
+        $this->resultPageFactory    = $resultPageFactory;
+        $this->resultForwardFactory = $resultForwardFactory;
+        $this->coreRegistry         = $coreRegistry;
+        $this->retailerRepository   = $retailerRepository;
+        $this->retailerFactory      = $retailerFactory;
 
         parent::__construct($context);
     }
@@ -91,7 +102,6 @@ abstract class AbstractRetailer extends Action
 
     /**
      * Check if allowed to manage retailer
-     *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      *
      * @return bool

@@ -11,6 +11,7 @@
  * @license   Open Software License ("OSL") v. 3.0
  */
 namespace Smile\Retailer\Api\Data;
+
 use Smile\Seller\Api\Data\SellerInterface;
 
 /**

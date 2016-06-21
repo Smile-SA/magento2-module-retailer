@@ -27,9 +27,15 @@ use Magento\Framework\UrlInterface;
  */
 class RetailerActions extends Column
 {
-    /** Url path */
+    /**
+     * Edit Url path
+     **/
     const RETAILER_URL_PATH_EDIT   = 'smile_retailer/retailer/edit';
-    const RETAILER_URL_PATH_DELETE = 'smile_retailer/page/delete';
+
+    /**
+     * Delete Url path
+     **/
+    const RETAILER_URL_PATH_DELETE = 'smile_retailer/retailer/delete';
 
     /** @var UrlInterface */
     protected $urlBuilder;
@@ -40,12 +46,12 @@ class RetailerActions extends Column
     private $editUrl;
 
     /**
-     * @param ContextInterface $context
-     * @param UiComponentFactory $uiComponentFactory
-     * @param UrlInterface $urlBuilder
-     * @param array $components
-     * @param array $data
-     * @param string $editUrl
+     * @param ContextInterface $context Application context
+     * @param UiComponentFactory $uiComponentFactory Ui Component Factory
+     * @param UrlInterface $urlBuilder URL Builder
+     * @param array $components Components
+     * @param array $data Component Data
+     * @param string $editUrl Edit Url
      */
     public function __construct(
         ContextInterface $context,
@@ -64,7 +70,8 @@ class RetailerActions extends Column
     /**
      * Prepare Data Source
      *
-     * @param array $dataSource
+     * @param array $dataSource The data source
+     *
      * @return array
      */
     public function prepareDataSource(array $dataSource)
@@ -72,17 +79,19 @@ class RetailerActions extends Column
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
                 $name = $this->getData('name');
+
                 if (isset($item['entity_id'])) {
                     $item[$name]['edit'] = [
-                        'href' => $this->urlBuilder->getUrl($this->editUrl, ['entity_id' => $item['entity_id']]),
+                        'href' => $this->urlBuilder->getUrl($this->editUrl, ['id' => $item['entity_id']]),
                         'label' => __('Edit')
                     ];
+
                     $item[$name]['delete'] = [
-                        'href' => $this->urlBuilder->getUrl(self::RETAILER_URL_PATH_DELETE, ['entity_id' => $item['entity_id']]),
+                        'href' => $this->urlBuilder->getUrl(self::RETAILER_URL_PATH_DELETE, ['id' => $item['entity_id']]),
                         'label' => __('Delete'),
                         'confirm' => [
-                            'title' => __('Delete ${ $.$data.title }'),
-                            'message' => __('Are you sure you wan\'t to delete a ${ $.$data.title } record?')
+                            'title' => __('Delete ${ $.$data.name }'),
+                            'message' => __('Are you sure you want to delete ${ $.$data.name } ?')
                         ]
                     ];
                 }

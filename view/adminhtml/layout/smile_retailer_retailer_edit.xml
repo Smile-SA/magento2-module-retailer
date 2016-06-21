@@ -17,19 +17,11 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" layout="admin-2columns-left">
     <update handle="smile_retailer_retailer_new"/>
-    <update handle="styles"/>
     <body>
         <referenceBlock name="page.title">
             <action method="setTitleClass">
                 <argument name="class" xsi:type="string">complex</argument>
             </action>
         </referenceBlock>
-        <referenceContainer name="page.main.actions">
-            <block class="Magento\Backend\Block\Store\Switcher" name="store_switcher">
-                <action method="setUseConfirm">
-                    <argument name="params" xsi:type="string">1</argument>
-                </action>
-            </block>
-        </referenceContainer>
     </body>
 </page>

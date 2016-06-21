@@ -15,10 +15,7 @@
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
 use Magento\Backend\App\Action;
-use Magento\Backend\App\Action\Context;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\View\Result\PageFactory;
-use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
 
 /**
@@ -38,30 +35,23 @@ class Edit extends AbstractRetailer
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
 
-        $retailerId = (int) $this->getRequest()->getParam("entity_id");
+        $retailerId = (int) $this->getRequest()->getParam('id');
+        $retailer   = null;
 
-        $retailer = null;
         $isExistingRetailer = (bool) $retailerId;
-
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/rorua.log');
-        $logger = new \Zend\Log\Logger();
-        $logger->addWriter($writer);
-        $logger->info('EXECUTE ACTION');
-        $logger->info($retailerId);
 
         if ($isExistingRetailer) {
             try {
                 $retailer = $this->retailerRepository->get($retailerId);
                 $this->coreRegistry->register('current_seller', $retailer);
                 $resultPage->getConfig()->getTitle()->prepend(__('Edit %1', $retailer->getName()));
+
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addException($e, __('Something went wrong while editing the retailer.'));
                 $resultRedirect = $this->resultRedirectFactory->create();
                 $resultRedirect->setPath('*/*/index');
-                $logger->info($e->getTraceAsString());
+
                 return $resultRedirect;
-            } catch (\Exception $e) {
-                $logger->info($e->getTraceAsString());
             }
         }
 

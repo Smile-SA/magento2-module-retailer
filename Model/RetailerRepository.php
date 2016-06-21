@@ -12,6 +12,7 @@
  */
 namespace Smile\Retailer\Model;
 
+use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\Retailer\Api\RetailerRepositoryInterface;
 use Smile\Seller\Model\SellerRepository;
 
@@ -24,5 +25,18 @@ use Smile\Seller\Model\SellerRepository;
  */
 class RetailerRepository extends SellerRepository implements RetailerRepositoryInterface
 {
+    /**
+     * Create retailer service
+     *
+     * @param \Smile\Seller\Api\Data\SellerInterface $seller
+     *
+     * @return \Smile\Seller\Api\Data\SellerInterface
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     */
+    public function save(\Smile\Seller\Api\Data\SellerInterface $seller)
+    {
+        $seller->setAttributeSetId(19);
 
+        return parent::save($seller);
+    }
 }
