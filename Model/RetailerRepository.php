@@ -12,7 +12,10 @@
  */
 namespace Smile\Retailer\Model;
 
+use Magento\Framework\EntityManager\EntityManager;
+use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\Retailer\Api\RetailerRepositoryInterface;
+use Smile\Seller\Model\SellerFactory;
 use Smile\Seller\Model\SellerRepository;
 
 /**
@@ -25,17 +28,14 @@ use Smile\Seller\Model\SellerRepository;
 class RetailerRepository extends SellerRepository implements RetailerRepositoryInterface
 {
     /**
-     * Create retailer service
+     * RetailerRepository constructor.
      *
-     * @param \Smile\Seller\Api\Data\SellerInterface $seller The seller
-     *
-     * @return \Smile\Seller\Api\Data\SellerInterface
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @param \Magento\Framework\EntityManager\EntityManager $entityManager    The entity manager
+     * @param \Smile\Seller\Model\SellerFactory              $sellerFactory    The Seller Factory
+     * @param null|string                                    $attributeSetName The attribute set name
      */
-    public function save(\Smile\Seller\Api\Data\SellerInterface $seller)
+    public function __construct(EntityManager $entityManager, SellerFactory $sellerFactory, $attributeSetName = RetailerInterface::ATTRIBUTE_SET_RETAILER)
     {
-        $seller->setAttributeSetId(19);
-
-        return parent::save($seller);
+        parent::__construct($entityManager, $sellerFactory, $attributeSetName);
     }
 }
