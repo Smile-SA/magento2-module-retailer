@@ -45,7 +45,6 @@ class Edit extends AbstractRetailer
                 $retailer = $this->retailerRepository->get($retailerId);
                 $this->coreRegistry->register('current_seller', $retailer);
                 $resultPage->getConfig()->getTitle()->prepend(__('Edit %1', $retailer->getName()));
-
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addException($e, __('Something went wrong while editing the retailer.'));
                 $resultRedirect = $this->resultRedirectFactory->create();

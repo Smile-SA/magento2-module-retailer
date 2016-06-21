@@ -71,7 +71,6 @@ class RetailerSetup extends SellerSetup
                     'seller_code',
                     'is_active',
                     'description',
-                    'test_retailer'
                 ],
                 'Images' => [
                     'image',
@@ -92,14 +91,7 @@ class RetailerSetup extends SellerSetup
      */
     private function getRetailerAttributes()
     {
-        $attributes = [
-            'test_retailer' => [
-                'type' => 'varchar',
-                'label' => 'Test Retailer',
-                'input' => 'text',
-                'sort_order' => 100,
-            ]
-        ];
+        $attributes = [];
 
         return $attributes;
     }

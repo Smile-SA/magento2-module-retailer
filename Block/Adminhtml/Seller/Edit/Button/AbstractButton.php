@@ -43,8 +43,8 @@ class AbstractButton implements ButtonProviderInterface
     /**
      * Generic constructor
      *
-     * @param Context $context
-     * @param Registry $registry
+     * @param Context  $context  Application context
+     * @param Registry $registry Application registry
      */
     public function __construct(
         Context $context,

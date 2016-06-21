@@ -12,7 +12,6 @@
  */
 namespace Smile\Retailer\Model;
 
-use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\Retailer\Api\RetailerRepositoryInterface;
 use Smile\Seller\Model\SellerRepository;
 
@@ -28,7 +27,7 @@ class RetailerRepository extends SellerRepository implements RetailerRepositoryI
     /**
      * Create retailer service
      *
-     * @param \Smile\Seller\Api\Data\SellerInterface $seller
+     * @param \Smile\Seller\Api\Data\SellerInterface $seller The seller
      *
      * @return \Smile\Seller\Api\Data\SellerInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException

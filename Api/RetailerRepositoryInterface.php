@@ -12,6 +12,7 @@
  */
 
 namespace Smile\Retailer\Api;
+
 use Smile\Seller\Api\SellerRepositoryInterface;
 
 /**

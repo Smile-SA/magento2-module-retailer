@@ -36,7 +36,7 @@ class InstallData implements InstallDataInterface
     /**
      * InstallData constructor
      *
-     * @param RetailerSetupFactory $sellerSetupFactory The Seller Setup factory
+     * @param RetailerSetupFactory $retailerSetupFactory The Retailer Setup factory
      */
     public function __construct(RetailerSetupFactory $retailerSetupFactory)
     {
@@ -63,7 +63,7 @@ class InstallData implements InstallDataInterface
     /**
      * Initialize the Retailer attribute sets.
      *
-     * @param RetailerSetup $setup
+     * @param RetailerSetup $setup The Retailer Setup
      */
     protected function installRetailerAttributeSet(RetailerSetup $setup)
     {
