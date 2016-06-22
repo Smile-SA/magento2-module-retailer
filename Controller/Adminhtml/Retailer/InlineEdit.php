@@ -75,6 +75,7 @@ class InlineEdit extends AbstractRetailer
             if (!count($postItems)) {
                 $messages[] = __('Please correct the data sent.');
                 $error = true;
+                
                 return $resultJson->setData(['messages' => $messages, 'error' => $error]);
             }
 
