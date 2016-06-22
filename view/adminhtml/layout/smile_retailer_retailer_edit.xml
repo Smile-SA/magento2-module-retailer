@@ -18,6 +18,9 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" layout="admin-2columns-left">
     <update handle="smile_retailer_retailer_new"/>
     <body>
+        <referenceContainer name="page.main.actions">
+            <block class="Magento\Backend\Block\Store\Switcher" name="retailer.store.switcher" template="Magento_Backend::store/switcher.phtml"/>
+        </referenceContainer>
         <referenceBlock name="page.title">
             <action method="setTitleClass">
                 <argument name="class" xsi:type="string">complex</argument>

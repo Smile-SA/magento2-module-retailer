@@ -36,13 +36,14 @@ class Edit extends AbstractRetailer
         $resultPage = $this->resultPageFactory->create();
 
         $retailerId = (int) $this->getRequest()->getParam('id');
+        $storeId    = $this->getRequest()->getParam('store', null);
         $retailer   = null;
 
         $isExistingRetailer = (bool) $retailerId;
 
         if ($isExistingRetailer) {
             try {
-                $retailer = $this->retailerRepository->get($retailerId);
+                $retailer = $this->retailerRepository->get($retailerId, $storeId);
                 $this->coreRegistry->register('current_seller', $retailer);
                 $resultPage->getConfig()->getTitle()->prepend(__('Edit %1', $retailer->getName()));
             } catch (NoSuchEntityException $e) {

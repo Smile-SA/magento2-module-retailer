@@ -120,5 +120,16 @@
                 </item>
             </argument>
         </field>
+        <field name="store_id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="dataScope" xsi:type="string">store_id</item>
+                    <item name="source" xsi:type="string">retailer</item>
+                </item>
+            </argument>
+        </field>
     </fieldset>
 </form>

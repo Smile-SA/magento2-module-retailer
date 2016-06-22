@@ -40,6 +40,7 @@ class Save extends AbstractRetailer
 
         if ($data) {
             $identifier = $this->getRequest()->getParam('id');
+            $storeId    = $this->getRequest()->getParam('store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID);
             $model      = $this->retailerFactory->create();
 
             if ($identifier) {
@@ -52,6 +53,9 @@ class Save extends AbstractRetailer
             }
 
             $model->setData($data);
+            if (null !== $storeId) {
+                $model->setStoreId($storeId);
+            }
 
             try {
                 $this->retailerRepository->save($model);
@@ -59,7 +63,12 @@ class Save extends AbstractRetailer
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
 
                 if ($redirectBack) {
-                    return $resultRedirect->setPath('*/*/edit', ['id' => $model->getId()]);
+                    $redirectParams = ['id' => $model->getId()];
+                    if (null !== $storeId) {
+                        $redirectParams['store'] = $storeId;
+                    }
+
+                    return $resultRedirect->setPath('*/*/edit', $redirectParams);
                 }
 
                 return $resultRedirect->setPath('*/*/');
