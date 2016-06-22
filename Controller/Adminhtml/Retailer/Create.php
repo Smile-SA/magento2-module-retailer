@@ -31,9 +31,11 @@ class Create extends AbstractRetailer
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
-        $resultForward = $this->resultForwardFactory->create();
+        $resultPage = $this->createPage();
 
-        return $resultForward->forward('edit');
+        $resultPage->setActiveMenu('Smile_Seller::sellers');
+        $resultPage->getConfig()->getTitle()->prepend(__('New Retailer'));
+
+        return $resultPage;
     }
 }

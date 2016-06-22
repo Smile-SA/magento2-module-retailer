@@ -39,26 +39,16 @@ class Edit extends AbstractRetailer
         $storeId    = $this->getRequest()->getParam('store', null);
         $retailer   = null;
 
-        $isExistingRetailer = (bool) $retailerId;
-
-        if ($isExistingRetailer) {
-            try {
-                $retailer = $this->retailerRepository->get($retailerId, $storeId);
-                $this->coreRegistry->register('current_seller', $retailer);
-                $resultPage->getConfig()->getTitle()->prepend(__('Edit %1', $retailer->getName()));
-            } catch (NoSuchEntityException $e) {
-                $this->messageManager->addException($e, __('Something went wrong while editing the retailer.'));
-                $resultRedirect = $this->resultRedirectFactory->create();
-                $resultRedirect->setPath('*/*/index');
-
-                return $resultRedirect;
-            }
-        }
-
-        if (!$isExistingRetailer) {
-            $retailer = $this->retailerFactory->create();
+        try {
+            $retailer = $this->retailerRepository->get($retailerId, $storeId);
             $this->coreRegistry->register('current_seller', $retailer);
-            $resultPage->getConfig()->getTitle()->prepend(__('New Retailer'));
+            $resultPage->getConfig()->getTitle()->prepend(__('Edit %1', $retailer->getName()));
+        } catch (NoSuchEntityException $e) {
+            $this->messageManager->addException($e, __('Something went wrong while editing the retailer.'));
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setPath('*/*/index');
+
+            return $resultRedirect;
         }
 
         $resultPage->addBreadcrumb(__('Retailer'), __('Retailer'));

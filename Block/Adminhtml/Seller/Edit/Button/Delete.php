@@ -27,7 +27,7 @@ class Delete extends AbstractButton
     public function getButtonData()
     {
         $data = [];
-        if ($this->getRetailer()->getId()) {
+        if ($this->getRetailer() && $this->getRetailer()->getId()) {
             $data = [
                 'label' => __('Delete'),
                 'class' => 'delete',
