@@ -95,7 +95,14 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 null,
                 ['unsigned' => true, 'nullable' => true, 'default' => null],
                 'Closing Hour'
-            )->setComment('Smile Retailer Opening Hours Table');
+            )->addForeignKey(
+                $setup->getFkName('smile_seller_opening_hours', 'retailer_id', 'smile_seller_entity', 'entity_id'),
+                'retailer_id',
+                $setup->getTable('smile_seller_entity'),
+                'entity_id',
+                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            )
+            ->setComment('Smile Retailer Opening Hours Table');
 
         $setup->getConnection()->createTable($table);
     }
