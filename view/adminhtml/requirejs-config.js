@@ -15,8 +15,9 @@
 var config = {
     map: {
         '*': {
-            estira: 'Smile_Retailer/js/elessa/estira',
-            elessar: 'Smile_Retailer/js/elessar/elessar'
+            estira: 'Smile_Retailer/js/elessar/estira',
+            elessar: 'Smile_Retailer/js/elessar/elessar',
+            openingHours : 'Smile_Retailer/js/opening-hours/rangebar'
         }
     }
 };

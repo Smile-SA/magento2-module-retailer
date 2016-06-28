@@ -36,99 +36,37 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" ' . $block->getUiId(
 </div>
 
 <script>
-    require(["jquery", "elessar", "moment"],
-        function($, RangeBar, moment) {
-            var rangeBar = RangeBar({
-                min: moment().startOf("day").format("LLLL"),
-                max: moment().endOf("day").format("LLLL"),
-                valueFormat: function(ts) {
-                    return moment(ts).format("LT");
-                },
-                valueParse: function(date) {
-                    return moment(date).valueOf();
-                },
-                values: [/** @TODO Inject values **/],
-                snap: 1000 * 60 * 15,
-                minSize: (1000 * 60 * 60) / 4,
-                allowDelete: true,
-                htmlLabel: true
-            }).$el;
 
-            var indicatorRangeBar = RangeBar({
-                min: moment().startOf("day").format("LLLL"),
-                max: moment().endOf("day").format("LLLL"),
-                valueFormat: function(ts) {
-                    return moment(ts).format("LT");
-                },
-                valueParse: function(date) {
-                    return moment(date).valueOf();
-                },
-                values: [
-                    [
-                        moment().startOf("day").format("LLLL"),
-                    ],
-                    [
-                        moment().startOf("day").add(6, "hours").format("LLLL")
-                    ],
-                    [
-                        moment().startOf("day").add(3, "hours").format("LLLL")
-                    ],
-                    [
-                        moment().startOf("day").add(9, "hours").format("LLLL")
-                    ],
-                    [
-                        moment().startOf("day").add(12, "hours").format("LLLL")
-                    ],
-                    [
-                        moment().startOf("day").add(15, "hours").format("LLLL")
-                    ],
-                    [
-                        moment().startOf("day").add(18, "hours").format("LLLL")
-                    ],
-                    [
-                        moment().startOf("day").add(21, "hours").format("LLLL")
-                    ],
-                    [
-                        moment().startOf("day").add(24, "hours").format("LLLL")
-                    ]
-                ],
-                snap: 1000 * 60 * 15,
-                minSize: (1000 * 60 * 60) / 4,
-                allowDelete: true,
-                htmlLabel: true,
-                label: function(a){return JSON.stringify(a[0])},
-                readonly: true
-            }).$el;
-
-            $("#<?php echo $inputId ?> .opening-hours-rangebar").prepend(rangeBar).on("changing", function(ev, ranges) {
-                $("#<?php echo $this->getHtmlId();?>").val(JSON.stringify(ranges,null,2));
-
-                var rangeLabels = [];
-                ranges.forEach(function (rangeItem) {
-                    var subRangeLabels = [];
-                    rangeItem.forEach(function (dateItem) {
-                        subRangeLabels.push(dateItem);
-                    });
-                    rangeLabels.push(subRangeLabels.join(" - "));
-                });
-                var label = rangeLabels.join(", ");
-                $("#<?php echo $this->getHtmlId();?>").closest(".field").children(".opening-hours-day").text(label);
-            }).on("change", function(ev, ranges) {
-                $("#<?php echo $this->getHtmlId();?>").val(JSON.stringify(ranges,null,2));
-
-                var rangeLabels = [];
-                ranges.forEach(function (rangeItem) {
-                    var subRangeLabels = [];
-                    rangeItem.forEach(function (dateItem) {
-                        subRangeLabels.push(dateItem);
-                    });
-                    rangeLabels.push(subRangeLabels.join(" - "));
-                });
-                var label = rangeLabels.join(", ");
-
-                $("#<?php echo $this->getHtmlId();?>").closest(".field").children(".opening-hours-day").text(label);
+    require(["jquery", "openingHours", "moment"],
+        function($, openingHours, moment) {
+            /**
+             * This component is the main timepicker for opening hours
+             */
+            $("#<?php echo $inputId ?> .opening-hours-rangebar").openingHours({
+                values: [/** @TODO Inject values here **/],
+                summary: $("#<?php echo $this->getHtmlId();?>").closest(".field").children(".opening-hours-day"),
+                updateSummary: true,
+                input : $("#<?php echo $this->getHtmlId();?>")
             });
 
-            $("#<?php echo $inputId ?> .opening-hours-indicator").prepend(indicatorRangeBar);
-        });
+            /**
+             * This component is a read-only one, made to display the time indicator
+             */
+            $("#<?php echo $inputId ?> .opening-hours-indicator").openingHours({
+                values: [
+                    [moment().startOf("day").format("LLLL")],
+                    [moment().startOf("day").add(3, "hours").format("LLLL")],
+                    [moment().startOf("day").add(6, "hours").format("LLLL")],
+                    [moment().startOf("day").add(9, "hours").format("LLLL")],
+                    [moment().startOf("day").add(12, "hours").format("LLLL")],
+                    [moment().startOf("day").add(15, "hours").format("LLLL")],
+                    [moment().startOf("day").add(18, "hours").format("LLLL")],
+                    [moment().startOf("day").add(21, "hours").format("LLLL")],
+                    [moment().startOf("day").add(24, "hours").format("LLLL")],
+                ],
+                label: function(a){return JSON.stringify(a[0])},
+                readonly: true
+            });
+        }
+    );
 </script>
