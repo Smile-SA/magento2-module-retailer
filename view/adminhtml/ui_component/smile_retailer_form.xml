@@ -25,10 +25,10 @@
         <item name="label" xsi:type="string" translate="true">Retailer Information</item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
         <item name="buttons" xsi:type="array">
-            <item name="back" xsi:type="string">Smile\Retailer\Block\Adminhtml\Seller\Edit\Button\Back</item>
-            <item name="save" xsi:type="string">Smile\Retailer\Block\Adminhtml\Seller\Edit\Button\Save</item>
-            <item name="delete" xsi:type="string">Smile\Retailer\Block\Adminhtml\Seller\Edit\Button\Delete</item>
-            <item name="save_and_continue" xsi:type="string">Smile\Retailer\Block\Adminhtml\Seller\Edit\Button\SaveAndContinue</item>
+            <item name="back" xsi:type="string">Smile\Retailer\Block\Adminhtml\Retailer\Edit\Button\Back</item>
+            <item name="save" xsi:type="string">Smile\Retailer\Block\Adminhtml\Retailer\Edit\Button\Save</item>
+            <item name="delete" xsi:type="string">Smile\Retailer\Block\Adminhtml\Retailer\Edit\Button\Delete</item>
+            <item name="save_and_continue" xsi:type="string">Smile\Retailer\Block\Adminhtml\Retailer\Edit\Button\SaveAndContinue</item>
         </item>
         <item name="config" xsi:type="array">
             <item name="dataScope" xsi:type="string">data</item>
@@ -131,7 +131,32 @@
                 </item>
             </argument>
         </field>
+
     </fieldset>
+    <fieldset name="opening_hours">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="sortOrder" xsi:type="number">20</item>
+                <item name="label" xsi:type="string">Opening Hours</item>
+            </item>
+        </argument>
+        <container name="opening_hours_config_container">
+            <htmlContent name="opening_hours">
+                <argument name="block" xsi:type="object">Smile\Retailer\Block\Adminhtml\Retailer\OpeningHours</argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="sortOrder" xsi:type="number">20</item>
+                        <item name="component" xsi:type="string">Smile_Retailer/js/component/retailer/opening-hours</item>
+                        <item name="dataScope" xsi:type="string">opening_hours</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">true</item>
+                        </item>
+                    </item>
+                </argument>
+            </htmlContent>
+        </container>
+    </fieldset>
+
     <fieldset name="search_engine_optimization">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">

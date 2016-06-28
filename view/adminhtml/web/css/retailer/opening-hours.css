@@ -1,0 +1,69 @@
+.elessar-range {
+    background:#eb5202 ;
+    overflow: visible;
+    height: 10px;
+}
+
+.elessar-handle {
+    height: 15px;
+    top: -3px;
+    width: 15px;
+    border: 1px solid #808080;
+    background-color: #cccccc;
+    border-radius: 4px;
+}
+
+.elessar-rangebar {
+    height: 10px;
+}
+
+div.opening-hours-container {
+    width: 80%;
+    margin-bottom: 20px;
+}
+
+div.opening-hours-container label {
+    margin-top: 20px;
+}
+
+div.opening-hours-rangebar div.elessar-rangebar{
+    background: #FFFFFF;
+    border: 1px solid #cccccc;
+    margin-left: -1px;
+}
+
+div.opening-hours-indicator {
+    margin-top: 40px;
+}
+
+div.opening-hours-indicator span.elessar-barlabel {
+    color: #808080;
+    position:relative;
+    top:-35px;
+    left: -30px;
+}
+
+div.opening-hours-indicator span.elessar-barlabel:after {
+    content: " ";
+    display: block;
+    border-left: 1px solid #808080;
+    height: 10px;
+    left: 29px;
+    top: -5px;
+    position: relative;
+}
+
+div.opening-hours-indicator .elessar-rangebar {
+    height: 0;
+}
+
+span.opening-hours-label {
+    position: relative;
+    top: -25px;
+    color: #000000;
+}
+
+span.opening-hours-day {
+    font-size: 80%;
+    color: #808080;
+}
