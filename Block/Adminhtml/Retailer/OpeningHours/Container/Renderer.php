@@ -78,6 +78,7 @@ class Renderer extends Template implements RendererInterface
     public function render(AbstractElement $element)
     {
         $this->element = $element;
+        $this->element->addClass("opening-hours-container-fieldset");
 
         return $this->toHtml();
     }

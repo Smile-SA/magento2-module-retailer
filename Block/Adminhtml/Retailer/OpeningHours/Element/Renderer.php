@@ -83,7 +83,7 @@ class Renderer extends Template implements RendererInterface
         $this->input->setId("opening_hours" . uniqid());
         $this->input->setName($element->getName());
 
-        $this->element->addClass("opening-hours-wrapper");
+        $this->element->addClass("opening-hours-wrapper")->removeClass("admin__control-text");
 
         return $this->toHtml();
     }

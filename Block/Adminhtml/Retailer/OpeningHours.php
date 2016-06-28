@@ -80,15 +80,14 @@ class OpeningHours  extends \Magento\Backend\Block\AbstractBlock
         $form = $this->formFactory->create();
         $form->setHtmlId('opening_hours');
 
-        $openingHoursField = $form->addField(
+        $openingHoursFieldset = $form->addFieldset(
             'opening_hours',
-            'text',
             ['name' => 'opening_hours', 'label' => __('Opening Hours'), 'container_id' => 'opening_hours']
         );
 
-        $openingHoursField->setValue("" /*$this->getRetailer()->getOpeningHours()*/);
+        $openingHoursFieldset->setValue("" /*$this->getRetailer()->getOpeningHours()*/);
         $openingHoursRenderer = $this->getLayout()->createBlock('Smile\Retailer\Block\Adminhtml\Retailer\OpeningHours\Container\Renderer');
-        $openingHoursField->setRenderer($openingHoursRenderer);
+        $openingHoursFieldset->setRenderer($openingHoursRenderer);
 
         return $form;
     }

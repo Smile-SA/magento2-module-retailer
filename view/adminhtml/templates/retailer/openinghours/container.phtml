@@ -20,7 +20,7 @@
 
 $element = $block->getElement();
 $fieldId = ($element->getHtmlContainerId()) ? ' id="' . $element->getHtmlContainerId() . '"' : '';
-$fieldClass = "field admin__field field-{$element->getId()} {$element->getCssClass()}";
+$fieldClass = "fieldset-{$element->getId()} {$element->getClass()}";
 $fieldClass .= ($element->getRequired()) ? ' required' : '';
 $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" ' . $block->getUiId('form-field', $element->getId());
 ?>
