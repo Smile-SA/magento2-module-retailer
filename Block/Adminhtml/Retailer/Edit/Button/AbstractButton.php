@@ -10,12 +10,13 @@
  * @copyright 2016 Smile
  * @license   Open Software License ("OSL") v. 3.0
  */
-namespace Smile\Retailer\Block\Adminhtml\Seller\Edit\Button;
+namespace Smile\Retailer\Block\Adminhtml\Retailer\Edit\Button;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
+use Smile\Retailer\Api\Data\RetailerInterface;
 
 /**
  * Abstract Retailer edit button
@@ -68,9 +69,9 @@ class AbstractButton implements ButtonProviderInterface
     }
 
     /**
-     * Get product
+     * Get retailer
      *
-     * @return ProductInterface
+     * @return RetailerInterface
      */
     public function getRetailer()
     {

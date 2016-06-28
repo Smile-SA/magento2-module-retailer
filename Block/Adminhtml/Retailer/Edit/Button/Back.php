@@ -10,7 +10,7 @@
  * @copyright 2016 Smile
  * @license   Open Software License ("OSL") v. 3.0
  */
-namespace Smile\Retailer\Block\Adminhtml\Seller\Edit\Button;
+namespace Smile\Retailer\Block\Adminhtml\Retailer\Edit\Button;
 
 /**
  * Save Button for retailer edition
