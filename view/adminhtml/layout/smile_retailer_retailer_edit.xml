@@ -15,13 +15,9 @@
  * @license   Apache License Version 2.0
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" layout="admin-2columns-left">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" layout="admin-1column">
     <update handle="styles"/>
     <update handle="editor"/>
-    <head>
-        <css src="Smile_Retailer::css/elessar/elessar.css"/>
-        <css src="Smile_Retailer::css/retailer/opening-hours.css"/>
-    </head>
     <body>
         <referenceContainer name="page.main.actions">
             <block class="Magento\Backend\Block\Store\Switcher" name="retailer.store.switcher" template="Magento_Backend::store/switcher.phtml"/>
