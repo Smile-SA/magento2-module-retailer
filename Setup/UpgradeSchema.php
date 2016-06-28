@@ -61,7 +61,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 "retailer_id",
                 Table::TYPE_INTEGER,
                 null,
-                ['unsigned' => true, 'nullable' => false, 'primary' => true],
+                ['unsigned' => true, 'nullable' => false],
                 'Retailer Id'
             )->addColumn(
                 "day_of_week",
