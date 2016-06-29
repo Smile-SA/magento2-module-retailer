@@ -30,7 +30,7 @@ define([
             min: moment().startOf("day").format("LLLL"),
             max: moment().endOf("day").format("LLLL"),
             valueFormat: function(ts) {
-                return moment(ts).format("LT");
+                return moment(ts).format("HH:mm");
             },
             valueParse: function(date) {
                 return moment(date).valueOf();
@@ -47,7 +47,8 @@ define([
          */
         _create: function ()
         {
-            this.rangeBar = new RangeBar(this.options).$el;
+            var rangeBarWidget = new RangeBar(this.options);
+            this.rangeBar = rangeBarWidget.$el;
 
             if (this.options.onChange) {
                 this.rangeBar.on("change", this.options.onChange);
@@ -61,13 +62,16 @@ define([
                 this.summary = $(this.options.summary);
                 this.prepareSummaryListening();
                 if (this.options.values.length) {
-                    // @TODO Update summary on creation with current values
+                    this.updateSummary(rangeBarWidget.val());
                 }
             }
 
             if (this.options.input !== null) {
                 this.input = $(this.options.input);
                 this.prepareInputBinding();
+                if (this.options.values.length) {
+                    this.input.val(JSON.stringify(rangeBarWidget.val(),null,2))
+                }
             }
 
             this.element.prepend(this.rangeBar);

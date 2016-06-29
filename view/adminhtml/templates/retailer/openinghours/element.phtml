@@ -43,7 +43,7 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" ' . $block->getUiId(
              * This component is the main timepicker for opening hours
              */
             $("#<?php echo $inputId ?> .opening-hours-rangebar").openingHours({
-                values: [/** @TODO Inject values here **/],
+                values: <?php echo $block->getJsonValues();?>,
                 summary: $("#<?php echo $this->getHtmlId();?>").closest(".field").children(".opening-hours-day"),
                 updateSummary: true,
                 input : $("#<?php echo $this->getHtmlId();?>")

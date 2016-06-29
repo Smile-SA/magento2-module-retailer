@@ -85,7 +85,7 @@ class OpeningHours  extends \Magento\Backend\Block\AbstractBlock
             ['name' => 'opening_hours', 'label' => __('Opening Hours'), 'container_id' => 'opening_hours']
         );
 
-        $openingHoursFieldset->setValue("" /*$this->getRetailer()->getOpeningHours()*/);
+        $openingHoursFieldset->setValue($this->getRetailer()->getOpeningHours());
         $openingHoursRenderer = $this->getLayout()->createBlock('Smile\Retailer\Block\Adminhtml\Retailer\OpeningHours\Container\Renderer');
         $openingHoursFieldset->setRenderer($openingHoursRenderer);
 

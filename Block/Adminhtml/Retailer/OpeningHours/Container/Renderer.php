@@ -52,22 +52,26 @@ class Renderer extends Template implements RendererInterface
      */
     protected $_template = 'retailer/openinghours/container.phtml';
 
+    private $localeList = null;
+
     /**
      * Block constructor.
      *
      * @param \Magento\Backend\Block\Template\Context                $context             Templating context.
      * @param \Magento\Framework\Data\Form\Element\Factory           $elementFactory      Form element factory.
-     * @param \Smile\Retailer\Model\OpeningHours\OpeningHoursFactory $openingHoursFactory Opening Hours factory.
+     * @param \Smile\Retailer\Model\Retailer\OpeningHoursFactory     $openingHoursFactory Opening Hours factory.
      * @param array                                                  $data                Additional data.
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Data\Form\Element\Factory $elementFactory,
-        \Smile\Retailer\Model\OpeningHours\OpeningHoursFactory $openingHoursFactory,
+        \Smile\Retailer\Model\Retailer\OpeningHoursFactory $openingHoursFactory,
+        \Magento\Framework\Locale\ListsInterface $localeLists,
         array $data = []
     ) {
         $this->elementFactory = $elementFactory;
         $this->openingHours   = $openingHoursFactory->create();
+        $this->localeList     = $localeLists;
 
         parent::__construct($context, $data);
     }
@@ -111,22 +115,28 @@ class Renderer extends Template implements RendererInterface
     public function getInputHtml()
     {
         if ($this->element->getValue()) {
-            /** @TODO apply value */
+            $values = $this->element->getValue();
         }
 
         $html = "";
+        $days = $this->localeList->getOptionWeekdays(true, true);
 
-        $days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
-
-        foreach ($days as $day) {
+        foreach ($days as $key => $day) {
             $input = $this->elementFactory->create('text');
             $input->setForm($this->getElement()->getForm());
-            $openingHoursElementRenderer = $this->getLayout()->createBlock('Smile\Retailer\Block\Adminhtml\Retailer\OpeningHours\Element\Renderer');
-            $input->setLabel($day);
-            $input->setName($this->element->getName() . "[$day]");
-            $input->setValue("")->setRenderer($openingHoursElementRenderer);
-            $htmlInput = $input->toHtml();
-            $html.= $htmlInput;
+
+            $elementRenderer = $this->getLayout()
+                ->createBlock('Smile\Retailer\Block\Adminhtml\Retailer\OpeningHours\Element\Renderer');
+
+            $input->setLabel(ucfirst($day['label']));
+            $input->setName($this->element->getName() . "[$key]");
+            $input->setRenderer($elementRenderer);
+
+            if (isset($values[$key])) {
+                $input->setValue($values[$key]);
+            }
+
+            $html.= $input->toHtml();
         }
 
         return $html;

@@ -53,21 +53,29 @@ class Renderer extends Template implements RendererInterface
     protected $_template = 'retailer/openinghours/element.phtml';
 
     /**
+     * @var \Magento\Framework\Json\Helper\Data
+     */
+    private $jsonHelper;
+
+    /**
      * Block constructor.
      *
      * @param \Magento\Backend\Block\Template\Context                $context             Templating context.
      * @param \Magento\Framework\Data\Form\Element\Factory           $elementFactory      Form element factory.
-     * @param \Smile\Retailer\Model\OpeningHours\OpeningHoursFactory $openingHoursFactory Opening Hours factory.
+     * @param \Smile\Retailer\Model\Retailer\OpeningHoursFactory     $openingHoursFactory Opening Hours factory.
+     * @param \Magento\Framework\Json\Helper\Data                    $jsonHelper          Helper for JSON
      * @param array                                                  $data                Additional data.
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Data\Form\Element\Factory $elementFactory,
-        \Smile\Retailer\Model\OpeningHours\OpeningHoursFactory $openingHoursFactory,
+        \Smile\Retailer\Model\Retailer\OpeningHoursFactory $openingHoursFactory,
+        \Magento\Framework\Json\Helper\Data $jsonHelper,
         array $data = []
     ) {
         $this->elementFactory = $elementFactory;
         $this->openingHours   = $openingHoursFactory->create();
+        $this->jsonHelper     = $jsonHelper;
 
         parent::__construct($context, $data);
     }
@@ -116,11 +124,41 @@ class Renderer extends Template implements RendererInterface
     public function getInputHtml()
     {
         if ($this->element->getValue()) {
-            /** @TODO apply value */
+            $this->input->setValue($this->getJsonValues());
         }
 
-        $this->input->setValue("");
-
         return $this->input->toHtml();
+    }
+
+    /**
+     * Retrieve element values in Json.
+     *
+     * @return string
+     */
+    public function getJsonValues()
+    {
+        $values = [];
+        if ($this->element->getValue()) {
+            $values = $this->element->getValue();
+            foreach ($values as &$timeRange) {
+                foreach ($timeRange as &$hour) {
+                    $date = new \Zend_Date();
+                    $date->setTime($hour);
+                    $hour = $date->toString($this->getDateFormat());
+                }
+            }
+        }
+
+        return $this->jsonHelper->jsonEncode($values);
+    }
+
+    /**
+     * Retrieve internally used date Format
+     *
+     * @return string
+     */
+    public function getDateFormat()
+    {
+        return \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT;
     }
 }
