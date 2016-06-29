@@ -56,12 +56,18 @@ class UpgradeSchema implements UpgradeSchemaInterface
     private function createOpeningHoursTable(SchemaSetupInterface $setup)
     {
         $table = $setup->getConnection()
-            ->newTable($setup->getTable("smile_retailer_opening_hours"))
+            ->newTable($setup->getTable("smile_retailer_time_slots"))
             ->addColumn(
                 "retailer_id",
                 Table::TYPE_INTEGER,
                 null,
                 ['unsigned' => true, 'nullable' => false],
+                'Retailer Id'
+            )->addColumn(
+                "attribute_code",
+                Table::TYPE_TEXT,
+                25,
+                ['nullable' => false],
                 'Retailer Id'
             )->addColumn(
                 "day_of_week",
@@ -73,30 +79,30 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 "date",
                 Table::TYPE_DATE,
                 null,
-                ['unsigned' => true, 'nullable' => true, 'default' => null],
+                ['nullable' => true, 'default' => null],
                 'Opening Date, if any'
-            /**
-             * Hack : Magento does not support TIME column on its DDL.
-             * Therefore this column will contain full datetime but work only with hours
-             */
+                /**
+                * Hack : Magento does not support TIME column on its DDL.
+                * Therefore this column will contain full datetime but work only with hours
+                */
             )->addColumn(
-                "opening_hour",
+                "start_hour",
                 Table::TYPE_DATETIME,
                 null,
-                ['unsigned' => true, 'nullable' => true, 'default' => null],
-                'Opening Hour'
-            /**
-             * Hack : Magento does not support TIME column on its DDL.
-             * Therefore this column will contain full datetime but work only with hours
-             */
+                ['nullable' => true, 'default' => null],
+                'Start Hour'
+                /**
+                * Hack : Magento does not support TIME column on its DDL.
+                * Therefore this column will contain full datetime but work only with hours
+                */
             )->addColumn(
-                "closing_hour",
+                "end_hour",
                 Table::TYPE_DATETIME,
                 null,
-                ['unsigned' => true, 'nullable' => true, 'default' => null],
-                'Closing Hour'
+                ['nullable' => true, 'default' => null],
+                'End Hour'
             )->addForeignKey(
-                $setup->getFkName('smile_seller_opening_hours', 'retailer_id', 'smile_seller_entity', 'entity_id'),
+                $setup->getFkName('smile_retailer_time_slots', 'retailer_id', 'smile_seller_entity', 'entity_id'),
                 'retailer_id',
                 $setup->getTable('smile_seller_entity'),
                 'entity_id',

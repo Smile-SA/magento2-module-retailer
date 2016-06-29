@@ -60,11 +60,11 @@ class Renderer extends Template implements RendererInterface
     /**
      * Block constructor.
      *
-     * @param \Magento\Backend\Block\Template\Context                $context             Templating context.
-     * @param \Magento\Framework\Data\Form\Element\Factory           $elementFactory      Form element factory.
-     * @param \Smile\Retailer\Model\Retailer\OpeningHoursFactory     $openingHoursFactory Opening Hours factory.
-     * @param \Magento\Framework\Json\Helper\Data                    $jsonHelper          Helper for JSON
-     * @param array                                                  $data                Additional data.
+     * @param \Magento\Backend\Block\Template\Context            $context             Templating context.
+     * @param \Magento\Framework\Data\Form\Element\Factory       $elementFactory      Form element factory.
+     * @param \Smile\Retailer\Model\Retailer\OpeningHoursFactory $openingHoursFactory Opening Hours factory.
+     * @param \Magento\Framework\Json\Helper\Data                $jsonHelper          Helper for JSON
+     * @param array                                              $data                Additional data.
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,

@@ -24,5 +24,15 @@ use Smile\Seller\Api\SellerRepositoryInterface;
  */
 interface RetailerRepositoryInterface extends SellerRepositoryInterface
 {
-
+    /**
+     * Get info about retailer by seller id
+     *
+     * @param int $retailerId The retailer Id
+     * @param int $storeId    The store Id
+     *
+     * @return \Smile\Retailer\Api\Data\RetailerInterface
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function get($retailerId, $storeId = null);
 }

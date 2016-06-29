@@ -11,16 +11,17 @@
  * @license   Open Software License ("OSL") v. 3.0
  */
 namespace Smile\Retailer\Block\Adminhtml\Retailer;
+
 use Smile\Retailer\Api\Data\RetailerInterface;
 
 /**
- * _________________________________________________
+ * Opening Hours rendering block
  *
  * @category Smile
  * @package  Smile\Retailer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class OpeningHours  extends \Magento\Backend\Block\AbstractBlock
+class OpeningHours extends \Magento\Backend\Block\AbstractBlock
 {
     /**
      * @var \Magento\Framework\Data\FormFactory
@@ -85,7 +86,10 @@ class OpeningHours  extends \Magento\Backend\Block\AbstractBlock
             ['name' => 'opening_hours', 'label' => __('Opening Hours'), 'container_id' => 'opening_hours']
         );
 
-        $openingHoursFieldset->setValue($this->getRetailer()->getOpeningHours());
+        if ($this->getRetailer() && $this->getRetailer()->getOpeningHours()) {
+            $openingHoursFieldset->setValue($this->getRetailer()->getOpeningHours());
+        }
+
         $openingHoursRenderer = $this->getLayout()->createBlock('Smile\Retailer\Block\Adminhtml\Retailer\OpeningHours\Container\Renderer');
         $openingHoursFieldset->setRenderer($openingHoursRenderer);
 

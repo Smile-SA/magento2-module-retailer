@@ -10,16 +10,25 @@
  * @copyright 2016 Smile
  * @license   Open Software License ("OSL") v. 3.0
  */
+
 namespace Smile\Retailer\Api\Data;
 
 /**
- * _________________________________________________
+ * Opening Hours Interface
  *
  * @category Smile
  * @package  Smile\Retailer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-interface RetailerOpeningHoursManagementInterface
+interface OpeningHoursInterface
 {
+    const EXTENSION_ATTRIBUTE_CODE = "opening_hours";
 
+    public function getRanges();
+
+    public function setRanges($rangesData);
+
+    public function getRetailerId();
+
+    public function setRetailerId($retailerId);
 }

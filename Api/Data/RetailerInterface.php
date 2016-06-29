@@ -1,7 +1,7 @@
 <?php
 /**
  * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade Smile Elastic Suite to newer
+ * Do not edit or add to this file if you wish to upgrade this module to newer
  * versions in the future.
  *
  * @category  Smile
@@ -24,4 +24,20 @@ use Smile\Seller\Api\Data\SellerInterface;
 interface RetailerInterface extends SellerInterface
 {
     const ATTRIBUTE_SET_RETAILER = "Retailer";
+
+    /**
+     * Retrieve Opening Hours of this Retailer
+     *
+     * @return mixed
+     */
+    public function getOpeningHours();
+
+    /**
+     * Set Opening Hours of this Retailer
+     *
+     * @param array $openingHours The opening hours
+     *
+     * @return mixed
+     */
+    public function setOpeningHours($openingHours);
 }

@@ -57,9 +57,15 @@ class Save extends AbstractRetailer
                 $model->setStoreId($storeId);
             }
 
+            if (isset($data['opening_hours']) && !empty($data['opening_hours'])) {
+                $extension = $model->getExtensionAttributes();
+                $extension->setOpeningHours($data['opening_hours']);
+                $model->setExtensionAttributes($extension);
+            }
+
             try {
                 $this->retailerRepository->save($model);
-                $this->messageManager->addSuccess(__('You saved the retailer %1.', $model->getName()));
+                $this->messageManager->addSuccessMessage(__('You saved the retailer %1.', $model->getName()));
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
 
                 if ($redirectBack) {

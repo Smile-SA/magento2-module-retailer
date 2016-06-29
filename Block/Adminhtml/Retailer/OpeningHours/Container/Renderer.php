@@ -52,15 +52,19 @@ class Renderer extends Template implements RendererInterface
      */
     protected $_template = 'retailer/openinghours/container.phtml';
 
+    /**
+     * @var \Magento\Framework\Locale\ListsInterface|null
+     */
     private $localeList = null;
 
     /**
      * Block constructor.
      *
-     * @param \Magento\Backend\Block\Template\Context                $context             Templating context.
-     * @param \Magento\Framework\Data\Form\Element\Factory           $elementFactory      Form element factory.
-     * @param \Smile\Retailer\Model\Retailer\OpeningHoursFactory     $openingHoursFactory Opening Hours factory.
-     * @param array                                                  $data                Additional data.
+     * @param \Magento\Backend\Block\Template\Context            $context             Templating context.
+     * @param \Magento\Framework\Data\Form\Element\Factory       $elementFactory      Form element factory.
+     * @param \Smile\Retailer\Model\Retailer\OpeningHoursFactory $openingHoursFactory Opening Hours factory.
+     * @param \Magento\Framework\Locale\ListsInterface           $localeLists         Locale List.
+     * @param array                                              $data                Additional data.
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -136,7 +140,7 @@ class Renderer extends Template implements RendererInterface
                 $input->setValue($values[$key]);
             }
 
-            $html.= $input->toHtml();
+            $html .= $input->toHtml();
         }
 
         return $html;
