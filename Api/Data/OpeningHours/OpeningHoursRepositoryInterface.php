@@ -23,15 +23,6 @@ namespace Smile\Retailer\Api\Data\OpeningHours;
 interface OpeningHoursRepositoryInterface
 {
     /**
-     * Get opening hours list for a given retailer
-     *
-     * @param \Smile\Retailer\Api\Data\RetailerInterface $retailer The retailer
-     *
-     * @return mixed
-     */
-    public function getList($retailer);
-
-    /**
      * Retrieve opening hours for a given retailer
      *
      * @param \Smile\Retailer\Api\Data\RetailerInterface $retailer The retailer

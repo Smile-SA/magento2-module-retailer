@@ -13,11 +13,9 @@
 namespace Smile\Retailer\Model\Retailer;
 
 use Smile\Retailer\Api\Data\OpeningHours\OpeningHoursRepositoryInterface;
-use Smile\Retailer\Api\Data\OpeningHoursInterface;
-use Smile\Retailer\Model\ResourceModel\Retailer\TimeSlots as TimeSlotsResource;
 
 /**
- * _________________________________________________
+ * Opening Hours Repository
  *
  * @category Smile
  * @package  Smile\Retailer
@@ -47,25 +45,10 @@ class OpeningHoursRepository implements OpeningHoursRepositoryInterface
      *
      * @return array
      */
-    public function getList($retailer)
-    {
-        $openingHoursModel = $this->openingHoursFactory->create();
-        $openingHours      = $openingHoursModel->setRetailerId($retailer->getId())->getTimeRanges();
-
-        return $openingHours;
-    }
-
-    /**
-     * Retrieve opening hours for a given retailer
-     *
-     * @param \Smile\Retailer\Api\Data\RetailerInterface $retailer The retailer
-     *
-     * @return array
-     */
     public function getByRetailer($retailer)
     {
-        $openingHoursModel = $this->openingHoursFactory->create();
-        $openingHoursModel->setRetailerId($retailer->getId())->loadTimeRanges();
+        $openingHoursModel = $this->openingHoursFactory->create(['retailerId' => $retailer->getId()]);
+        $openingHoursModel->loadTimeRanges();
 
         return $openingHoursModel;
     }

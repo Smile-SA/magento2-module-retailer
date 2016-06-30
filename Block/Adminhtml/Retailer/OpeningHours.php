@@ -14,6 +14,7 @@ namespace Smile\Retailer\Block\Adminhtml\Retailer;
 
 use Magento\Framework\Stdlib\DateTime;
 use Smile\Retailer\Api\Data\RetailerInterface;
+use Zend_Date;
 
 /**
  * Opening Hours rendering block
@@ -88,24 +89,37 @@ class OpeningHours extends \Magento\Backend\Block\AbstractBlock
         );
 
         if ($this->getRetailer() && $this->getRetailer()->getOpeningHours()) {
-            $retailerOpeningHours = $this->getRetailer()->getOpeningHours()->getTimeRanges();
-
-            foreach ($retailerOpeningHours as &$values) {
-                foreach ($values as &$timeRange) {
-                    foreach ($timeRange as &$hour) {
-                        $date = new \Zend_Date();
-                        $date->setTime($hour);
-                        $hour = $date->toString($this->getRetailer()->getOpeningHours()->getDateFormat());
-                    }
-                }
-            }
-
-            $openingHoursFieldset->setValue($retailerOpeningHours);
+            $timeRanges = $this->getRetailer()->getOpeningHours()->getTimeRanges();
+            $timeRanges = $this->convertTimeRanges($timeRanges);
+            $openingHoursFieldset->setValue($timeRanges);
         }
 
         $openingHoursRenderer = $this->getLayout()->createBlock('Smile\Retailer\Block\Adminhtml\Retailer\OpeningHours\Container\Renderer');
         $openingHoursFieldset->setRenderer($openingHoursRenderer);
 
         return $form;
+    }
+
+    /**
+     * Convert Time Range to today date.
+     *
+     * @param array $timeRanges The time ranges to convert
+     *
+     * @return mixed
+     */
+    private function convertTimeRanges($timeRanges)
+    {
+        // Convert time ranges to current day for correct form display
+        foreach ($timeRanges as &$values) {
+            foreach ($values as &$timeRange) {
+                foreach ($timeRange as &$hour) {
+                    $date = new Zend_Date();
+                    $date->setTime($hour);
+                    $hour = $date->toString($this->getRetailer()->getOpeningHours()->getDateFormat());
+                }
+            }
+        }
+
+        return $timeRanges;
     }
 }

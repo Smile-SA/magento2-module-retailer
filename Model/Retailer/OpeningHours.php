@@ -63,11 +63,13 @@ class OpeningHours extends AbstractDataObject implements OpeningHoursInterface
      *
      * @param \Smile\Retailer\Model\ResourceModel\Retailer\TimeSlots $timeSlotsResource Resource Model for Timeslots Management
      * @param \Magento\Framework\Json\Helper\Data                    $jsonHelper        JSON helper
+     * @param int                                                    $retailerId        The retailer Id
      */
-    public function __construct(TimeSlots $timeSlotsResource, JsonHelper $jsonHelper)
+    public function __construct(TimeSlots $timeSlotsResource, JsonHelper $jsonHelper, $retailerId = null)
     {
         $this->timeSlotsResource = $timeSlotsResource;
         $this->jsonHelper = $jsonHelper;
+        $this->retailerId = (int) $retailerId;
     }
 
     /**
@@ -124,7 +126,7 @@ class OpeningHours extends AbstractDataObject implements OpeningHoursInterface
     /**
      * Set Time format to Use
      *
-     * @param string $timeFormat
+     * @param string $timeFormat The time format to use
      */
     public function setTimeFormat($timeFormat)
     {
@@ -135,11 +137,12 @@ class OpeningHours extends AbstractDataObject implements OpeningHoursInterface
      * Load submitted data and parse it as proper format
      *
      * @param array $rangesData The time ranges
+     *
+     * @return $this
      */
     public function loadPostData($rangesData)
     {
         foreach ($rangesData as &$timeSlotItem) {
-
             if (is_string($timeSlotItem)) {
                 $timeSlotItem = $this->jsonHelper->jsonDecode($timeSlotItem);
             }
@@ -154,6 +157,8 @@ class OpeningHours extends AbstractDataObject implements OpeningHoursInterface
         }
 
         $this->timeRanges = array_filter($rangesData);
+
+        return $this;
     }
 
     /**
@@ -209,7 +214,7 @@ class OpeningHours extends AbstractDataObject implements OpeningHoursInterface
     /**
      * Internal Constructor
      *
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName) Method is inherited
      */
     protected function _construct()
     {

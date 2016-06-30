@@ -28,11 +28,6 @@ use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 class Renderer extends Template implements RendererInterface
 {
     /**
-     * @var \Smile\Retailer\Model\OpeningHours\OpeningHours
-     */
-    protected $openingHours;
-
-    /**
      * @var \Magento\Framework\Data\Form\Element\Factory
      */
     protected $elementFactory;
@@ -60,21 +55,18 @@ class Renderer extends Template implements RendererInterface
     /**
      * Block constructor.
      *
-     * @param \Magento\Backend\Block\Template\Context            $context             Templating context.
-     * @param \Magento\Framework\Data\Form\Element\Factory       $elementFactory      Form element factory.
-     * @param \Smile\Retailer\Model\Retailer\OpeningHoursFactory $openingHoursFactory Opening Hours factory.
-     * @param \Magento\Framework\Locale\ListsInterface           $localeLists         Locale List.
-     * @param array                                              $data                Additional data.
+     * @param \Magento\Backend\Block\Template\Context      $context        Templating context.
+     * @param \Magento\Framework\Data\Form\Element\Factory $elementFactory Form element factory.
+     * @param \Magento\Framework\Locale\ListsInterface     $localeLists    Locale List.
+     * @param array                                         $data          Additional data.
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Data\Form\Element\Factory $elementFactory,
-        \Smile\Retailer\Model\Retailer\OpeningHoursFactory $openingHoursFactory,
         \Magento\Framework\Locale\ListsInterface $localeLists,
         array $data = []
     ) {
         $this->elementFactory = $elementFactory;
-        $this->openingHours   = $openingHoursFactory->create();
         $this->localeList     = $localeLists;
 
         parent::__construct($context, $data);
