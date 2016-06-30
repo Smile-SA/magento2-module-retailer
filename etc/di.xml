@@ -21,7 +21,7 @@
     <preference for="Smile\Retailer\Api\Data\RetailerInterface" type="Smile\Retailer\Model\Retailer" />
     <preference for="Smile\Retailer\Api\Data\OpeningHoursInterface" type="Smile\Retailer\Model\Retailer\OpeningHours" />
 
-    <preference for="Smile\Retailer\Api\Data\OpeningHours\OpeningHoursRepositoryInterface" type="Smile\Retailer\Model\Retailer\OpeningHoursRepository" />
+    <preference for="Smile\Retailer\Api\OpeningHoursRepositoryInterface" type="Smile\Retailer\Model\Retailer\OpeningHoursRepository" />
     <preference for="Smile\Retailer\Api\Data\OpeningHours\OpeningHoursManagementInterface" type="Smile\Retailer\Model\Retailer\OpeningHours\Management" />
 
     <virtualType name="Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory" type="Smile\Seller\Model\ResourceModel\Seller\CollectionFactory">

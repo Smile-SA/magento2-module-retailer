@@ -11,7 +11,7 @@
  * @license   Open Software License ("OSL") v. 3.0
  */
 
-namespace Smile\Retailer\Api\Data\OpeningHours;
+namespace Smile\Retailer\Api;
 
 /**
  * Opening Hours Repository Interface

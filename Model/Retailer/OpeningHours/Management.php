@@ -13,7 +13,7 @@
 namespace Smile\Retailer\Model\Retailer\OpeningHours;
 
 use Smile\Retailer\Api\Data\OpeningHours\OpeningHoursManagementInterface;
-use Smile\Retailer\Api\Data\OpeningHours\OpeningHoursRepositoryInterface;
+use Smile\Retailer\Api\OpeningHoursRepositoryInterface;
 
 /**
  * Opening Hours Management class
@@ -25,14 +25,14 @@ use Smile\Retailer\Api\Data\OpeningHours\OpeningHoursRepositoryInterface;
 class Management implements OpeningHoursManagementInterface
 {
     /**
-     * @var \Smile\Retailer\Api\Data\OpeningHours\OpeningHoursRepositoryInterface
+     * @var \Smile\Retailer\Api\OpeningHoursRepositoryInterface
      */
     private $openingHoursRepository;
 
     /**
      * Management constructor.
      *
-     * @param \Smile\Retailer\Api\Data\OpeningHours\OpeningHoursRepositoryInterface $openingHoursRepository Opening Hours repository
+     * @param \Smile\Retailer\Api\OpeningHoursRepositoryInterface $openingHoursRepository Opening Hours repository
      */
     public function __construct(OpeningHoursRepositoryInterface $openingHoursRepository)
     {

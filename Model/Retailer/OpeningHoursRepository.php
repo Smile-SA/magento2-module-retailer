@@ -12,7 +12,7 @@
  */
 namespace Smile\Retailer\Model\Retailer;
 
-use Smile\Retailer\Api\Data\OpeningHours\OpeningHoursRepositoryInterface;
+use Smile\Retailer\Api\OpeningHoursRepositoryInterface;
 
 /**
  * Opening Hours Repository
