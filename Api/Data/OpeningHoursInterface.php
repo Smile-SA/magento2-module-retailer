@@ -24,9 +24,9 @@ interface OpeningHoursInterface
 {
     const EXTENSION_ATTRIBUTE_CODE = "opening_hours";
 
-    public function getRanges();
+    public function getTimeRanges();
 
-    public function setRanges($rangesData);
+    public function loadPostData($rangesData);
 
     public function getRetailerId();
 

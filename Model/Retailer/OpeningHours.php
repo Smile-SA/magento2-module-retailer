@@ -12,8 +12,12 @@
  */
 namespace Smile\Retailer\Model\Retailer;
 
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Data\AbstractDataObject;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Framework\Stdlib\DateTime;
 use Smile\Retailer\Api\Data\OpeningHoursInterface;
+use Smile\Retailer\Model\ResourceModel\Retailer\TimeSlots;
+use Zend_Date;
 
 /**
  * Opening Hours Model
@@ -22,7 +26,7 @@ use Smile\Retailer\Api\Data\OpeningHoursInterface;
  * @package  Smile\Retailer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class OpeningHours extends AbstractModel implements OpeningHoursInterface
+class OpeningHours extends AbstractDataObject implements OpeningHoursInterface
 {
     /**
      * @var null
@@ -32,31 +36,124 @@ class OpeningHours extends AbstractModel implements OpeningHoursInterface
     /**
      * @var null
      */
-    private $ranges = null;
+    private $timeRanges = null;
+
+    /**
+     * @var string The format used to manipulate date
+     */
+    private $dateFormat = DateTime::DATETIME_INTERNAL_FORMAT;
+
+    /**
+     * @var string The format used to manipulate time
+     */
+    private $timeFormat = Zend_Date::TIME_SHORT;
+
+    /**
+     * @var \Magento\Framework\Json\Helper\Data
+     */
+    private $jsonHelper;
+
+    /**
+     * @var \Smile\Retailer\Model\ResourceModel\Retailer\TimeSlots
+     */
+    private $timeSlotsResource;
+
+    /**
+     * OpeningHours constructor.
+     *
+     * @param \Smile\Retailer\Model\ResourceModel\Retailer\TimeSlots $timeSlotsResource Resource Model for Timeslots Management
+     * @param \Magento\Framework\Json\Helper\Data                    $jsonHelper        JSON helper
+     */
+    public function __construct(TimeSlots $timeSlotsResource, JsonHelper $jsonHelper)
+    {
+        $this->timeSlotsResource = $timeSlotsResource;
+        $this->jsonHelper = $jsonHelper;
+    }
 
     /**
      * Retrieve Time ranges of this opening hours
      *
      * @return array|null
      */
-    public function getRanges()
+    public function getTimeRanges()
     {
-        if (null === $this->ranges) {
-            $rangeData = $this->getResource()->getTimeSlots($this->getRetailerId(), OpeningHoursInterface::EXTENSION_ATTRIBUTE_CODE);
-            $this->ranges = $this->aggregateTimeRangesByDate($rangeData);
+        if (null === $this->timeRanges) {
+            $this->loadTimeRanges();
         }
 
-        return $this->ranges;
+        return $this->timeRanges;
     }
 
     /**
-     * Set Time ranges of current object
+     * Retrieve Time ranges of this opening hours
+     *
+     * @return array|null
+     */
+    public function loadTimeRanges()
+    {
+        if (null === $this->timeRanges) {
+            $rangeData = $this->timeSlotsResource->getTimeSlots(
+                $this->getRetailerId(),
+                OpeningHoursInterface::EXTENSION_ATTRIBUTE_CODE
+            );
+
+            $this->timeRanges = $this->aggregateTimeRangesByDate($rangeData);
+        }
+    }
+
+    /**
+     * Retrieve Date Format used
+     *
+     * @return string
+     */
+    public function getDateFormat()
+    {
+        return $this->dateFormat;
+    }
+
+    /**
+     * Retrieve Time Format used
+     *
+     * @return string
+     */
+    public function getTimeFormat()
+    {
+        return $this->timeFormat;
+    }
+
+    /**
+     * Set Time format to Use
+     *
+     * @param string $timeFormat
+     */
+    public function setTimeFormat($timeFormat)
+    {
+        $this->timeFormat = $timeFormat;
+    }
+
+    /**
+     * Load submitted data and parse it as proper format
      *
      * @param array $rangesData The time ranges
      */
-    public function setRanges($rangesData)
+    public function loadPostData($rangesData)
     {
-        // TODO: Implement setRanges() method.
+        foreach ($rangesData as &$timeSlotItem) {
+
+            if (is_string($timeSlotItem)) {
+                $timeSlotItem = $this->jsonHelper->jsonDecode($timeSlotItem);
+            }
+
+            if (empty($timeSlotItem)) {
+                continue;
+            }
+
+            foreach ($timeSlotItem as &$timeSlot) {
+                $timeSlot = array_map([$this, 'dateFromHour'], $timeSlot);
+            }
+        }
+
+        $this->timeRanges = array_filter($rangesData);
     }
 
     /**
@@ -84,20 +181,16 @@ class OpeningHours extends AbstractModel implements OpeningHoursInterface
     }
 
     /**
-     * Save time ranges
-     *
-     * @param array $rangeData Range data to save
+     * Save time ranges into DB
      *
      * @return bool
      */
-    public function saveRanges($rangeData)
+    public function saveTimeRanges()
     {
-        $rangeData = $this->prepareTimeRangeStorage($rangeData);
-
-        return $this->getResource()->saveTimeSlots(
+        return $this->timeSlotsResource->saveTimeSlots(
             $this->getRetailerId(),
             OpeningHoursInterface::EXTENSION_ATTRIBUTE_CODE,
-            $rangeData
+            $this->timeRanges
         );
     }
 
@@ -110,7 +203,7 @@ class OpeningHours extends AbstractModel implements OpeningHoursInterface
      */
     public function deleteByRetailerId($retailerId)
     {
-        return $this->getResource()->deleteTimeSlotsByRetailerId($retailerId, OpeningHoursInterface::EXTENSION_ATTRIBUTE_CODE);
+        return $this->getTimeSlotResource()->deleteTimeSlotsByRetailerId($retailerId, OpeningHoursInterface::EXTENSION_ATTRIBUTE_CODE);
     }
 
     /**
@@ -147,37 +240,9 @@ class OpeningHours extends AbstractModel implements OpeningHoursInterface
     }
 
     /**
-     * Prepare Time ranges before storage
-     *
-     * @param array $rangeData Range data to aggregate
-     *
-     * @return array
-     */
-    private function prepareTimeRangeStorage($rangeData)
-    {
-        foreach ($rangeData as &$timeSlotItem) {
-            // @TODO Better parsing
-            if (is_string($timeSlotItem)) {
-                $timeSlotItem = json_decode($timeSlotItem);
-            }
-
-            if (empty($timeSlotItem)) {
-                continue;
-            }
-
-            foreach ($timeSlotItem as &$timeSlot) {
-                $timeSlot[0] = $this->dateFromHour($timeSlot[0]);
-                $timeSlot[1] = $this->dateFromHour($timeSlot[1]);
-            }
-        }
-
-        return array_filter($rangeData);
-    }
-
-    /**
      * Build default date (01.01.1970) from an hour
      *
-     * @TODO Rework this one
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) called via an array_map
      *
      * @param string $hour The hour
      *
@@ -185,16 +250,14 @@ class OpeningHours extends AbstractModel implements OpeningHoursInterface
      */
     private function dateFromHour($hour)
     {
-        $date = new \Zend_Date(0, \Zend_Date::TIMESTAMP);
+        $date = new Zend_Date(0, Zend_Date::TIMESTAMP); // Init as 1970-01-01 since field is store on a DATETIME column.
         $date->setTime($hour);
 
-        return $date->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+        return $date->toString($this->getDateFormat());
     }
 
     /**
      * Extract hour from a date
-     *
-     * @TODO Rework this one
      *
      * @param string $date The date
      *
@@ -202,8 +265,8 @@ class OpeningHours extends AbstractModel implements OpeningHoursInterface
      */
     private function dateToHour($date)
     {
-        $date = new \Zend_Date($date, \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+        $date = new Zend_Date($date, $this->getDateFormat());
 
-        return $date->toString(\Zend_Date::TIME_SHORT);
+        return $date->toString($this->getTimeFormat());
     }
 }

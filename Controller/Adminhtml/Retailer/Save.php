@@ -59,7 +59,9 @@ class Save extends AbstractRetailer
 
             if (isset($data['opening_hours']) && !empty($data['opening_hours'])) {
                 $extension = $model->getExtensionAttributes();
-                $extension->setOpeningHours($data['opening_hours']);
+                $openingHours = $this->openingHoursFactory->create();
+                $openingHours->loadPostData($data['opening_hours']);
+                $extension->setOpeningHours($openingHours);
                 $model->setExtensionAttributes($extension);
             }
 

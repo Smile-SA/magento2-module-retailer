@@ -50,23 +50,37 @@ class OpeningHoursRepository implements OpeningHoursRepositoryInterface
     public function getList($retailer)
     {
         $openingHoursModel = $this->openingHoursFactory->create();
-        $openingHours      = $openingHoursModel->setRetailerId($retailer->getId())->getRanges();
+        $openingHours      = $openingHoursModel->setRetailerId($retailer->getId())->getTimeRanges();
 
         return $openingHours;
     }
 
     /**
+     * Retrieve opening hours for a given retailer
+     *
+     * @param \Smile\Retailer\Api\Data\RetailerInterface $retailer The retailer
+     *
+     * @return array
+     */
+    public function getByRetailer($retailer)
+    {
+        $openingHoursModel = $this->openingHoursFactory->create();
+        $openingHoursModel->setRetailerId($retailer->getId())->loadTimeRanges();
+
+        return $openingHoursModel;
+    }
+
+    /**
      * Save opening hours for a given retailer
      *
-     * @param int   $retailerId   The retailer id
-     * @param array $openingHours The opening hours data
+     * @param int                                            $retailerId   The retailer id
+     * @param \Smile\Retailer\Api\Data\OpeningHoursInterface $openingHours The opening hours object
      *
      * @return bool
      */
     public function save($retailerId, $openingHours)
     {
-        $openingHoursModel = $this->openingHoursFactory->create();
-        $openingHoursModel->setRetailerId($retailerId)->saveRanges($openingHours);
+        $openingHours->setRetailerId($retailerId)->saveTimeRanges();
     }
 
     /**

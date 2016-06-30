@@ -12,6 +12,7 @@
  */
 namespace Smile\Retailer\Block\Adminhtml\Retailer;
 
+use Magento\Framework\Stdlib\DateTime;
 use Smile\Retailer\Api\Data\RetailerInterface;
 
 /**
@@ -87,7 +88,19 @@ class OpeningHours extends \Magento\Backend\Block\AbstractBlock
         );
 
         if ($this->getRetailer() && $this->getRetailer()->getOpeningHours()) {
-            $openingHoursFieldset->setValue($this->getRetailer()->getOpeningHours());
+            $retailerOpeningHours = $this->getRetailer()->getOpeningHours()->getTimeRanges();
+
+            foreach ($retailerOpeningHours as &$values) {
+                foreach ($values as &$timeRange) {
+                    foreach ($timeRange as &$hour) {
+                        $date = new \Zend_Date();
+                        $date->setTime($hour);
+                        $hour = $date->toString($this->getRetailer()->getOpeningHours()->getDateFormat());
+                    }
+                }
+            }
+
+            $openingHoursFieldset->setValue($retailerOpeningHours);
         }
 
         $openingHoursRenderer = $this->getLayout()->createBlock('Smile\Retailer\Block\Adminhtml\Retailer\OpeningHours\Container\Renderer');

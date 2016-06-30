@@ -140,25 +140,8 @@ class Renderer extends Template implements RendererInterface
         $values = [];
         if ($this->element->getValue()) {
             $values = $this->element->getValue();
-            foreach ($values as &$timeRange) {
-                foreach ($timeRange as &$hour) {
-                    $date = new \Zend_Date();
-                    $date->setTime($hour);
-                    $hour = $date->toString($this->getDateFormat());
-                }
-            }
         }
 
         return $this->jsonHelper->jsonEncode($values);
-    }
-
-    /**
-     * Retrieve internally used date Format
-     *
-     * @return string
-     */
-    public function getDateFormat()
-    {
-        return \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT;
     }
 }

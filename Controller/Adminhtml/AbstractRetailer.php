@@ -19,6 +19,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 use Smile\Retailer\Api\RetailerRepositoryInterface;
 use Smile\Seller\Model\SellerFactory;
+use Smile\Retailer\Model\Retailer\OpeningHoursFactory;
 
 /**
  * Abstract Retailer controller
@@ -38,6 +39,11 @@ abstract class AbstractRetailer extends Action
      * @var \Magento\Framework\Controller\Result\ForwardFactory|null
      */
     protected $resultForwardFactory = null;
+
+    /**
+     * @var \Smile\Retailer\Model\Retailer\OpeningHoursFactory|null
+     */
+    protected $openingHoursFactory = null;
 
     /**
      * Core registry
@@ -67,6 +73,7 @@ abstract class AbstractRetailer extends Action
      * @param Registry                    $coreRegistry         Application registry
      * @param RetailerRepositoryInterface $retailerRepository   Retailer Repository
      * @param SellerFactory               $retailerFactory      Retailer Factory
+     * @param OpeningHoursFactory         $openingHoursFactory  Opening Hours Factory
      */
     public function __construct(
         Context $context,
@@ -74,13 +81,15 @@ abstract class AbstractRetailer extends Action
         ForwardFactory $resultForwardFactory,
         Registry $coreRegistry,
         RetailerRepositoryInterface $retailerRepository,
-        SellerFactory $retailerFactory
+        SellerFactory $retailerFactory,
+        OpeningHoursFactory $openingHoursFactory
     ) {
         $this->resultPageFactory    = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->coreRegistry         = $coreRegistry;
         $this->retailerRepository   = $retailerRepository;
         $this->retailerFactory      = $retailerFactory;
+        $this->openingHoursFactory  = $openingHoursFactory;
 
         parent::__construct($context);
     }

@@ -57,7 +57,7 @@ class ReadHandler implements ExtensionInterface
         }*/
 
         $entityExtension = $entity->getExtensionAttributes();
-        $openingHours    = $this->openingHoursRepository->getList($entity);
+        $openingHours    = $this->openingHoursRepository->getByRetailer($entity);
         if ($openingHours) {
             $entityExtension->setOpeningHours($openingHours);
         }
