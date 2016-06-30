@@ -57,7 +57,7 @@ class Save extends AbstractRetailer
                 $model->setStoreId($storeId);
             }
 
-            if (isset($data['opening_hours']) && !empty($data['opening_hours'])) {
+            if (isset($data['opening_hours'])) {
                 $extension = $model->getExtensionAttributes();
                 $openingHours = $this->openingHoursFactory->create();
                 $openingHours->loadPostData($data['opening_hours']);
@@ -84,7 +84,7 @@ class Save extends AbstractRetailer
                 $this->messageManager->addError($e->getMessage());
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData($data);
 
-                $returnParams = ['retailer_id' => $this->getRequest()->getParam('id')];
+                $returnParams = ['id' => $this->getRequest()->getParam('id')];
 
                 return $resultRedirect->setPath('*/*/edit', $returnParams);
             }
