@@ -19,4 +19,7 @@
     <extension_attributes for="Smile\Seller\Api\Data\SellerInterface">
         <attribute code="opening_hours" type="\Smile\Retailer\Api\Data\OpeningHoursInterface" />
     </extension_attributes>
+    <extension_attributes for="Smile\Seller\Api\Data\SellerInterface">
+        <attribute code="special_opening_hours" type="\Smile\Retailer\Api\Data\SpecialOpeningHoursInterface" />
+    </extension_attributes>
 </config>

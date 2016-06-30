@@ -10,10 +10,10 @@
  * @copyright 2016 Smile
  * @license   Open Software License ("OSL") v. 3.0
  */
-namespace Smile\Retailer\Model\Retailer\OpeningHours;
+namespace Smile\Retailer\Model\Retailer\SpecialOpeningHours;
 
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
-use Smile\Retailer\Api\OpeningHoursRepositoryInterface;
+use Smile\Retailer\Api\SpecialOpeningHoursRepositoryInterface;
 use Smile\Retailer\Api\RetailerRepositoryInterface;
 
 /**
@@ -26,9 +26,9 @@ use Smile\Retailer\Api\RetailerRepositoryInterface;
 class SaveHandler implements ExtensionInterface
 {
     /**
-     * @var \Smile\Retailer\Api\OpeningHoursRepositoryInterface
+     * @var \Smile\Retailer\Api\SpecialOpeningHoursRepositoryInterface
      */
-    private $openingHoursRepository;
+    private $specialOpeningHoursRepository;
 
     /**
      * @var \Smile\Retailer\Api\RetailerRepositoryInterface
@@ -38,13 +38,13 @@ class SaveHandler implements ExtensionInterface
     /**
      * SaveHandler constructor.
      *
-     * @param \Smile\Retailer\Api\OpeningHoursRepositoryInterface $openingHoursRepository Opening Hours Repository
-     * @param \Smile\Retailer\Api\RetailerRepositoryInterface     $retailerRepository     RetailerRepository
+     * @param \Smile\Retailer\Api\SpecialOpeningHoursRepositoryInterface $specialOpeningHoursRepository Special Opening Hours Repository
+     * @param \Smile\Retailer\Api\RetailerRepositoryInterface            $retailerRepository            Retailer Repository
      */
-    public function __construct(OpeningHoursRepositoryInterface $openingHoursRepository, RetailerRepositoryInterface $retailerRepository)
+    public function __construct(SpecialOpeningHoursRepositoryInterface $specialOpeningHoursRepository, RetailerRepositoryInterface $retailerRepository)
     {
-        $this->openingHoursRepository = $openingHoursRepository;
-        $this->retailerRepository     = $retailerRepository;
+        $this->specialOpeningHoursRepository = $specialOpeningHoursRepository;
+        $this->retailerRepository            = $retailerRepository;
     }
 
     /**
@@ -64,12 +64,11 @@ class SaveHandler implements ExtensionInterface
             return $entity;
         }
 
-        $openingHours = $entity->getExtensionAttributes()->getOpeningHours();
+        $openingHours = $entity->getExtensionAttributes()->getSpecialOpeningHours();
 
         if (null !== $openingHours) {
-            $this->openingHoursRepository->save($entity->getId(), $openingHours);
+            $this->specialOpeningHoursRepository->save($entity->getId(), $openingHours);
         }
-
         return $entity;
     }
 }

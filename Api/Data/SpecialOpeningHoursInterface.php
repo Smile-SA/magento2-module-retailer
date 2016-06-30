@@ -14,16 +14,16 @@
 namespace Smile\Retailer\Api\Data;
 
 /**
- * Opening Hours Interface
+ * Special Opening Hours Interface
  *
  * @category Smile
  * @package  Smile\Retailer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-interface OpeningHoursInterface extends TimeSlotsInterface
+interface SpecialOpeningHoursInterface extends TimeSlotsInterface
 {
     /**
      * The time slots type for this data
      */
-    const EXTENSION_ATTRIBUTE_CODE = "opening_hours";
+    const EXTENSION_ATTRIBUTE_CODE = "special_opening_hours";
 }

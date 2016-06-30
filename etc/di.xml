@@ -20,8 +20,10 @@
     <preference for="Smile\Retailer\Api\RetailerRepositoryInterface" type="Smile\Retailer\Model\RetailerRepository" />
     <preference for="Smile\Retailer\Api\Data\RetailerInterface" type="Smile\Retailer\Model\Retailer" />
     <preference for="Smile\Retailer\Api\Data\OpeningHoursInterface" type="Smile\Retailer\Model\Retailer\OpeningHours" />
+    <preference for="Smile\Retailer\Api\Data\SpecialOpeningHoursInterface" type="Smile\Retailer\Model\Retailer\SpecialOpeningHours" />
 
     <preference for="Smile\Retailer\Api\OpeningHoursRepositoryInterface" type="Smile\Retailer\Model\Retailer\OpeningHoursRepository" />
+    <preference for="Smile\Retailer\Api\SpecialOpeningHoursRepositoryInterface" type="Smile\Retailer\Model\Retailer\SpecialOpeningHoursRepository" />
     <preference for="Smile\Retailer\Api\Data\OpeningHours\OpeningHoursManagementInterface" type="Smile\Retailer\Model\Retailer\OpeningHours\Management" />
 
     <virtualType name="Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory" type="Smile\Seller\Model\ResourceModel\Seller\CollectionFactory">
@@ -54,12 +56,15 @@
                 <item name="Smile\Seller\Api\Data\SellerInterface" xsi:type="array">
                     <item name="create" xsi:type="array">
                         <item name="create_opening_hours" xsi:type="string">Smile\Retailer\Model\Retailer\OpeningHours\SaveHandler</item>
+                        <item name="create_special_opening_hours" xsi:type="string">Smile\Retailer\Model\Retailer\SpecialOpeningHours\SaveHandler</item>
                     </item>
                     <item name="update" xsi:type="array">
                         <item name="update_opening_hours" xsi:type="string">Smile\Retailer\Model\Retailer\OpeningHours\SaveHandler</item>
+                        <item name="update_special_opening_hours" xsi:type="string">Smile\Retailer\Model\Retailer\SpecialOpeningHours\SaveHandler</item>
                     </item>
                     <item name="read" xsi:type="array">
                         <item name="read_opening_hours" xsi:type="string">Smile\Retailer\Model\Retailer\OpeningHours\ReadHandler</item>
+                        <item name="read_special_opening_hours" xsi:type="string">Smile\Retailer\Model\Retailer\SpecialOpeningHours\ReadHandler</item>
                     </item>
                 </item>
             </argument>

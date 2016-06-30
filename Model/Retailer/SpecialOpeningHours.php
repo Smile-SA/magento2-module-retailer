@@ -13,21 +13,21 @@
 namespace Smile\Retailer\Model\Retailer;
 
 use Magento\Framework\Json\Helper\Data;
-use Smile\Retailer\Api\Data\OpeningHoursInterface;
+use Smile\Retailer\Api\Data\SpecialOpeningHoursInterface;
 use Smile\Retailer\Model\ResourceModel\Retailer\TimeSlots;
 use Smile\Retailer\Model\Retailer\TimeSlots\AbstractTimeSlots;
 
 /**
- * Opening Hours Model
+ * Special Opening Hours Model
  *
  * @category Smile
  * @package  Smile\Retailer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class OpeningHours extends AbstractTimeSlots implements OpeningHoursInterface
+class SpecialOpeningHours extends AbstractTimeSlots implements SpecialOpeningHoursInterface
 {
     /**
-     * OpeningHours constructor. Just inject correct extension attribute code
+     * Special Opening Hours constructor. Just inject correct extension attribute code
      *
      * @param \Smile\Retailer\Model\ResourceModel\Retailer\TimeSlots $timeSlotsResource The Resource Model
      * @param \Magento\Framework\Json\Helper\Data                    $jsonHelper        JSON Helper
@@ -37,7 +37,7 @@ class OpeningHours extends AbstractTimeSlots implements OpeningHoursInterface
     public function __construct(
         TimeSlots $timeSlotsResource,
         Data $jsonHelper,
-        $attributeCode = OpeningHoursInterface::EXTENSION_ATTRIBUTE_CODE,
+        $attributeCode = SpecialOpeningHoursInterface::EXTENSION_ATTRIBUTE_CODE,
         $retailerId = null
     ){
         parent::__construct($timeSlotsResource, $jsonHelper, $attributeCode, $retailerId);
@@ -56,7 +56,7 @@ class OpeningHours extends AbstractTimeSlots implements OpeningHoursInterface
 
         if (!empty($rangeData)) {
             foreach ($rangeData as $range) {
-                $values[$range["day_of_week"]][] = [
+                $values[$range["date"]][] = [
                     $this->dateToHour($range["start_hour"]),
                     $this->dateToHour($range["end_hour"]),
                 ];
