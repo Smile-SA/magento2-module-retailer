@@ -92,10 +92,14 @@ class SpecialOpeningHours extends AbstractTimeSlots implements SpecialOpeningHou
 
         if (!empty($rangeData)) {
             foreach ($rangeData as $range) {
-                $values[$range["date"]][] = [
-                    $this->dateToHour($range["start_hour"]),
-                    $this->dateToHour($range["end_hour"]),
-                ];
+                $data = [];
+                if (null !== $range["start_hour"] && null !== $range["end_hour"]) {
+                    $data = [
+                        $this->dateToHour($range["start_hour"]),
+                        $this->dateToHour($range["end_hour"]),
+                    ];
+                }
+                $values[$range["date"]][] = $data;
             }
         }
 

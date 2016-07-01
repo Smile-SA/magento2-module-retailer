@@ -76,10 +76,10 @@ class Save extends AbstractRetailer
 
                 return $resultRedirect->setPath('*/*/');
             } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData($data);
 
-                $returnParams = ['id' => $this->getRequest()->getParam('id')];
+                $returnParams = ['id' => $model->getId()];
 
                 return $resultRedirect->setPath('*/*/edit', $returnParams);
             }

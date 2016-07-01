@@ -45,14 +45,21 @@ class TimeSlots extends AbstractDb
                 $dateField = "day_of_week";
             }
 
+            $row = [
+                "retailer_id"    => $retailerId,
+                "attribute_code" => $attributeCode,
+                $dateField       => $date,
+                "start_hour"     => null,
+                "end_hour"       => null,
+            ];
+
+            if (!count($timeSlotItem)) {
+                $data[] = $row;
+                continue;
+            }
+
             foreach ($timeSlotItem as $timeSlot) {
-                $data[] = [
-                    "retailer_id"    => $retailerId,
-                    "attribute_code" => $attributeCode,
-                    $dateField       => $date,
-                    "start_hour"     => $timeSlot[0],
-                    "end_hour"       => $timeSlot[1],
-                ];
+                $data[] = array_merge($row, ["start_hour" => $timeSlot[0], "end_hour" => $timeSlot[1]]);
             }
         }
 

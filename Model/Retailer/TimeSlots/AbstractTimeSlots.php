@@ -155,16 +155,14 @@ abstract class AbstractTimeSlots extends AbstractDataObject implements TimeSlots
                 $timeSlotItem = $this->jsonHelper->jsonDecode($timeSlotItem);
             }
 
-            if (empty($timeSlotItem)) {
-                continue;
-            }
-
-            foreach ($timeSlotItem as &$timeSlot) {
-                $timeSlot = array_map([$this, 'dateFromHour'], $timeSlot);
+            if (!empty($timeSlotItem)) {
+                foreach ($timeSlotItem as &$timeSlot) {
+                    $timeSlot = array_map([$this, 'dateFromHour'], $timeSlot);
+                }
             }
         }
 
-        $this->timeRanges = array_filter($rangesData);
+        $this->timeRanges = $rangesData;
 
         return $this;
     }

@@ -268,7 +268,7 @@ JAVASCRIPT;
                 $date = new Zend_Date($date, $this->getElement()->getSpecialOpeningHours()->getDateFormat());
                 $arrayValues[] = [
                     "date" => $date->toString($this->_localeDate->getDateFormatWithLongYear()),
-                    "opening_hours" => $this->jsonHelper->jsonEncode($timeRanges),
+                    "opening_hours" => $this->jsonHelper->jsonEncode(array_filter($timeRanges)),
                 ];
             }
         }
