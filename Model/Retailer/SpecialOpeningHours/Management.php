@@ -10,14 +10,14 @@
  * @copyright 2016 Smile
  * @license   Open Software License ("OSL") v. 3.0
  */
-namespace Smile\Retailer\Model\Retailer\OpeningHours;
+namespace Smile\Retailer\Model\Retailer\SpecialOpeningHours;
 
-use Smile\Retailer\Api\Data\OpeningHours\ManagementInterface;
-use Smile\Retailer\Api\OpeningHoursRepositoryInterface;
+use Smile\Retailer\Api\Data\SpecialOpeningHours\ManagementInterface;
 use Smile\Retailer\Api\RetailerRepositoryInterface;
+use Smile\Retailer\Api\SpecialOpeningHoursRepositoryInterface;
 
 /**
- * Opening Hours Management class
+ * Special Opening Hours Management class
  *
  * @category Smile
  * @package  Smile\Retailer
@@ -38,11 +38,11 @@ class Management implements ManagementInterface
     /**
      * Management constructor.
      *
-     * @param \Smile\Retailer\Api\OpeningHoursRepositoryInterface $openingHoursRepository Opening Hours repository
-     * @param \Smile\Retailer\Api\RetailerRepositoryInterface     $retailerRepository     Retailer repository
+     * @param \Smile\Retailer\Api\SpecialOpeningHoursRepositoryInterface $openingHoursRepository Opening Hours repository
+     * @param \Smile\Retailer\Api\RetailerRepositoryInterface            $retailerRepository     Retailer repository
      */
     public function __construct(
-        OpeningHoursRepositoryInterface $openingHoursRepository,
+        SpecialOpeningHoursRepositoryInterface $openingHoursRepository,
         RetailerRepositoryInterface $retailerRepository
     ) {
         $this->openingHoursRepository = $openingHoursRepository;
@@ -50,36 +50,36 @@ class Management implements ManagementInterface
     }
 
     /**
-     * Save Opening Hours for a given retailer
+     * Save Special Opening Hours for a given retailer
      *
      * @param \Smile\Seller\Api\Data\SellerInterface $retailer The retailer
      *
      * @return \Smile\Seller\Api\Data\SellerInterface
      */
-    public function saveOpeningHours(\Smile\Seller\Api\Data\SellerInterface $retailer)
+    public function saveSpecialOpeningHours(\Smile\Seller\Api\Data\SellerInterface $retailer)
     {
         /** @var $entity \Smile\Seller\Api\Data\SellerInterface */
         if ((int) $retailer->getAttributeSetId() !== (int) $this->getRetailerRepository()->getEntityAttributeSetId()) {
             return $retailer;
         }
 
-        $openingHours = $retailer->getExtensionAttributes()->getOpeningHours();
+        $openingHours = $retailer->getExtensionAttributes()->getSpecialOpeningHours();
 
         if (null !== $openingHours) {
-            $this->getOpeningHoursRepository()->save($retailer->getId(), $openingHours);
+            $this->getSpecialOpeningHoursRepository()->save($retailer->getId(), $openingHours);
         }
 
         return $retailer;
     }
 
     /**
-     * Load Opening Hours for a given retailer
+     * Load Special Opening Hours for a given retailer
      *
      * @param \Smile\Seller\Api\Data\SellerInterface $retailer The retailer
      *
      * @return \Smile\Seller\Api\Data\SellerInterface
      */
-    public function loadOpeningHours(\Smile\Seller\Api\Data\SellerInterface $retailer)
+    public function loadSpecialOpeningHours(\Smile\Seller\Api\Data\SellerInterface $retailer)
     {
         /** @var $entity \Smile\Seller\Api\Data\SellerInterface */
         if ((int) $retailer->getAttributeSetId() !== (int) $this->getRetailerRepository()->getEntityAttributeSetId()) {
@@ -87,9 +87,9 @@ class Management implements ManagementInterface
         }
 
         $entityExtension = $retailer->getExtensionAttributes();
-        $openingHours    = $this->getOpeningHoursRepository()->getByRetailer($retailer);
+        $openingHours    = $this->getSpecialOpeningHoursRepository()->getByRetailer($retailer);
         if ($openingHours) {
-            $entityExtension->setOpeningHours($openingHours);
+            $entityExtension->setSpecialOpeningHours($openingHours);
         }
 
         $retailer->setExtensionAttributes($entityExtension);
@@ -98,11 +98,11 @@ class Management implements ManagementInterface
     }
 
     /**
-     * Retrieve Opening Hours Repository
+     * Retrieve Special Opening Hours Repository
      *
-     * @return OpeningHoursRepositoryInterface
+     * @return SpecialOpeningHoursRepositoryInterface
      */
-    private function getOpeningHoursRepository()
+    private function getSpecialOpeningHoursRepository()
     {
         return $this->openingHoursRepository;
     }

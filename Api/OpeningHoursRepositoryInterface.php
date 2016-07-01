@@ -27,15 +27,15 @@ interface OpeningHoursRepositoryInterface
      *
      * @param \Smile\Retailer\Api\Data\RetailerInterface $retailer The retailer
      *
-     * @return array
+     * @return \Smile\Retailer\Api\Data\OpeningHoursInterface
      */
     public function getByRetailer($retailer);
 
     /**
      * Save opening hours list for a given retailer Id
      *
-     * @param integer $retailerId   The retailer Id
-     * @param array   $openingHours The Opening Hours
+     * @param integer                                        $retailerId   The retailer Id
+     * @param \Smile\Retailer\Api\Data\OpeningHoursInterface $openingHours The Opening Hours
      *
      * @return mixed
      */

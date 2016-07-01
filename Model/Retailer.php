@@ -96,6 +96,22 @@ class Retailer extends Seller implements RetailerInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function isOpen($retailer, $dateTime = null)
+    {
+        // TODO: Implement isOpen() method.
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isClosed($retailer, $dateTime = null)
+    {
+        return !$this->isOpen($retailer, $dateTime);
+    }
+
+    /**
      * Retrieve custom attributes codes list
      *
      * @return array

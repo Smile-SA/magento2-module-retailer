@@ -13,8 +13,7 @@
 namespace Smile\Retailer\Model\Retailer\OpeningHours;
 
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
-use Smile\Retailer\Api\OpeningHoursRepositoryInterface;
-use Smile\Retailer\Api\RetailerRepositoryInterface;
+use Smile\Retailer\Api\Data\OpeningHours\ManagementInterface;
 
 /**
  * Read Handler for Opening Hours
@@ -26,25 +25,18 @@ use Smile\Retailer\Api\RetailerRepositoryInterface;
 class ReadHandler implements ExtensionInterface
 {
     /**
-     * @var \Smile\Retailer\Api\OpeningHoursRepositoryInterface
+     * @var \Smile\Retailer\Api\Data\OpeningHours\ManagementInterface
      */
-    private $openingHoursRepository;
+    private $openingHoursManagement;
 
     /**
-     * @var \Smile\Retailer\Api\RetailerRepositoryInterface
-     */
-    private $retailerRepository;
-
-    /**
-     * ReadHandler constructor.
+     * SaveHandler constructor.
      *
-     * @param \Smile\Retailer\Api\OpeningHoursRepositoryInterface $openingHoursRepository Opening Hours Repository
-     * @param \Smile\Retailer\Api\RetailerRepositoryInterface     $retailerRepository     RetailerRepository
+     * @param \Smile\Retailer\Api\Data\OpeningHours\ManagementInterface $openingHoursManagement Special Opening Hours Management
      */
-    public function __construct(OpeningHoursRepositoryInterface $openingHoursRepository, RetailerRepositoryInterface $retailerRepository)
+    public function __construct(ManagementInterface $openingHoursManagement)
     {
-        $this->openingHoursRepository = $openingHoursRepository;
-        $this->retailerRepository     = $retailerRepository;
+        $this->openingHoursManagement = $openingHoursManagement;
     }
 
     /**
@@ -59,18 +51,7 @@ class ReadHandler implements ExtensionInterface
      */
     public function execute($entity, $arguments = [])
     {
-        /** @var $entity \Smile\Seller\Api\Data\SellerInterface */
-        if ((int) $entity->getAttributeSetId() !== (int) $this->retailerRepository->getEntityAttributeSetId()) {
-            return $entity;
-        }
-
-        $entityExtension = $entity->getExtensionAttributes();
-        $openingHours    = $this->openingHoursRepository->getByRetailer($entity);
-        if ($openingHours) {
-            $entityExtension->setOpeningHours($openingHours);
-        }
-
-        $entity->setExtensionAttributes($entityExtension);
+        $entity = $this->openingHoursManagement->loadOpeningHours($entity);
 
         return $entity;
     }

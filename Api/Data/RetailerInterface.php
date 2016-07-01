@@ -40,4 +40,24 @@ interface RetailerInterface extends SellerInterface
      * @return mixed
      */
     public function setOpeningHours($openingHours);
+
+    /**
+     * Check if a retailer is open at a given date time
+     *
+     * @param \Smile\Retailer\Api\Data\RetailerInterface $retailer The retailer
+     * @param mixed                                      $dateTime A date time
+     *
+     * @return mixed
+     */
+    public function isOpen($retailer, $dateTime = null);
+
+    /**
+     * Check if a retailer is closed at a given date time
+     *
+     * @param \Smile\Retailer\Api\Data\RetailerInterface $retailer The retailer
+     * @param mixed                                      $dateTime A date time
+     *
+     * @return mixed
+     */
+    public function isClosed($retailer, $dateTime = null);
 }
