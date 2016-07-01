@@ -16,6 +16,7 @@ use Magento\Backend\Block\Template;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Zend_Date;
 
 /**
@@ -43,6 +44,7 @@ class Renderer extends \Magento\Config\Block\System\Config\Form\Field\FieldArray
      * @var \Magento\Framework\Json\Helper\Data
      */
     private $jsonHelper;
+
 
     /**
      * @param \Magento\Backend\Block\Template\Context      $context        Application context
@@ -160,8 +162,7 @@ class Renderer extends \Magento\Config\Block\System\Config\Form\Field\FieldArray
     private function renderDateColumn($columnName)
     {
         $element = $this->elementFactory->create('date');
-        $element->setFormat(DateTime::DATE_INTERNAL_FORMAT)
-            ->setId("date")
+        $element->setFormat($this->_localeDate->getDateFormatWithLongYear())
             ->setForm($this->getForm())
             ->setName($this->_getCellInputElementName($columnName))
             ->setHtmlId($this->_getCellInputElementId('<%- _id %>', $columnName))
@@ -264,8 +265,9 @@ JAVASCRIPT;
                     }
                 }
 
+                $date = new Zend_Date($date, $this->getElement()->getSpecialOpeningHours()->getDateFormat());
                 $arrayValues[] = [
-                    "date" => $date,
+                    "date" => $date->toString($this->_localeDate->getDateFormatWithLongYear()),
                     "opening_hours" => $this->jsonHelper->jsonEncode($timeRanges),
                 ];
             }

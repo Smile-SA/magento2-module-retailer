@@ -13,9 +13,13 @@
 namespace Smile\Retailer\Model\Retailer;
 
 use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Smile\Retailer\Api\Data\SpecialOpeningHoursInterface;
 use Smile\Retailer\Model\ResourceModel\Retailer\TimeSlots;
 use Smile\Retailer\Model\Retailer\TimeSlots\AbstractTimeSlots;
+use Magento\Framework\Stdlib\DateTime\Filter\Date as DateFilter;
 
 /**
  * Special Opening Hours Model
@@ -27,19 +31,27 @@ use Smile\Retailer\Model\Retailer\TimeSlots\AbstractTimeSlots;
 class SpecialOpeningHours extends AbstractTimeSlots implements SpecialOpeningHoursInterface
 {
     /**
+     * @var TimezoneInterface
+     */
+    private $localeDate;
+
+    /**
      * Special Opening Hours constructor. Just inject correct extension attribute code
      *
      * @param \Smile\Retailer\Model\ResourceModel\Retailer\TimeSlots $timeSlotsResource The Resource Model
      * @param \Magento\Framework\Json\Helper\Data                    $jsonHelper        JSON Helper
+     * @param TimezoneInterface                                      $localeDate        The Locale Date Interface
      * @param null|string                                            $attributeCode     Extension Attribute code
      * @param null                                                   $retailerId        Retailer Id
      */
     public function __construct(
         TimeSlots $timeSlotsResource,
         Data $jsonHelper,
+        TimezoneInterface $localeDate,
         $attributeCode = SpecialOpeningHoursInterface::EXTENSION_ATTRIBUTE_CODE,
         $retailerId = null
     ) {
+        $this->localeDate = $localeDate;
         parent::__construct($timeSlotsResource, $jsonHelper, $attributeCode, $retailerId);
     }
 
@@ -59,7 +71,9 @@ class SpecialOpeningHours extends AbstractTimeSlots implements SpecialOpeningHou
                 continue;
             }
 
-            $openingHoursRange[$range['date']] = $range['opening_hours'];
+            $date = $this->formatDate($range['date']);
+
+            $openingHoursRange[$date] = $range['opening_hours'];
         }
 
         parent::loadPostData($openingHoursRange);
@@ -86,5 +100,23 @@ class SpecialOpeningHours extends AbstractTimeSlots implements SpecialOpeningHou
         }
 
         return $values;
+    }
+
+    /**
+     * Prepare date for save in DB
+     *
+     * @param string $date   The Date
+     * @param string $format This Date format
+     *
+     * @return string
+     */
+    private function formatDate($date, $format = null)
+    {
+        if (null === $format) {
+            $format = $this->localeDate->getDateFormatWithLongYear();
+        }
+        $date = new \Zend_Date($date, $format);
+
+        return $date->toString(DateTime::DATE_INTERNAL_FORMAT);
     }
 }
