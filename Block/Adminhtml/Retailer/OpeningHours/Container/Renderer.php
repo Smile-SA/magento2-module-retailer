@@ -58,7 +58,7 @@ class Renderer extends Template implements RendererInterface
      * @param \Magento\Backend\Block\Template\Context      $context        Templating context.
      * @param \Magento\Framework\Data\Form\Element\Factory $elementFactory Form element factory.
      * @param \Magento\Framework\Locale\ListsInterface     $localeLists    Locale List.
-     * @param array                                         $data          Additional data.
+     * @param array                                        $data           Additional data.
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -110,8 +110,8 @@ class Renderer extends Template implements RendererInterface
      */
     public function getInputHtml()
     {
-        if ($this->element->getValue()) {
-            $values = $this->element->getValue();
+        if ($this->element->getOpeningHours()) {
+            $values = $this->element->getOpeningHours()->getTimeRanges();
         }
 
         $html = "";
@@ -123,7 +123,7 @@ class Renderer extends Template implements RendererInterface
 
             $elementRenderer = $this->getLayout()
                 ->createBlock('Smile\Retailer\Block\Adminhtml\Retailer\OpeningHours\Element\Renderer');
-
+            $elementRenderer->setDateFormat($this->element->getOpeningHours()->getDateFormat());
             $input->setLabel(ucfirst($day['label']));
             $input->setName($this->element->getName() . "[$key]");
             $input->setRenderer($elementRenderer);

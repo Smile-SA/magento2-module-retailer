@@ -47,6 +47,11 @@ define([
          */
         _create: function ()
         {
+            if (this.options.values) {
+                if (typeof this.options.values === "string") {
+                    this.options.values = JSON.parse(this.options.values);
+                }
+            }
             var rangeBarWidget = new RangeBar(this.options);
             this.rangeBar = rangeBarWidget.$el;
 

@@ -39,7 +39,7 @@ class OpeningHours extends AbstractTimeSlots implements OpeningHoursInterface
         Data $jsonHelper,
         $attributeCode = OpeningHoursInterface::EXTENSION_ATTRIBUTE_CODE,
         $retailerId = null
-    ){
+    ) {
         parent::__construct($timeSlotsResource, $jsonHelper, $attributeCode, $retailerId);
     }
 

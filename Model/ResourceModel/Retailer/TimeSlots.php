@@ -39,12 +39,17 @@ class TimeSlots extends AbstractDb
         $data = [];
         $this->deleteTimeSlotsByRetailerId($retailerId, $attributeCode);
 
-        foreach ($timeSlots as $day => $timeSlotItem) {
+        foreach ($timeSlots as $date => $timeSlotItem) {
+            $dateField = "date";
+            if (is_numeric($date)) {
+                $dateField = "day_of_week";
+            }
+
             foreach ($timeSlotItem as $timeSlot) {
                 $data[] = [
                     "retailer_id"    => $retailerId,
                     "attribute_code" => $attributeCode,
-                    "day_of_week"    => $day,
+                    $dateField       => $date,
                     "start_hour"     => $timeSlot[0],
                     "end_hour"       => $timeSlot[1],
                 ];

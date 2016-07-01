@@ -39,8 +39,30 @@ class SpecialOpeningHours extends AbstractTimeSlots implements SpecialOpeningHou
         Data $jsonHelper,
         $attributeCode = SpecialOpeningHoursInterface::EXTENSION_ATTRIBUTE_CODE,
         $retailerId = null
-    ){
+    ) {
         parent::__construct($timeSlotsResource, $jsonHelper, $attributeCode, $retailerId);
+    }
+
+    /**
+     * Load submitted data and parse it as proper format
+     *
+     * @param array $rangesData The time ranges
+     *
+     * @return $this
+     */
+    public function loadPostData($rangesData)
+    {
+        $openingHoursRange = [];
+
+        foreach ($rangesData as $range) {
+            if (!isset($range['date'])) {
+                continue;
+            }
+
+            $openingHoursRange[$range['date']] = $range['opening_hours'];
+        }
+
+        parent::loadPostData($openingHoursRange);
     }
 
     /**

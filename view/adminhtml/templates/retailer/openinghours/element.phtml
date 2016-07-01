@@ -26,8 +26,8 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" ' . $block->getUiId(
 ?>
 
 <div<?php /* @escapeNotVerified */ echo $fieldAttributes ?>>
-    <?php echo $element->getLabelHtml() ?><span class="opening-hours-day"></span>
-    <?php $inputId = "opening_hours_" . uniqid() ; ?>
+    <?php echo $element->getLabelHtml() ?><span class="opening-hours-day" id="<?php echo $this->getHtmlId();?>-label"></span>
+    <?php $inputId = "opening_hours_field_" . $this->getHtmlId() ; ?>
     <div id ="<?php echo $inputId ?>" class="opening-hours-container">
         <div class="opening-hours-indicator"></div>
         <div class="opening-hours-rangebar"></div>
@@ -43,8 +43,8 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" ' . $block->getUiId(
              * This component is the main timepicker for opening hours
              */
             $("#<?php echo $inputId ?> .opening-hours-rangebar").openingHours({
-                values: <?php echo $block->getJsonValues();?>,
-                summary: $("#<?php echo $this->getHtmlId();?>").closest(".field").children(".opening-hours-day"),
+                values: $("#<?php echo $this->getHtmlId();?>").val(),
+                summary: $("#<?php echo $this->getHtmlId();?>-label"),
                 updateSummary: true,
                 input : $("#<?php echo $this->getHtmlId();?>")
             });

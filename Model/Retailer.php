@@ -31,9 +31,14 @@ class Retailer extends Seller implements RetailerInterface
     private $openingHours = null;
 
     /**
+     * @var null
+     */
+    private $specialOpeningHours = null;
+
+    /**
      * Get opening hours for this retailer
      *
-     * @return \Smile\Retailer\Api\Data\OpeningHoursInterface[]
+     * @return \Smile\Retailer\Api\Data\OpeningHoursInterface
      */
     public function getOpeningHours()
     {
@@ -47,7 +52,7 @@ class Retailer extends Seller implements RetailerInterface
     /**
      * Opening Hours setter
      *
-     * @param array $openingHours The opening hours of this retailer
+     * @param \Smile\Retailer\Api\Data\OpeningHoursInterface $openingHours The opening hours of this retailer
      *
      * @return \Smile\Retailer\Api\Data\RetailerInterface
      */
@@ -55,6 +60,36 @@ class Retailer extends Seller implements RetailerInterface
     {
         $extension = $this->getExtensionAttributes();
         $extension->setOpeningHours($openingHours);
+        $this->setExtensionAttributes($extension);
+
+        return $this;
+    }
+
+    /**
+     * Get opening hours for this retailer
+     *
+     * @return \Smile\Retailer\Api\Data\OpeningHoursInterface
+     */
+    public function getSpecialOpeningHours()
+    {
+        if ($this->specialOpeningHours === null) {
+            $this->specialOpeningHours = $this->getExtensionAttributes()->getSpecialOpeningHours();
+        }
+
+        return $this->specialOpeningHours;
+    }
+
+    /**
+     * Special Opening Hours setter
+     *
+     * @param \Smile\Retailer\Api\Data\SpecialOpeningHoursInterface $specialOpeningHours The special opening hours of this retailer
+     *
+     * @return \Smile\Retailer\Api\Data\RetailerInterface
+     */
+    public function setSpecialOpeningHours($specialOpeningHours)
+    {
+        $extension = $this->getExtensionAttributes();
+        $extension->setSpecialOpeningHours($specialOpeningHours);
         $this->setExtensionAttributes($extension);
 
         return $this;

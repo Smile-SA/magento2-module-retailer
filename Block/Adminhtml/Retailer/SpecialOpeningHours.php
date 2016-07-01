@@ -17,13 +17,13 @@ use Smile\Retailer\Api\Data\RetailerInterface;
 use Zend_Date;
 
 /**
- * Opening Hours rendering block
+ * Special Opening Hours rendering block
  *
  * @category Smile
  * @package  Smile\Retailer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class OpeningHours extends \Magento\Backend\Block\AbstractBlock
+class SpecialOpeningHours extends \Magento\Backend\Block\AbstractBlock
 {
     /**
      * @var \Magento\Framework\Data\FormFactory
@@ -60,7 +60,7 @@ class OpeningHours extends \Magento\Backend\Block\AbstractBlock
      */
     protected function _toHtml()
     {
-        return $this->escapeJsQuote($this->getForm()->toHtml());
+        return $this->getForm()->toHtml();
     }
 
     /**
@@ -81,19 +81,19 @@ class OpeningHours extends \Magento\Backend\Block\AbstractBlock
     private function getForm()
     {
         $form = $this->formFactory->create();
-        $form->setHtmlId('opening_hours');
+        $form->setHtmlId('special_opening_hours');
 
         $openingHoursFieldset = $form->addFieldset(
-            'opening_hours',
-            ['name' => 'opening_hours', 'label' => __('Opening Hours'), 'container_id' => 'opening_hours']
+            'special_opening_hours',
+            ['name' => 'special_opening_hours', 'label' => __('Special Opening Hours'), 'container_id' => 'special_opening_hours']
         );
 
-        if ($this->getRetailer() && $this->getRetailer()->getOpeningHours()) {
-            $openingHoursFieldset->setOpeningHours($this->getRetailer()->getOpeningHours());
+        if ($this->getRetailer() && $this->getRetailer()->getSpecialOpeningHours()) {
+            $openingHoursFieldset->setSpecialOpeningHours($this->getRetailer()->getSpecialOpeningHours());
         }
 
-        $openingHoursRenderer = $this->getLayout()->createBlock('Smile\Retailer\Block\Adminhtml\Retailer\OpeningHours\Container\Renderer');
-        $openingHoursFieldset->setRenderer($openingHoursRenderer);
+        $openingHoursRenderer = $this->getLayout()->createBlock('Smile\Retailer\Block\Adminhtml\Retailer\SpecialOpeningHours\Container\Renderer');
+        $openingHoursFieldset->setRenderer($openingHoursRenderer->setForm($form));
 
         return $form;
     }

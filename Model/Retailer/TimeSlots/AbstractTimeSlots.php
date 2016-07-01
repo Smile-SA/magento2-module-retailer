@@ -81,15 +81,6 @@ abstract class AbstractTimeSlots extends AbstractDataObject implements TimeSlots
     }
 
     /**
-     * Aggregate Time ranges
-     *
-     * @param array $rangeData Range data to aggregate
-     *
-     * @return array
-     */
-    abstract protected function aggregateTimeRanges($rangeData);
-
-    /**
      * Retrieve Time ranges of this opening hours
      *
      * @return array|null
@@ -237,6 +228,15 @@ abstract class AbstractTimeSlots extends AbstractDataObject implements TimeSlots
     {
         $this->_init('Smile\Retailer\Model\ResourceModel\Retailer\TimeSlots');
     }
+
+    /**
+     * Aggregate Time ranges
+     *
+     * @param array $rangeData Range data to aggregate
+     *
+     * @return array
+     */
+    abstract protected function aggregateTimeRanges($rangeData);
 
     /**
      * Build default date (01.01.1970) from an hour

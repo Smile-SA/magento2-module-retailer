@@ -15,6 +15,7 @@ namespace Smile\Retailer\Block\Adminhtml\Retailer\OpeningHours\Element;
 use Magento\Backend\Block\Template;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
+use Zend_Date;
 
 /**
  * Opening Hours field renderer
@@ -88,7 +89,10 @@ class Renderer extends Template implements RendererInterface
         $this->element = $element;
         $this->input   = $this->elementFactory->create('hidden');
         $this->input->setForm($this->getElement()->getForm());
-        $this->input->setId("opening_hours" . uniqid());
+
+        $inputId = $this->getData("input_id") !== null ? $this->getData("input_id") : "opening_hours" . uniqid();
+
+        $this->input->setId($inputId);
         $this->input->setName($element->getName());
 
         $this->element->addClass("opening-hours-wrapper")->removeClass("admin__control-text");
@@ -137,11 +141,30 @@ class Renderer extends Template implements RendererInterface
      */
     public function getJsonValues()
     {
+        $values = $this->getValues();
+
+        return $this->jsonHelper->jsonEncode($values);
+    }
+
+    /**
+     * Retrieve element values
+     *
+     * @return array
+     */
+    private function getValues()
+    {
         $values = [];
         if ($this->element->getValue()) {
             $values = $this->element->getValue();
+            foreach ($values as &$timeRange) {
+                foreach ($timeRange as &$hour) {
+                    $date = new Zend_Date();
+                    $date->setTime($hour);
+                    $hour = $date->toString($this->getDateFormat());
+                }
+            }
         }
 
-        return $this->jsonHelper->jsonEncode($values);
+        return $values;
     }
 }

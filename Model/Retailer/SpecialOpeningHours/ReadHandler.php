@@ -27,9 +27,9 @@ use Smile\Retailer\Api\SpecialOpeningHoursRepositoryInterface;
 class ReadHandler implements ExtensionInterface
 {
     /**
-     * @var \Smile\Retailer\Api\OpeningHoursRepositoryInterface
+     * @var \Smile\Retailer\Api\SpecialOpeningHoursRepositoryInterface
      */
-    private $openingHoursRepository;
+    private $specialOpeningHoursRepository;
 
     /**
      * @var \Smile\Retailer\Api\RetailerRepositoryInterface

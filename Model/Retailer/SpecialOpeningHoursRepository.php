@@ -56,7 +56,7 @@ class SpecialOpeningHoursRepository implements SpecialOpeningHoursRepositoryInte
     /**
      * Save specialOpening hours for a given retailer
      *
-     * @param int                                            $retailerId   The retailer id
+     * @param int                                                   $retailerId          The retailer id
      * @param \Smile\Retailer\Api\Data\SpecialOpeningHoursInterface $specialOpeningHours The specialOpening hours object
      *
      * @return bool

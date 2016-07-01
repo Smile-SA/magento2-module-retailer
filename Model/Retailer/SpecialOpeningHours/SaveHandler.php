@@ -69,6 +69,7 @@ class SaveHandler implements ExtensionInterface
         if (null !== $openingHours) {
             $this->specialOpeningHoursRepository->save($entity->getId(), $openingHours);
         }
+
         return $entity;
     }
 }
