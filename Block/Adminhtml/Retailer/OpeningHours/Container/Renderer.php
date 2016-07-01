@@ -123,7 +123,11 @@ class Renderer extends Template implements RendererInterface
 
             $elementRenderer = $this->getLayout()
                 ->createBlock('Smile\Retailer\Block\Adminhtml\Retailer\OpeningHours\Element\Renderer');
-            $elementRenderer->setDateFormat($this->element->getOpeningHours()->getDateFormat());
+
+            if ($this->element->getOpeningHours()) {
+                $elementRenderer->setDateFormat($this->element->getOpeningHours()->getDateFormat());
+            }
+
             $input->setLabel(ucfirst($day['label']));
             $input->setName($this->element->getName() . "[$key]");
             $input->setRenderer($elementRenderer);
