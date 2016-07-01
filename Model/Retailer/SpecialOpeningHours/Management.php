@@ -66,7 +66,8 @@ class Management implements ManagementInterface
         $openingHours = $retailer->getExtensionAttributes()->getSpecialOpeningHours();
 
         if (null !== $openingHours) {
-            $this->getSpecialOpeningHoursRepository()->save($retailer->getId(), $openingHours);
+            $openingHours->setRetailerId($retailer->getId());
+            $this->getSpecialOpeningHoursRepository()->save($openingHours);
         }
 
         return $retailer;

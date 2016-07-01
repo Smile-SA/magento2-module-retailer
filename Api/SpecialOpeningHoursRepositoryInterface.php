@@ -32,14 +32,13 @@ interface SpecialOpeningHoursRepositoryInterface
     public function getByRetailer($retailer);
 
     /**
-     * Save special opening hours list for a given retailer Id
+     * Save special opening hours object
      *
-     * @param integer                                               $retailerId   The retailer Id
-     * @param \Smile\Retailer\Api\Data\SpecialOpeningHoursInterface $openingHours The Opening Hours
+     * @param \Smile\Retailer\Api\Data\SpecialOpeningHoursInterface $openingHours The Special Opening Hours Object
      *
      * @return mixed
      */
-    public function save($retailerId, $openingHours);
+    public function save($openingHours);
 
     /**
      * Delete special opening hours list for a given retailer Id

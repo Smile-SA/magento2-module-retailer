@@ -54,16 +54,15 @@ class SpecialOpeningHoursRepository implements SpecialOpeningHoursRepositoryInte
     }
 
     /**
-     * Save specialOpening hours for a given retailer
+     * Save specialOpening hours object
      *
-     * @param int                                                   $retailerId          The retailer id
      * @param \Smile\Retailer\Api\Data\SpecialOpeningHoursInterface $specialOpeningHours The specialOpening hours object
      *
      * @return bool
      */
-    public function save($retailerId, $specialOpeningHours)
+    public function save($specialOpeningHours)
     {
-        $specialOpeningHours->setRetailerId($retailerId)->saveTimeRanges();
+        $specialOpeningHours->saveTimeRanges();
     }
 
     /**
