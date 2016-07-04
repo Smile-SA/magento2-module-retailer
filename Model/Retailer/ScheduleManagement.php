@@ -12,14 +12,14 @@
  */
 namespace Smile\Retailer\Model\Retailer;
 
-use Smile\Retailer\Api\Data\Retailer\OpeningHoursFactoryInterface;
 use Smile\Retailer\Api\Data\OpeningHoursInterface;
-use Smile\Retailer\Api\Data\Retailer\SpecialOpeningHoursFactoryInterface;
 use Smile\Retailer\Api\Data\SpecialOpeningHoursInterface;
 use Smile\Retailer\Api\RetailerScheduleManagementInterface;
 use Smile\Retailer\Api\RetailerRepositoryInterface;
 use Smile\Retailer\Api\OpeningHoursRepositoryInterface;
 use Smile\Retailer\Api\SpecialOpeningHoursRepositoryInterface;
+use Smile\Retailer\Api\Data\OpeningHoursInterfaceFactory;
+use Smile\Retailer\Api\Data\SpecialOpeningHoursInterfaceFactory;
 
 /**
  * Schedule Management Class for Retailers.
@@ -47,30 +47,30 @@ class ScheduleManagement implements RetailerScheduleManagementInterface
     private $retailerRepository;
 
     /**
-     * @var \Smile\Retailer\Api\Data\Retailer\OpeningHoursFactoryInterface
+     * @var \Smile\Retailer\Api\Data\OpeningHoursFactoryInterface
      */
     private $openingHoursFactory;
 
     /**
-     * @var \Smile\Retailer\Api\Data\Retailer\SpecialOpeningHoursFactoryInterface
+     * @var \Smile\Retailer\Api\Data\SpecialOpeningHoursFactoryInterface
      */
     private $specialOpeningHoursFactory;
 
     /**
      * Management constructor.
      *
-     * @param \Smile\Retailer\Api\OpeningHoursRepositoryInterface                   $openingHoursRepository        Opening Hours repository
-     * @param \Smile\Retailer\Api\SpecialOpeningHoursRepositoryInterface            $specialOpeningHoursRepository Opening Hours repository
-     * @param \Smile\Retailer\Api\RetailerRepositoryInterface                       $retailerRepository            Retailer repository
-     * @param \Smile\Retailer\Api\Data\Retailer\OpeningHoursFactoryInterface        $openingHoursFactory           Opening Hours Factory
-     * @param \Smile\Retailer\Api\Data\Retailer\SpecialOpeningHoursFactoryInterface $specialOpeningHoursFactory    Special Opening Hours Factory
+     * @param \Smile\Retailer\Api\OpeningHoursRepositoryInterface          $openingHoursRepository        Opening Hours repository
+     * @param \Smile\Retailer\Api\SpecialOpeningHoursRepositoryInterface   $specialOpeningHoursRepository Opening Hours repository
+     * @param \Smile\Retailer\Api\RetailerRepositoryInterface              $retailerRepository            Retailer repository
+     * @param \Smile\Retailer\Api\Data\OpeningHoursInterfaceFactory        $openingHoursFactory           Opening Hours Factory
+     * @param \Smile\Retailer\Api\Data\SpecialOpeningHoursInterfaceFactory $specialOpeningHoursFactory    Special Opening Hours Factory
      */
     public function __construct(
         OpeningHoursRepositoryInterface $openingHoursRepository,
         SpecialOpeningHoursRepositoryInterface $specialOpeningHoursRepository,
         RetailerRepositoryInterface $retailerRepository,
-        OpeningHoursFactoryInterface $openingHoursFactory,
-        SpecialOpeningHoursFactoryInterface $specialOpeningHoursFactory
+        OpeningHoursInterfaceFactory $openingHoursFactory,
+        SpecialOpeningHoursInterfaceFactory $specialOpeningHoursFactory
     ) {
         $this->openingHoursRepository        = $openingHoursRepository;
         $this->specialOpeningHoursRepository = $specialOpeningHoursRepository;
