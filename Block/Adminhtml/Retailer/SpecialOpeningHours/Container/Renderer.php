@@ -164,6 +164,8 @@ class Renderer extends \Magento\Config\Block\System\Config\Form\Field\FieldArray
         $element = $this->elementFactory->create('date');
         $element->setFormat($this->_localeDate->getDateFormatWithLongYear())
             ->setForm($this->getForm())
+            ->setDisabled(false)
+            ->setValue('')
             ->setName($this->_getCellInputElementName($columnName))
             ->setHtmlId($this->_getCellInputElementId('<%- _id %>', $columnName))
             ->addClass("smile-special-opening-hours-datepicker");
@@ -211,14 +213,17 @@ class Renderer extends \Magento\Config\Block\System\Config\Form\Field\FieldArray
             'timeFormat'  => $element->getTimeFormat(),
             'buttonImage' => $element->getImage(),
             'buttonText'  => 'Select Date',
-            'disabled'    => $element->getDisabled(),
+            'disabled'    => $element->getDisabled()
         ]);
 
+        // Class toggle on change() is mandatory to have the Mutation Observer working properly.
+        // Since jquery Ui Datepicker value appliance is made with val(), this does not trigger changes on DOM.
         $datePickerJsInit = <<<JAVASCRIPT
             <script type="text/javascript">
                 require(["jquery", "calendar"],
                     function($, calendar) {
                         $("#$inputId").calendar($calendarConfig);
+                        $("#$inputId").change(function() { $("#$inputId").toggleClass("updated-datepicker");});
                     }
                 );
             </script>
