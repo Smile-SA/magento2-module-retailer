@@ -10,17 +10,36 @@
  * @copyright 2016 Smile
  * @license   Open Software License ("OSL") v. 3.0
  */
-namespace Smile\Retailer\Api\Data\SpecialOpeningHours;
+namespace Smile\Retailer\Api;
 
 /**
- * Special Opening Hours Management Interface
+ * Schedule Management class.
+ * Globally handles modifications of retailers schedule (opening hours, special opening hours, pickup hours, etc ...)
  *
  * @category Smile
  * @package  Smile\Retailer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-interface ManagementInterface
+interface RetailerScheduleManagementInterface
 {
+    /**
+     * Save Opening Hours for a given retailer
+     *
+     * @param \Smile\Seller\Api\Data\SellerInterface $retailer The retailer
+     *
+     * @return \Smile\Seller\Api\Data\SellerInterface
+     */
+    public function saveOpeningHours(\Smile\Seller\Api\Data\SellerInterface $retailer);
+
+    /**
+     * Load Opening Hours for a given retailer
+     *
+     * @param \Smile\Seller\Api\Data\SellerInterface $retailer The retailer
+     *
+     * @return \Smile\Seller\Api\Data\SellerInterface
+     */
+    public function loadOpeningHours(\Smile\Seller\Api\Data\SellerInterface $retailer);
+
     /**
      * Load Special Opening Hours for a given retailer
      *

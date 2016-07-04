@@ -14,7 +14,7 @@
 namespace Smile\Retailer\Model\Retailer\SpecialOpeningHours;
 
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
-use Smile\Retailer\Api\Data\SpecialOpeningHours\ManagementInterface;
+use Smile\Retailer\Api\RetailerScheduleManagementInterface;
 
 /**
  * Read Handler for Opening Hours
@@ -26,18 +26,18 @@ use Smile\Retailer\Api\Data\SpecialOpeningHours\ManagementInterface;
 class ReadHandler implements ExtensionInterface
 {
     /**
-     * @var \Smile\Retailer\Api\Data\SpecialOpeningHours\ManagementInterface
+     * @var \Smile\Retailer\Api\RetailerScheduleManagementInterface
      */
-    private $specialOpeningHoursManagement;
+    private $scheduleManagement;
 
     /**
      * SaveHandler constructor.
      *
-     * @param \Smile\Retailer\Api\Data\SpecialOpeningHours\ManagementInterface $openingHoursManagement Special Opening Hours Management
+     * @param \Smile\Retailer\Api\RetailerScheduleManagementInterface $scheduleManagement Schedule Manager
      */
-    public function __construct(ManagementInterface $openingHoursManagement)
+    public function __construct(RetailerScheduleManagementInterface $scheduleManagement)
     {
-        $this->specialOpeningHoursManagement = $openingHoursManagement;
+        $this->scheduleManagement = $scheduleManagement;
     }
 
     /**
@@ -52,7 +52,7 @@ class ReadHandler implements ExtensionInterface
      */
     public function execute($entity, $arguments = [])
     {
-        $entity = $this->specialOpeningHoursManagement->loadSpecialOpeningHours($entity);
+        $entity = $this->scheduleManagement->loadSpecialOpeningHours($entity);
 
         return $entity;
     }
