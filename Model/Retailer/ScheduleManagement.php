@@ -12,6 +12,10 @@
  */
 namespace Smile\Retailer\Model\Retailer;
 
+use Smile\Retailer\Api\Data\Retailer\OpeningHoursFactoryInterface;
+use Smile\Retailer\Api\Data\OpeningHoursInterface;
+use Smile\Retailer\Api\Data\Retailer\SpecialOpeningHoursFactoryInterface;
+use Smile\Retailer\Api\Data\SpecialOpeningHoursInterface;
 use Smile\Retailer\Api\RetailerScheduleManagementInterface;
 use Smile\Retailer\Api\RetailerRepositoryInterface;
 use Smile\Retailer\Api\OpeningHoursRepositoryInterface;
@@ -43,20 +47,36 @@ class ScheduleManagement implements RetailerScheduleManagementInterface
     private $retailerRepository;
 
     /**
+     * @var \Smile\Retailer\Api\Data\Retailer\OpeningHoursFactoryInterface
+     */
+    private $openingHoursFactory;
+
+    /**
+     * @var \Smile\Retailer\Api\Data\Retailer\SpecialOpeningHoursFactoryInterface
+     */
+    private $specialOpeningHoursFactory;
+
+    /**
      * Management constructor.
      *
-     * @param \Smile\Retailer\Api\OpeningHoursRepositoryInterface        $openingHoursRepository        Opening Hours repository
-     * @param \Smile\Retailer\Api\SpecialOpeningHoursRepositoryInterface $specialOpeningHoursRepository Opening Hours repository
-     * @param \Smile\Retailer\Api\RetailerRepositoryInterface            $retailerRepository            Retailer repository
+     * @param \Smile\Retailer\Api\OpeningHoursRepositoryInterface                   $openingHoursRepository        Opening Hours repository
+     * @param \Smile\Retailer\Api\SpecialOpeningHoursRepositoryInterface            $specialOpeningHoursRepository Opening Hours repository
+     * @param \Smile\Retailer\Api\RetailerRepositoryInterface                       $retailerRepository            Retailer repository
+     * @param \Smile\Retailer\Api\Data\Retailer\OpeningHoursFactoryInterface        $openingHoursFactory           Opening Hours Factory
+     * @param \Smile\Retailer\Api\Data\Retailer\SpecialOpeningHoursFactoryInterface $specialOpeningHoursFactory    Special Opening Hours Factory
      */
     public function __construct(
         OpeningHoursRepositoryInterface $openingHoursRepository,
         SpecialOpeningHoursRepositoryInterface $specialOpeningHoursRepository,
-        RetailerRepositoryInterface $retailerRepository
+        RetailerRepositoryInterface $retailerRepository,
+        OpeningHoursFactoryInterface $openingHoursFactory,
+        SpecialOpeningHoursFactoryInterface $specialOpeningHoursFactory
     ) {
         $this->openingHoursRepository        = $openingHoursRepository;
         $this->specialOpeningHoursRepository = $specialOpeningHoursRepository;
         $this->retailerRepository            = $retailerRepository;
+        $this->openingHoursFactory           = $openingHoursFactory;
+        $this->specialOpeningHoursFactory    = $specialOpeningHoursFactory;
     }
 
     /**
@@ -158,6 +178,31 @@ class ScheduleManagement implements RetailerScheduleManagementInterface
     }
 
     /**
+     * Append Data from POST to a given retailer
+     *
+     * @param \Smile\Seller\Api\Data\SellerInterface $retailer The retailer
+     * @param                                        $data     POST Data
+     */
+    public function setPostScheduleData(\Smile\Seller\Api\Data\SellerInterface $retailer, $data)
+    {
+        if (isset($data[OpeningHoursInterface::EXTENSION_ATTRIBUTE_CODE])) {
+            $extension = $retailer->getExtensionAttributes();
+            $openingHours = $this->getOpeningHoursFactory()->create();
+            $openingHours->loadPostData($data[OpeningHoursInterface::EXTENSION_ATTRIBUTE_CODE]);
+            $extension->setOpeningHours($openingHours);
+            $retailer->setExtensionAttributes($extension);
+        }
+
+        if (isset($data[SpecialOpeningHoursInterface::EXTENSION_ATTRIBUTE_CODE])) {
+            $extension = $retailer->getExtensionAttributes();
+            $specialOpeningHours = $this->getSpecialOpeningHoursFactory()->create();
+            $specialOpeningHours->loadPostData($data[SpecialOpeningHoursInterface::EXTENSION_ATTRIBUTE_CODE]);
+            $extension->setSpecialOpeningHours($specialOpeningHours);
+            $retailer->setExtensionAttributes($extension);
+        }
+    }
+
+    /**
      * Retrieve Opening Hours Repository
      *
      * @return OpeningHoursRepositoryInterface
@@ -175,6 +220,26 @@ class ScheduleManagement implements RetailerScheduleManagementInterface
     private function getSpecialOpeningHoursRepository()
     {
         return $this->specialOpeningHoursRepository;
+    }
+
+    /**
+     * Retrieve Opening Hours Factory
+     *
+     * @return OpeningHoursFactoryInterface
+     */
+    private function getOpeningHoursFactory()
+    {
+        return $this->openingHoursFactory;
+    }
+
+    /**
+     * Retrieve Special Opening Hours Factory
+     *
+     * @return SpecialOpeningHoursFactoryInterface
+     */
+    private function getSpecialOpeningHoursFactory()
+    {
+        return $this->specialOpeningHoursFactory;
     }
 
     /**

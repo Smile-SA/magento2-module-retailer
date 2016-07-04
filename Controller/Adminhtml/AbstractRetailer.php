@@ -18,9 +18,8 @@ use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 use Smile\Retailer\Api\RetailerRepositoryInterface;
+use Smile\Retailer\Api\RetailerScheduleManagementInterface;
 use Smile\Seller\Model\SellerFactory;
-use Smile\Retailer\Model\Retailer\OpeningHoursFactory;
-use Smile\Retailer\Model\Retailer\SpecialOpeningHoursFactory;
 
 /**
  * Abstract Retailer controller
@@ -42,16 +41,6 @@ abstract class AbstractRetailer extends Action
     protected $resultForwardFactory = null;
 
     /**
-     * @var \Smile\Retailer\Model\Retailer\OpeningHoursFactory|null
-     */
-    protected $openingHoursFactory = null;
-
-    /**
-     * @var \Smile\Retailer\Model\Retailer\SpecialOpeningHoursFactory|null
-     */
-    protected $specialOpeningHoursFactory = null;
-
-    /**
      * Core registry
      *
      * @var Registry
@@ -71,16 +60,20 @@ abstract class AbstractRetailer extends Action
     protected $retailerFactory;
 
     /**
+     * @var \Smile\Retailer\Api\RetailerScheduleManagementInterface
+     */
+    protected $scheduleManagement;
+
+    /**
      * Abstract constructor.
      *
-     * @param Context                     $context                    Application context
-     * @param PageFactory                 $resultPageFactory          Result Page factory
-     * @param ForwardFactory              $resultForwardFactory       Result forward factory
-     * @param Registry                    $coreRegistry               Application registry
-     * @param RetailerRepositoryInterface $retailerRepository         Retailer Repository
-     * @param SellerFactory               $retailerFactory            Retailer Factory
-     * @param OpeningHoursFactory         $openingHoursFactory        Opening Hours Factory
-     * @param SpecialOpeningHoursFactory  $specialOpeningHoursFactory Special Opening Hours Factory
+     * @param Context                             $context                    Application context
+     * @param PageFactory                         $resultPageFactory          Result Page factory
+     * @param ForwardFactory                      $resultForwardFactory       Result forward factory
+     * @param Registry                            $coreRegistry               Application registry
+     * @param RetailerRepositoryInterface         $retailerRepository         Retailer Repository
+     * @param SellerFactory                       $retailerFactory            Retailer Factory
+     * @param RetailerScheduleManagementInterface $scheduleManagement         Schedule Management
      */
     public function __construct(
         Context $context,
@@ -89,16 +82,14 @@ abstract class AbstractRetailer extends Action
         Registry $coreRegistry,
         RetailerRepositoryInterface $retailerRepository,
         SellerFactory $retailerFactory,
-        OpeningHoursFactory $openingHoursFactory,
-        SpecialOpeningHoursFactory $specialOpeningHoursFactory
+        RetailerScheduleManagementInterface $scheduleManagement
     ) {
         $this->resultPageFactory    = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->coreRegistry         = $coreRegistry;
         $this->retailerRepository   = $retailerRepository;
         $this->retailerFactory      = $retailerFactory;
-        $this->openingHoursFactory  = $openingHoursFactory;
-        $this->specialOpeningHoursFactory = $specialOpeningHoursFactory;
+        $this->scheduleManagement   = $scheduleManagement;
 
         parent::__construct($context);
     }

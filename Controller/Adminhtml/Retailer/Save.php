@@ -15,8 +15,6 @@
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
 use Magento\Backend\App\Action;
-use Smile\Retailer\Api\Data\OpeningHoursInterface;
-use Smile\Retailer\Api\Data\SpecialOpeningHoursInterface;
 use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
 
 /**
@@ -58,7 +56,7 @@ class Save extends AbstractRetailer
                 $model->setStoreId($storeId);
             }
 
-            $this->processExtensionAttributes($model, $data);
+            $this->scheduleManagement->setPostScheduleData($model, $data);
 
             try {
                 $this->retailerRepository->save($model);
@@ -86,30 +84,5 @@ class Save extends AbstractRetailer
         }
 
         return $resultRedirect->setPath('*/*/');
-    }
-
-    /**
-     * Process time based extension attributes
-     *
-     * @param \Smile\Retailer\Api\Data\RetailerInterface $model The retailer
-     * @param array                                      $data  POST Data from the form
-     */
-    private function processExtensionAttributes($model, $data)
-    {
-        if (isset($data[OpeningHoursInterface::EXTENSION_ATTRIBUTE_CODE])) {
-            $extension = $model->getExtensionAttributes();
-            $openingHours = $this->openingHoursFactory->create();
-            $openingHours->loadPostData($data[OpeningHoursInterface::EXTENSION_ATTRIBUTE_CODE]);
-            $extension->setOpeningHours($openingHours);
-            $model->setExtensionAttributes($extension);
-        }
-
-        if (isset($data[SpecialOpeningHoursInterface::EXTENSION_ATTRIBUTE_CODE])) {
-            $extension = $model->getExtensionAttributes();
-            $specialOpeningHours = $this->specialOpeningHoursFactory->create();
-            $specialOpeningHours->loadPostData($data[SpecialOpeningHoursInterface::EXTENSION_ATTRIBUTE_CODE]);
-            $extension->setSpecialOpeningHours($specialOpeningHours);
-            $model->setExtensionAttributes($extension);
-        }
     }
 }

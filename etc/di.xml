@@ -27,6 +27,9 @@
 
     <preference for="Smile\Retailer\Api\RetailerScheduleManagementInterface" type="Smile\Retailer\Model\Retailer\ScheduleManagement" />
 
+    <preference for="Smile\Retailer\Api\Data\Retailer\OpeningHoursFactoryInterface" type="Smile\Retailer\Model\Retailer\OpeningHoursFactory" />
+    <preference for="Smile\Retailer\Api\Data\Retailer\SpecialOpeningHoursFactoryInterface" type="Smile\Retailer\Model\Retailer\SpecialOpeningHoursFactory" />
+
     <virtualType name="Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory" type="Smile\Seller\Model\ResourceModel\Seller\CollectionFactory">
         <arguments>
             <argument name="instanceName" xsi:type="string">Smile\Retailer\Model\ResourceModel\Retailer\Collection</argument>
