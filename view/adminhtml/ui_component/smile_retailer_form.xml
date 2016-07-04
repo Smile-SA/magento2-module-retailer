@@ -137,7 +137,7 @@
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="sortOrder" xsi:type="number">20</item>
-                <item name="label" xsi:type="string">Opening Hours</item>
+                <item name="label" xsi:type="string" translate="true">Opening Hours</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
             </item>
         </argument>
@@ -162,7 +162,7 @@
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="sortOrder" xsi:type="number">30</item>
-                <item name="label" xsi:type="string">Special Opening Hours</item>
+                <item name="label" xsi:type="string" translate="true">Special Opening Hours</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
             </item>
         </argument>
@@ -186,7 +186,7 @@
     <fieldset name="search_engine_optimization">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="label" xsi:type="string">Meta Informations</item>
+                <item name="label" xsi:type="string" translate="true">Meta Informations</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
             </item>
         </argument>

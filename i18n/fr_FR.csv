@@ -1,0 +1,35 @@
+Back,Retour
+Delete,Supprimer
+"Are you sure you want to do this?","Êtes-vous sûr de vouloir faire cela?"
+Save,Sauvegarder
+"Save and Continue Edit","Sauvegarder et continuer l'édition"
+"Opening Hours","Heures d'ouverture"
+"Special Opening Hours","Heures d'ouverture exceptionnelles"
+"Add Speial Opening Hours","Ajouter une heure d'ouverture exceptionnelle"
+Sellers,Vendeurs
+Retailers,Magasins
+"New Retailer","Nouveau Magasin"
+"This retailer no longer exists.","Ce magasin n'existe plus."
+"You deleted the retailer %1.","Vous avez supprimé le magasin %1."
+"Edit %1","Éditer %1"
+"Something went wrong while editing the retailer.","Une erreur s'est produite durant l'édition du magasin."
+Retailer,Magasin
+"Retailers List","Liste des magasins"
+"Please correct the data sent.","Veuillez corriger les données envoyées."
+"You saved the retailer %1.","Magasin %1 sauvegardé."
+Edit,Éditer
+"Delete ${ $.$data.name }","Supprimer ${ $.$data.name }"
+"Are you sure you want to delete ${ $.$data.name } ?","Êtes-vous sûr de vouloir supprimer ${ $.$data.name } ?"
+"Retailer Information","Informations du magasin"
+"Retailer Name","Nom du magasin"
+"Seller Code","Code vendeur"
+"Enable Retailer","Activer le magasin"
+"Meta Title","Meta Title"
+"Meta Keywords","Meta Keywords"
+"Meta Description","Meta Description"
+"Add New Retailer","Ajouter un magasin"
+ID,ID
+Name,Nom
+Active,Activé
+Inactive,Désactivé
+Status,Statut
