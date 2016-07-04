@@ -138,6 +138,7 @@
             <item name="config" xsi:type="array">
                 <item name="sortOrder" xsi:type="number">20</item>
                 <item name="label" xsi:type="string">Opening Hours</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
             </item>
         </argument>
         <container name="opening_hours_config_container">
@@ -162,6 +163,7 @@
             <item name="config" xsi:type="array">
                 <item name="sortOrder" xsi:type="number">30</item>
                 <item name="label" xsi:type="string">Special Opening Hours</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
             </item>
         </argument>
         <container name="special_opening_hours_config_container">
@@ -185,6 +187,7 @@
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="label" xsi:type="string">Meta Informations</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
             </item>
         </argument>
         <field name="meta_title">
