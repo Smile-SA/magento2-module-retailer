@@ -13,6 +13,7 @@
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
 use Smile\Retailer\Api\Data\RetailerInterface;
+use Smile\Retailer\Api\RetailerScheduleManagementInterface;
 use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
@@ -36,13 +37,14 @@ class InlineEdit extends AbstractRetailer
     protected $jsonFactory;
 
     /**
-     * @param Context                     $context              Application context
-     * @param PageFactory                 $resultPageFactory    Result Page factory
-     * @param ForwardFactory              $resultForwardFactory Result forward factory
-     * @param Registry                    $coreRegistry         Application registry
-     * @param RetailerRepositoryInterface $retailerRepository   Retailer Repository
-     * @param SellerFactory               $retailerFactory      Retailer Factory
-     * @param JsonFactory                 $jsonFactory          JSON Factory
+     * @param Context                             $context              Application context
+     * @param PageFactory                         $resultPageFactory    Result Page factory
+     * @param ForwardFactory                      $resultForwardFactory Result forward factory
+     * @param Registry                            $coreRegistry         Application registry
+     * @param RetailerRepositoryInterface         $retailerRepository   Retailer Repository
+     * @param SellerFactory                       $retailerFactory      Retailer Factory
+     * @param RetailerScheduleManagementInterface $scheduleManagement   Schedule Management
+     * @param JsonFactory                         $jsonFactory          JSON Factory
      */
     public function __construct(
         Context $context,
@@ -51,9 +53,19 @@ class InlineEdit extends AbstractRetailer
         Registry $coreRegistry,
         RetailerRepositoryInterface $retailerRepository,
         SellerFactory $retailerFactory,
+        RetailerScheduleManagementInterface $scheduleManagement,
         JsonFactory $jsonFactory
     ) {
-        parent::__construct($context, $resultPageFactory, $resultForwardFactory, $coreRegistry, $retailerRepository, $retailerFactory);
+        parent::__construct(
+            $context,
+            $resultPageFactory,
+            $resultForwardFactory,
+            $coreRegistry,
+            $retailerRepository,
+            $retailerFactory,
+            $scheduleManagement
+        );
+
         $this->jsonFactory = $jsonFactory;
     }
 
