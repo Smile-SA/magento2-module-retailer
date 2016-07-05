@@ -36,7 +36,7 @@ interface OpeningHoursRepositoryInterface
      *
      * @param \Smile\Retailer\Api\Data\OpeningHoursInterface $openingHours The Opening Hours
      *
-     * @return mixed
+     * @return bool
      */
     public function save($openingHours);
 
@@ -45,7 +45,7 @@ interface OpeningHoursRepositoryInterface
      *
      * @param integer $retailerId The retailer Id
      *
-     * @return mixed
+     * @return bool
      */
     public function deleteByRetailerId($retailerId);
 }

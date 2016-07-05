@@ -36,7 +36,7 @@ interface SpecialOpeningHoursRepositoryInterface
      *
      * @param \Smile\Retailer\Api\Data\SpecialOpeningHoursInterface $openingHours The Special Opening Hours Object
      *
-     * @return mixed
+     * @return bool
      */
     public function save($openingHours);
 
@@ -45,7 +45,7 @@ interface SpecialOpeningHoursRepositoryInterface
      *
      * @param integer $retailerId The retailer Id
      *
-     * @return mixed
+     * @return bool
      */
     public function deleteByRetailerId($retailerId);
 }
