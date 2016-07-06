@@ -22,6 +22,11 @@ namespace Smile\Retailer\Api\Data;
 interface TimeSlotsInterface
 {
     /**
+     * Field used for time ranges
+     */
+    const TIME_RANGES_DATA = "time_ranges";
+
+    /**
      * Retrieve time ranges as array
      *
      * @return null|array

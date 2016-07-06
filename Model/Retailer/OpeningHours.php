@@ -56,8 +56,9 @@ class OpeningHours extends AbstractTimeSlots implements OpeningHoursInterface
 
         if (!empty($rangeData)) {
             foreach ($rangeData as $range) {
+                $values[$range["day_of_week"]]["date"] = $range["day_of_week"];
                 if (null !== $range["start_hour"] && null !== $range["end_hour"]) {
-                    $values[$range["day_of_week"]][] = [
+                    $values[$range["day_of_week"]][self::TIME_RANGES_DATA][] = [
                         $this->dateToHour($range["start_hour"]),
                         $this->dateToHour($range["end_hour"]),
                     ];

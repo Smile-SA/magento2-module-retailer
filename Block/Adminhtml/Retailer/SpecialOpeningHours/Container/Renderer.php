@@ -17,6 +17,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Smile\Retailer\Api\Data\TimeSlotsInterface;
 use Zend_Date;
 
 /**
@@ -261,12 +262,16 @@ JAVASCRIPT;
         if (!empty($values)) {
             ksort($values);
 
-            foreach ($values as $date => $timeRanges) {
-                foreach ($timeRanges as &$timeRange) {
-                    foreach ($timeRange as &$hour) {
-                        $hourDate = new Zend_Date();
-                        $hourDate->setTime($hour);
-                        $hour = $hourDate->toString($this->getElement()->getSpecialOpeningHours()->getDateFormat());
+            foreach ($values as $date => $item) {
+                $timeRanges = [];
+                if (isset($item[TimeSlotsInterface::TIME_RANGES_DATA])) {
+                    $timeRanges = $item[TimeSlotsInterface::TIME_RANGES_DATA];
+                    foreach ($timeRanges as &$timeRange) {
+                        foreach ($timeRange as &$hour) {
+                            $hourDate = new Zend_Date();
+                            $hourDate->setTime($hour);
+                            $hour = $hourDate->toString($this->getElement()->getSpecialOpeningHours()->getDateFormat());
+                        }
                     }
                 }
 

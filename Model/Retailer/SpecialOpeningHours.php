@@ -99,7 +99,8 @@ class SpecialOpeningHours extends AbstractTimeSlots implements SpecialOpeningHou
                         $this->dateToHour($range["end_hour"]),
                     ];
                 }
-                $values[$range["date"]][] = $data;
+                $values[$range["date"]]["date"] = $range["date"];
+                $values[$range["date"]][self::TIME_RANGES_DATA][] = $data;
             }
         }
 

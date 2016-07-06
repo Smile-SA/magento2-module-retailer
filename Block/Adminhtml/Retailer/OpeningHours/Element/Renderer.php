@@ -15,6 +15,7 @@ namespace Smile\Retailer\Block\Adminhtml\Retailer\OpeningHours\Element;
 use Magento\Backend\Block\Template;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
+use Smile\Retailer\Api\Data\TimeSlotsInterface;
 use Zend_Date;
 
 /**
@@ -28,11 +29,6 @@ use Zend_Date;
  */
 class Renderer extends Template implements RendererInterface
 {
-    /**
-     * @var \Smile\Retailer\Model\OpeningHours\OpeningHours
-     */
-    protected $openingHours;
-
     /**
      * @var \Magento\Framework\Data\Form\Element\Factory
      */
@@ -61,21 +57,18 @@ class Renderer extends Template implements RendererInterface
     /**
      * Block constructor.
      *
-     * @param \Magento\Backend\Block\Template\Context            $context             Templating context.
-     * @param \Magento\Framework\Data\Form\Element\Factory       $elementFactory      Form element factory.
-     * @param \Smile\Retailer\Model\Retailer\OpeningHoursFactory $openingHoursFactory Opening Hours factory.
-     * @param \Magento\Framework\Json\Helper\Data                $jsonHelper          Helper for JSON
-     * @param array                                              $data                Additional data.
+     * @param \Magento\Backend\Block\Template\Context      $context        Templating context.
+     * @param \Magento\Framework\Data\Form\Element\Factory $elementFactory Form element factory.
+     * @param \Magento\Framework\Json\Helper\Data          $jsonHelper     Helper for JSON
+     * @param array                                        $data           Additional data.
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Data\Form\Element\Factory $elementFactory,
-        \Smile\Retailer\Model\Retailer\OpeningHoursFactory $openingHoursFactory,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         array $data = []
     ) {
         $this->elementFactory = $elementFactory;
-        $this->openingHours   = $openingHoursFactory->create();
         $this->jsonHelper     = $jsonHelper;
 
         parent::__construct($context, $data);
@@ -155,13 +148,17 @@ class Renderer extends Template implements RendererInterface
     {
         $values = [];
         if ($this->element->getValue()) {
-            $values = $this->element->getValue();
-            foreach ($values as &$timeRange) {
-                foreach ($timeRange as &$hour) {
-                    $date = new Zend_Date();
-                    $date->setTime($hour);
-                    $hour = $date->toString($this->getDateFormat());
+            $elementValue = $this->element->getValue();
+
+            if (isset($elementValue[TimeSlotsInterface::TIME_RANGES_DATA])) {
+                foreach ($elementValue[TimeSlotsInterface::TIME_RANGES_DATA] as &$timeRange) {
+                    foreach ($timeRange as &$hour) {
+                        $date = new Zend_Date();
+                        $date->setTime($hour);
+                        $hour = $date->toString($this->getDateFormat());
+                    }
                 }
+                $values = $elementValue[TimeSlotsInterface::TIME_RANGES_DATA];
             }
         }
 
