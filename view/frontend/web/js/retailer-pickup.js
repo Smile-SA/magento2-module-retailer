@@ -3,10 +3,10 @@ define([
     'ko',
     'jquery',
     'underscore',
-    'Magento_Customer/js/customer-data',
     'Smile_Retailer/js/retailer/data-provider',
-    'mage/calendar'
-], function (ko, $, _, customerData, retailerDataProvider) {
+    'mage/calendar',
+    'mage/storage',
+], function (ko, $, _, retailerDataProvider) {
     'use strict';
 
     $.widget('smileRetailer.retailerPickup', {
@@ -28,6 +28,7 @@ define([
             this.retailerPicker = null;
             this.dataProvider = retailerDataProvider;
             this.retailerData = null;
+            this.storage      = $.initNamespaceStorage('mage-cache-storage').localStorage;
 
             if (this.options.datePicker) {
                 this.initDatePicker();
@@ -44,8 +45,8 @@ define([
         initRetailerPicker : function()
         {
             this.retailerPicker = $(this.options.retailerPicker);
-            if (this.getCustomerData("smile-retailer-current-retailer")) {
-                var retailerId = this.getCustomerData("smile-retailer-current-retailer");
+            if (this.getStorageData("smile-retailer-current-retailer")) {
+                var retailerId = this.getStorageData("smile-retailer-current-retailer");
                 this.retailerPicker.val(retailerId);
                 this.updateRetailerData(parseInt(retailerId));
             }
@@ -58,8 +59,8 @@ define([
         initDatePicker : function()
         {
             this.datePicker = $(this.options.datePicker);
-            if (this.getCustomerData("smile-retailer-current-pickup-date")) {
-                this.datePicker.val(this.getCustomerData("smile-retailer-current-pickup-date"));
+            if (this.getStorageData("smile-retailer-current-pickup-date")) {
+                this.datePicker.val(this.getStorageData("smile-retailer-current-pickup-date"));
             }
             this.datePicker.on('change', $.proxy(function (event) {this.setPickupDate($(event.target).val());}, this));
         },
@@ -73,7 +74,8 @@ define([
         setRetailer : function(retailerId)
         {
             this.currentRetailer = retailerId;
-            this.setCustomerData("smile-retailer-current-retailer", this.currentRetailer);
+            this.setStorageData("smile-retailer-current-retailer", this.currentRetailer);
+            this.resetPickupDate();
             this.updateRetailerData(retailerId);
         },
 
@@ -86,7 +88,7 @@ define([
         setPickupDate : function(pickupDate)
         {
             this.currentPickuPdate = pickupDate;
-            this.setCustomerData("smile-retailer-current-pickup-date", this.currentPickuPdate);
+            this.setStorageData("smile-retailer-current-pickup-date", this.currentPickuPdate);
         },
 
         /**
@@ -97,11 +99,8 @@ define([
          */
         updateRetailerData : function(retailerId)
         {
-            console.log("update retailer data");
             this.dataProvider.get(retailerId).done(function (data) {
                 this.retailerData = data;
-                console.log("receiving retailer data");
-                console.log(this.retailerData);
                 this.updateDatePicker();
             }.bind(this));
         },
@@ -227,14 +226,25 @@ define([
         },
 
         /**
+         * Reset the pickup date to null. Can be used when switching to a new retailer.
+         */
+        resetPickupDate : function ()
+        {
+            if (this.datePicker !== null) {
+                this.datePicker.val('');
+                this.setStorageData("smile-retailer-current-pickup-date", null);
+            }
+        },
+
+        /**
          * Wrapper for data retrieval in customerData
          *
          * @param key
          * @returns {*}
          */
-        getCustomerData : function(key)
+        getStorageData : function(key)
         {
-            return customerData.get(key)();
+            return this.storage.get(key);
         },
 
         /**
@@ -243,9 +253,9 @@ define([
          * @param key
          * @param value
          */
-        setCustomerData : function(key, value)
+        setStorageData : function(key, value)
         {
-            customerData.set(key, value);
+            this.storage.set(key, value);
         }
     });
 
