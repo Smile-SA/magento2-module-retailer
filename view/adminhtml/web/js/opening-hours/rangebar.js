@@ -24,7 +24,7 @@ define([
     $.widget('smile.openingHours', {
         options: {
             snap: 1000 * 60 * 15,
-            minSize: (1000 * 60 * 60) / 4,
+            minSize: 0, //(1000 * 60 * 60) / 4,
             allowDelete: true,
             htmlLabel: true,
             min: moment().startOf("day").format("LLLL"),
@@ -37,7 +37,8 @@ define([
             },
             indicator:false,
             updateSummary:false,
-            summary:null
+            summary:null,
+            deleteConfirm:true,
         },
 
         /**
@@ -52,7 +53,10 @@ define([
                     this.options.values = JSON.parse(this.options.values);
                 }
             }
+
             var rangeBarWidget = new RangeBar(this.options);
+
+            this.rangeBarWidget = rangeBarWidget;
             this.rangeBar = rangeBarWidget.$el;
 
             if (this.options.onChange) {
@@ -79,6 +83,9 @@ define([
                 }
             }
 
+            this.bindRangesDelete();
+            this.rangeBar.on("change", this.bindRangesDelete.bind(this));
+
             this.element.prepend(this.rangeBar);
         },
 
@@ -88,8 +95,8 @@ define([
         prepareInputBinding: function()
         {
             if (this.input) {
-                this.rangeBar.on("change", function(ev, ranges) {this.input.val(JSON.stringify(ranges,null,2))}.bind(this));
-                this.rangeBar.on("changing", function(ev, ranges) {this.input.val(JSON.stringify(ranges,null,2))}.bind(this));
+                this.rangeBar.on("change", function(ev, ranges) { this.input.val(JSON.stringify(ranges,null,2))}.bind(this));
+                this.rangeBar.on("changing", function(ev, ranges) { this.input.val(JSON.stringify(ranges,null,2))}.bind(this));
             }
         },
 
@@ -100,6 +107,24 @@ define([
         {
             this.rangeBar.on("change", function(ev, ranges) { this.updateSummary(ranges) }.bind(this));
             this.rangeBar.on("changing", function(ev, ranges) { this.updateSummary(ranges) }.bind(this));
+        },
+
+        /**
+         * Bind Delete event handler on double click for ranges
+         */
+        bindRangesDelete: function()
+        {
+            this.rangeBarWidget.ranges.forEach(function(range) {
+                if (!range.$el.hasClass("delete-bound")) {
+                    range.$el.one('dblclick', function (ev) {
+                        console.log("DBLCLICKICI");
+                        ev.preventDefault();
+                        ev.stopPropagation();
+                        this.rangeBarWidget.removeRange(range)
+                    }.bind(this));
+                    range.$el.addClass("delete-bound");
+                }
+            }.bind(this));
         },
 
         /**
