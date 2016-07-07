@@ -1,0 +1,24 @@
+<?php
+/**
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this module to newer
+ * versions in the future.
+ *
+ * @category  Smile
+ * @package   Smile\Retailer
+ * @author    Romain Ruaud <romain.ruaud@smile.fr>
+ * @copyright 2016 Smile
+ * @license   Open Software License ("OSL") v. 3.0
+ *
+ * Retailer picker for front office
+ */
+?>
+
+<?php
+/** @var \Smile\Retailer\Block\Retailer\Chooser $block */
+?>
+<?php if ($block->getInputLabel()) : ?>
+    <label for="<?php echo $block->getInputId();?>"><?php echo __($block->getInputLabel());?></label>
+<?php endif;?>
+<?php echo $block->getRetailerHtmlSelect();?>
