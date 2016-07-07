@@ -21,7 +21,8 @@
 <div class="smile-retailer-pickup-wrapper"
      data-mage-init='{"smileRetailerPickup":{
                             "retailerPicker":"#<?php echo $block->getRetailerPicker()->getInputId();?>",
-                            "datePicker":"#<?php echo $block->getDatePicker()->getInputId();?>"
+                            "datePicker":"#<?php echo $block->getDatePicker()->getInputId();?>",
+                            "sessionSetUrl":"<?php echo $block->getUrl('retailer/retailer/set') ;?>"
                         }
                      }'>
     <div class="retailer-picker-wrapper">

@@ -4,9 +4,9 @@ define([
     'jquery',
     'underscore',
     'Smile_Retailer/js/retailer/data-provider',
-    'mage/calendar',
-    'mage/storage',
-], function (ko, $, _, retailerDataProvider) {
+    'Magento_Customer/js/customer-data',
+    'mage/calendar'
+], function (ko, $, _, retailerDataProvider, customerData) {
     'use strict';
 
     $.widget('smileRetailer.retailerPickup', {
@@ -28,7 +28,6 @@ define([
             this.retailerPicker = null;
             this.dataProvider = retailerDataProvider;
             this.retailerData = null;
-            this.storage      = $.initNamespaceStorage('mage-cache-storage').localStorage;
 
             if (this.options.datePicker) {
                 this.initDatePicker();
@@ -45,8 +44,8 @@ define([
         initRetailerPicker : function()
         {
             this.retailerPicker = $(this.options.retailerPicker);
-            if (this.getStorageData("smile-retailer-current-retailer")) {
-                var retailerId = this.getStorageData("smile-retailer-current-retailer");
+            if (this.getCustomerData("retailer_id")) {
+                var retailerId = this.getCustomerData("retailer_id");
                 this.retailerPicker.val(retailerId);
                 this.updateRetailerData(parseInt(retailerId));
             }
@@ -59,8 +58,8 @@ define([
         initDatePicker : function()
         {
             this.datePicker = $(this.options.datePicker);
-            if (this.getStorageData("smile-retailer-current-pickup-date")) {
-                this.datePicker.val(this.getStorageData("smile-retailer-current-pickup-date"));
+            if (this.getCustomerData("pickup_date")) {
+                this.datePicker.val(this.getCustomerData("pickup_date"));
             }
             this.datePicker.on('change', $.proxy(function (event) {this.setPickupDate($(event.target).val());}, this));
         },
@@ -74,7 +73,7 @@ define([
         setRetailer : function(retailerId)
         {
             this.currentRetailer = retailerId;
-            this.setStorageData("smile-retailer-current-retailer", this.currentRetailer);
+            $.post(this.options.sessionSetUrl, { retailer_id: retailerId });
             this.resetPickupDate();
             this.updateRetailerData(retailerId);
         },
@@ -88,7 +87,7 @@ define([
         setPickupDate : function(pickupDate)
         {
             this.currentPickuPdate = pickupDate;
-            this.setStorageData("smile-retailer-current-pickup-date", this.currentPickuPdate);
+            $.post( this.options.sessionSetUrl, { retailer_id: this.currentRetailer.retailer_id, pickup_date: pickupDate } );
         },
 
         /**
@@ -232,7 +231,6 @@ define([
         {
             if (this.datePicker !== null) {
                 this.datePicker.val('');
-                this.setStorageData("smile-retailer-current-pickup-date", null);
             }
         },
 
@@ -240,22 +238,17 @@ define([
          * Wrapper for data retrieval in customerData
          *
          * @param key
+         *
          * @returns {*}
          */
-        getStorageData : function(key)
+        getCustomerData : function(key)
         {
-            return this.storage.get(key);
-        },
+            var retailerData = customerData.get("smile-retailer-data")();
+            if (retailerData.hasOwnProperty(key)) {
+                return retailerData[key];
+            }
 
-        /**
-         * Wrapper for setting data to the customerData
-         *
-         * @param key
-         * @param value
-         */
-        setStorageData : function(key, value)
-        {
-            this.storage.set(key, value);
+            return null;
         }
     });
 
