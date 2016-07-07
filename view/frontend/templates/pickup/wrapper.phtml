@@ -24,6 +24,10 @@
                             "datePicker":"#<?php echo $block->getDatePicker()->getInputId();?>"
                         }
                      }'>
-    <?php echo $block->getRetailerPicker()->toHtml();?>
-    <?php echo $block->getDatePicker()->toHtml();?>
+    <div class="retailer-picker-wrapper">
+        <?php echo $block->getRetailerPicker()->toHtml();?>
+    </div>
+    <div class="date-picker-wrapper">
+        <?php echo $block->getDatePicker()->toHtml();?>
+    </div>
 </div>
