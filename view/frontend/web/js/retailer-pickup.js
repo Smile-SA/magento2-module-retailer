@@ -47,7 +47,7 @@ define([
             if (this.getCustomerData("retailer_id")) {
                 var retailerId = this.getCustomerData("retailer_id");
                 this.retailerPicker.val(retailerId);
-                this.updateRetailerData(parseInt(retailerId));
+                this.updateRetailerData(parseInt(retailerId, 10));
             }
             this.retailerPicker.on('change', $.proxy(function (event) {this.setRetailer($(event.target).val());}, this));
         },
@@ -160,7 +160,7 @@ define([
                 }
 
                 // Given weekday is not closed, and precise date is not a special closing date
-                if ((standardCloseDays.indexOf(day) == -1) && (specialClosingDays.indexOf(string) !== -1) ) {
+                if ((standardCloseDays.indexOf(day) === -1) && (specialClosingDays.indexOf(string) !== -1) ) {
                     result = false;
                 }
 
@@ -184,8 +184,8 @@ define([
                 && retailerData.opening_hours.time_ranges.length > 0
             ) {
                 retailerData.opening_hours.time_ranges.forEach( function (dateElement) {
-                    if (dateElement.date !== undefined && dateElement.time_ranges == undefined) {
-                        closedDays.push(parseInt(dateElement.date));
+                    if (dateElement.date !== undefined && dateElement.time_ranges === undefined) {
+                        closedDays.push(parseInt(dateElement.date, 10));
                     }
                 });
             }
@@ -204,7 +204,7 @@ define([
         {
             var dates = {
                 specialOpenings : [],
-                specialClosings : [],
+                specialClosings : []
             };
 
             if (retailerData.special_opening_hours
