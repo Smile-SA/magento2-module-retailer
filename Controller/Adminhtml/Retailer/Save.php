@@ -52,9 +52,7 @@ class Save extends AbstractRetailer
             }
 
             $model->setData($data);
-            if (null !== $storeId) {
-                $model->setStoreId($storeId);
-            }
+            $model->setStoreId($storeId);
 
             $this->scheduleManagement->setPostScheduleData($model, $data);
 

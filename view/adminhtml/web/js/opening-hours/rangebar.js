@@ -38,7 +38,7 @@ define([
             indicator:false,
             updateSummary:false,
             summary:null,
-            deleteConfirm:true,
+            deleteConfirm:true
         },
 
         /**
@@ -54,6 +54,22 @@ define([
                 }
             }
 
+            this.initRangeBarElement().initSummary().initInput().bindRangesDelete();
+
+            this.rangeBar.on("change", this.bindRangesDelete.bind(this));
+
+            this.element.prepend(this.rangeBar);
+        },
+
+        /**
+         * Init Range Bar Element
+         *
+         * @private
+         *
+         * @returns {smile.openingHours}
+         */
+        initRangeBarElement: function()
+        {
             var rangeBarWidget = new RangeBar(this.options);
 
             this.rangeBarWidget = rangeBarWidget;
@@ -67,26 +83,47 @@ define([
                 this.rangeBar.on("changing", this.options.onChanging);
             }
 
+            return this;
+        },
+
+        /**
+         * Init Summary Element if any
+         *
+         * @private
+         *
+         * @returns {smile.openingHours}
+         */
+        initSummary: function()
+        {
             if (this.options.updateSummary === true && this.options.summary !== null) {
                 this.summary = $(this.options.summary);
                 this.prepareSummaryListening();
                 if (this.options.values.length) {
-                    this.updateSummary(rangeBarWidget.val());
+                    this.updateSummary(this.rangeBarWidget.val());
                 }
             }
 
+            return this;
+        },
+
+        /**
+         * Init Input element if any
+         *
+         * @private
+         *
+         * @returns {smile.openingHours}
+         */
+        initInput: function()
+        {
             if (this.options.input !== null) {
                 this.input = $(this.options.input);
                 this.prepareInputBinding();
                 if (this.options.values.length) {
-                    this.input.val(JSON.stringify(rangeBarWidget.val(),null,2))
+                    this.input.val(JSON.stringify(this.rangeBarWidget.val(),null,2))
                 }
             }
 
-            this.bindRangesDelete();
-            this.rangeBar.on("change", this.bindRangesDelete.bind(this));
-
-            this.element.prepend(this.rangeBar);
+            return this;
         },
 
         /**
@@ -95,8 +132,10 @@ define([
         prepareInputBinding: function()
         {
             if (this.input) {
-                this.rangeBar.on("change", function(ev, ranges) { this.input.val(JSON.stringify(ranges,null,2))}.bind(this));
-                this.rangeBar.on("changing", function(ev, ranges) { this.input.val(JSON.stringify(ranges,null,2))}.bind(this));
+                var callback = function(ev, ranges) {this.input.val(JSON.stringify(ranges,null,2))}.bind(this);
+
+                this.rangeBarEvent("change", callback);
+                this.rangeBarEvent("changing", callback);
             }
         },
 
@@ -105,8 +144,10 @@ define([
          */
         prepareSummaryListening: function()
         {
-            this.rangeBar.on("change", function(ev, ranges) { this.updateSummary(ranges) }.bind(this));
-            this.rangeBar.on("changing", function(ev, ranges) { this.updateSummary(ranges) }.bind(this));
+            var callback = function(ev, ranges) { this.updateSummary(ranges) }.bind(this);
+
+            this.rangeBarEvent("change", callback);
+            this.rangeBarEvent("changing", callback);
         },
 
         /**
@@ -117,7 +158,6 @@ define([
             this.rangeBarWidget.ranges.forEach(function(range) {
                 if (!range.$el.hasClass("delete-bound")) {
                     range.$el.one('dblclick', function (ev) {
-                        console.log("DBLCLICKICI");
                         ev.preventDefault();
                         ev.stopPropagation();
                         this.rangeBarWidget.removeRange(range)
@@ -144,6 +184,17 @@ define([
             });
             var label = rangeLabels.join(", ");
             this.summary.text(label)
+        },
+
+        /**
+         * Bind events on rangeBar
+         *
+         * @param eventName The event name
+         * @param callback A function callback
+         */
+        rangeBarEvent: function (eventName, callback)
+        {
+            this.rangeBar.on(eventName, callback);
         }
 
     });
