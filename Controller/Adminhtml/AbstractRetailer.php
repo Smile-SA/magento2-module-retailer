@@ -67,13 +67,13 @@ abstract class AbstractRetailer extends Action
     /**
      * Abstract constructor.
      *
-     * @param Context                             $context                    Application context
-     * @param PageFactory                         $resultPageFactory          Result Page factory
-     * @param ForwardFactory                      $resultForwardFactory       Result forward factory
-     * @param Registry                            $coreRegistry               Application registry
-     * @param RetailerRepositoryInterface         $retailerRepository         Retailer Repository
-     * @param SellerFactory                       $retailerFactory            Retailer Factory
-     * @param RetailerScheduleManagementInterface $scheduleManagement         Schedule Management
+     * @param Context                             $context              Application context
+     * @param PageFactory                         $resultPageFactory    Result Page factory
+     * @param ForwardFactory                      $resultForwardFactory Result forward factory
+     * @param Registry                            $coreRegistry         Application registry
+     * @param RetailerRepositoryInterface         $retailerRepository   Retailer Repository
+     * @param SellerFactory                       $retailerFactory      Retailer Factory
+     * @param RetailerScheduleManagementInterface $scheduleManagement   Schedule Management
      */
     public function __construct(
         Context $context,

@@ -214,7 +214,7 @@ class Renderer extends \Magento\Config\Block\System\Config\Form\Field\FieldArray
             'timeFormat'  => $element->getTimeFormat(),
             'buttonImage' => $element->getImage(),
             'buttonText'  => 'Select Date',
-            'disabled'    => $element->getDisabled()
+            'disabled'    => $element->getDisabled(),
         ]);
 
         // Class toggle on change() is mandatory to have the Mutation Observer working properly.

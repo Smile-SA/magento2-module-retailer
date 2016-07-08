@@ -30,9 +30,10 @@ class RetailerData implements SectionSourceInterface
     private $customerSession;
 
     /**
-     * @param CustomerSession $customerSession
+     * @param CustomerSession $customerSession The Customer Session
      */
-    public function __construct(CustomerSession $customerSession) {
+    public function __construct(CustomerSession $customerSession)
+    {
         $this->customerSession = $customerSession;
     }
 

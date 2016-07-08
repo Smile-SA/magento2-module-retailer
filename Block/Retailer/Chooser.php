@@ -13,6 +13,7 @@
 namespace Smile\Retailer\Block\Retailer;
 
 use Magento\Framework\App\Cache\Type\Collection;
+use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -23,7 +24,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @package  Smile\Retailer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class Chooser extends \Magento\Framework\View\Element\Template
+class Chooser extends Template
 {
     /** @var \Smile\Seller\Model\ResourceModel\Seller\Collection  */
     private $collection = null;
@@ -83,12 +84,13 @@ class Chooser extends \Magento\Framework\View\Element\Template
     /**
      * Prepare HTML Input for rendering
      *
+     * @SuppressWarnings(PHPMD.ElseExpression)
+     *
      * @return \Magento\Framework\View\Element\Html\Select
      */
     public function getChooserInput()
     {
         if (null == $this->input) {
-            \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
             $cacheKey = 'SMILE_RETAILER_RETAILER_COLLECTION' . $this->_storeManager->getStore()->getId();
             $cache = $this->collectionCache->load($cacheKey);
 
@@ -106,7 +108,6 @@ class Chooser extends \Magento\Framework\View\Element\Template
                 ->setOptions($options);
 
             $this->input = $selectElement;
-            \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
         }
 
         return $this->input;
@@ -114,6 +115,8 @@ class Chooser extends \Magento\Framework\View\Element\Template
 
     /**
      * Render Retailer Html Element
+     *
+     * @return string
      */
     public function getRetailerHtmlSelect()
     {

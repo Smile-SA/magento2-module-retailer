@@ -39,7 +39,7 @@ class RetailerData extends Template
     /**
      * Get url for Retailer data ajax requests. Returns url with protocol matching used to request page.
      *
-     * @param string $route
+     * @param string $route A route to be displayed on the block.
      *
      * @return string Retailer Api Base URL.
      */

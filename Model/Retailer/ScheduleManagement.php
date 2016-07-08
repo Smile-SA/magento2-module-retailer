@@ -181,7 +181,7 @@ class ScheduleManagement implements RetailerScheduleManagementInterface
      * Append Data from POST to a given retailer
      *
      * @param \Smile\Seller\Api\Data\SellerInterface $retailer The retailer
-     * @param                                        $data     POST Data
+     * @param array                                  $data     POST Data
      */
     public function setPostScheduleData(\Smile\Seller\Api\Data\SellerInterface $retailer, $data)
     {
