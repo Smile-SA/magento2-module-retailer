@@ -22,4 +22,4 @@ ratings:
 exclude_paths:
   - vendor/*
   - Resources/*
-  - elessar/*
+  - view/adminhtml/web/js/elessar/*
