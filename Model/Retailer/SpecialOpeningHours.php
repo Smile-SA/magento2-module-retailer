@@ -67,7 +67,7 @@ class SpecialOpeningHours extends AbstractTimeSlots implements SpecialOpeningHou
         $openingHoursRange = [];
 
         foreach ($rangesData as $range) {
-            if (!isset($range['date'])) {
+            if (!isset($range['date']) || (trim($range['date']) == "")) {
                 continue;
             }
 
