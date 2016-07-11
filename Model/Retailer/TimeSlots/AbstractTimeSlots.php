@@ -152,7 +152,11 @@ abstract class AbstractTimeSlots extends AbstractDataObject implements TimeSlots
     {
         foreach ($rangesData as &$timeSlotItem) {
             if (is_string($timeSlotItem)) {
-                $timeSlotItem = $this->jsonHelper->jsonDecode($timeSlotItem);
+                try {
+                    $timeSlotItem = $this->jsonHelper->jsonDecode($timeSlotItem);
+                } catch (\Zend_Json_Exception $exception) {
+                    $timeSlotItem = [];
+                }
             }
 
             if (!empty($timeSlotItem)) {
