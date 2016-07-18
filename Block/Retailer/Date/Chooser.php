@@ -63,7 +63,6 @@ class Chooser extends \Magento\Framework\View\Element\Template
                 ->setData($this->inputData);
             $this->datePicker->setFormat($this->_localeDate->getDateFormatWithLongYear());
             $this->datePicker->setDateFormat($this->_localeDate->getDateFormatWithLongYear());
-            $this->datePicker->setButtonText(__("Select Date..."));
         }
 
         return $this->datePicker;
