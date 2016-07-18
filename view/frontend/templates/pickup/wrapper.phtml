@@ -18,17 +18,22 @@
 <?php
 /** @var \Smile\Retailer\Block\Retailer\Pickup\Wrapper $block */
 ?>
+<?php $placeHolderId = uniqid("smile-retailer-pickup-placeholder_");?>
 <div class="smile-retailer-pickup-wrapper"
      data-mage-init='{"smileRetailerPickup":{
                             "retailerPicker":"#<?php echo $block->getRetailerPicker()->getInputId();?>",
                             "datePicker":"#<?php echo $block->getDatePicker()->getInputId();?>",
-                            "sessionSetUrl":"<?php echo $block->getUrl('retailer/retailer/set') ;?>"
+                            "sessionSetUrl":"<?php echo $block->getUrl('retailer/retailer/set') ;?>",
+                            "placeHolder":"#<?php echo $placeHolderId;?>"
                         }
-                     }'>
+                     }' style="display:none;">
     <div class="retailer-picker-wrapper">
         <?php echo $block->getRetailerPicker()->toHtml();?>
     </div>
     <div class="date-picker-wrapper">
         <?php echo $block->getDatePicker()->toHtml();?>
     </div>
+</div>
+<div class="smile-retailer-pickup-placeholder" id="<?php echo $placeHolderId; ?>" style="display:none;">
+    <a href="#" title="<?php echo __("Choose your retailer");?>"><span><?php echo __("You did not chose your retailer and pickup date. Click here to choose them.");?></span></a>
 </div>

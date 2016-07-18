@@ -105,7 +105,8 @@ class Chooser extends Template
             $selectElement = $this->getLayout()->createBlock('Magento\Framework\View\Element\Html\Select')
                 ->setData($this->inputData)
                 ->setValue(intval($this->getRetailerId()))
-                ->setOptions($options);
+                ->setOptions($options)
+                ->setExtraParams('placeholder="' . __("Select Retailer") . '"');
 
             $this->input = $selectElement;
         }

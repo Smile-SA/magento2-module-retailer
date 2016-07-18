@@ -36,6 +36,26 @@ define([
             if (this.options.retailerPicker) {
                 this.initRetailerPicker();
             }
+
+            if (this.options.placeHolder) {
+                this.initPlaceHolder();
+            }
+        },
+
+        /**
+         * Init the placeholder for retailer picker.
+         */
+        initPlaceHolder : function()
+        {
+            this.placeHolder = $(this.options.placeHolder);
+            if (this.getCustomerData("retailer_id") && (this.getCustomerData("pickup_date"))) {
+                this.placeHolder.hide();
+                this.element.show();
+            } else {
+                this.placeHolder.show();
+                this.element.hide();
+            }
+            this.placeHolder.find("a").on("click", function() {this.element.show(); this.placeHolder.hide();}.bind(this));
         },
 
         /**
