@@ -35,3 +35,7 @@ Inactive,Inactive
 Status,Status
 "My Retailer","My Retailer"
 "My Pickup Date","My Pickup Date"
+"Select Date...","Select Date..."
+"Select Retailer...","Select Retailer..."
+"You did not chose your retailer and pickup date.","You did not chose your retailer and pickup date."
+"Click here to choose them.","Click here to choose them."
