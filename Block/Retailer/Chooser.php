@@ -97,16 +97,24 @@ class Chooser extends Template
             if ($cache) {
                 $options = unserialize($cache);
             } else {
-                $options = $options = $this->collection->toOptionArray();
+                $options = $this->collection->toOptionArray();
                 $this->collectionCache->save(serialize($options), $cacheKey);
             }
+
+            $defaultOption = [
+                'value' => '',
+                'label' => __("Select Retailer..."),
+                'params' => ['disabled' => true, 'hidden' => true, 'selected' => true],
+            ];
+
+            array_unshift($options, $defaultOption);
 
             /** @var \Magento\Framework\View\Element\Html\Select $selectElement */
             $selectElement = $this->getLayout()->createBlock('Magento\Framework\View\Element\Html\Select')
                 ->setData($this->inputData)
                 ->setValue(intval($this->getRetailerId()))
                 ->setOptions($options)
-                ->setExtraParams('placeholder="' . __("Select Retailer") . '"');
+                ->setExtraParams('required');
 
             $this->input = $selectElement;
         }

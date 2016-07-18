@@ -81,6 +81,9 @@ define([
             if (this.getCustomerData("pickup_date")) {
                 this.datePicker.val(this.getCustomerData("pickup_date"));
             }
+            var placeholder = this.datePicker.datepicker("option", "buttonText");
+            this.datePicker.attr('placeholder', placeholder);
+
             this.datePicker.on('change', $.proxy(function (event) {this.setPickupDate($(event.target).val());}, this));
         },
 
@@ -106,8 +109,13 @@ define([
          */
         setPickupDate : function(pickupDate)
         {
-            this.currentPickuPdate = pickupDate;
-            $.post( this.options.sessionSetUrl, { retailer_id: this.currentRetailer.retailer_id, pickup_date: pickupDate } );
+            this.currentPickupDate = pickupDate;
+            if (this.currentRetailer) {
+                $.post(this.options.sessionSetUrl, {
+                    retailer_id: this.currentRetailer.retailer_id,
+                    pickup_date: pickupDate
+                });
+            }
         },
 
         /**
