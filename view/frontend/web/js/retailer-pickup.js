@@ -12,7 +12,7 @@ define([
     $.widget('smileRetailer.retailerPickup', {
         options: {
             datePickerConfig : {
-                minDate : +2,
+                minDate : +0,
                 maxDate : "+2M",
                 internalDateFormat : $.datepicker.ISO_8601
             }
