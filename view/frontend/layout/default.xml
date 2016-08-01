@@ -17,43 +17,8 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="header-wrapper">
-            <block class="Smile\Retailer\Block\Retailer\Pickup\Wrapper" name="top.smileretailer.pickup.chooser" as="top.smileretailer.pickup.chooser">
-                <block class="Smile\Retailer\Block\Retailer\Chooser" name="top.smileretailer.pickup.retailer.chooser" as="top.smileretailer.pickup.retailer.chooser" template="Smile_Retailer::retailer/chooser.phtml">
-                    <arguments>
-                        <argument name="collection" xsi:type="object">Smile\Retailer\Model\ResourceModel\Retailer\Collection</argument>
-                        <argument name="collectionAttributes" xsi:type="array">
-                            <item name="attribute-name" xsi:type="string">name</item>
-                        </argument>
-                        <argument name="input" xsi:type="array">
-                            <item name="title" xsi:type="string" translate="true">My Retailer</item>
-                            <item name="name" xsi:type="string">smile_retailer_picker_top</item>
-                            <item name="class" xsi:type="string">smile-retailer-picker</item>
-                            <item name="id" xsi:type="string">smile_retailer_picker_top</item>
-                        </argument>
-                        <argument name="input_label" xsi:type="string" translate="true">My Retailer</argument>
-                    </arguments>
-                </block>
-                <block class="Smile\Retailer\Block\Retailer\Date\Chooser" name="top.smileretailer.pickup.date.chooser" as="top.smileretailer.pickup.date.chooser" template="Smile_Retailer::retailer/date/picker.phtml">
-                    <arguments>
-                        <argument name="input" xsi:type="array">
-                            <item name="title" xsi:type="string" translate="true">Pickup Date</item>
-                            <item name="name" xsi:type="string">smile_retailer_pickup_date_top</item>
-                            <item name="class" xsi:type="string">smile-retailer-pickup-datepicker</item>
-                            <item name="id" xsi:type="string">smile_retailer_pickup_date_top</item>
-                        </argument>
-                        <argument name="input_label" xsi:type="string" translate="true">My Pickup Date</argument>
-                    </arguments>
-                </block>
-                <arguments>
-                    <argument name="retailer_picker" xsi:type="string">top.smileretailer.pickup.retailer.chooser</argument>
-                    <argument name="date_picker" xsi:type="string">top.smileretailer.pickup.date.chooser</argument>
-                </arguments>
+            <block class="Smile\Retailer\Block\Retailer\Chooser" name="top.smileretailer.pickup.retailer.chooser" as="top.smileretailer.pickup.retailer.chooser" template="Smile_Retailer::retailer/chooser.phtml">
             </block>
-        </referenceContainer>
-        <referenceContainer name="content">
-            <block name="smile.retailer.data"
-                   class="Smile\Retailer\Block\RetailerData"
-                   template="Smile_Retailer::js/retailer-data.phtml"/>
         </referenceContainer>
     </body>
 </page>

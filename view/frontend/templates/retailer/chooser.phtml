@@ -18,7 +18,11 @@
 <?php
 /** @var \Smile\Retailer\Block\Retailer\Chooser $block */
 ?>
-<?php if ($block->getInputLabel()) : ?>
-    <label for="<?php echo $block->getInputId();?>"><?php echo __($block->getInputLabel());?></label>
-<?php endif;?>
-<?php echo $block->getRetailerHtmlSelect();?>
+
+<div class="smile-es-retailer-picker" data-bind="scope: '<?php /* @noEscape */ echo $block->getDataScope(); ?>'">
+<!-- ko template: getTemplate() --><!-- /ko -->
+</div>
+
+<script type="text/x-magento-init">
+    {"*" : {"Magento_Ui/js/core/app": {"components": <?php echo  /* @noEscape */ $block->getJsonConfig(); ?> }}}
+</script>

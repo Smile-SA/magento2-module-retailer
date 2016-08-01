@@ -1,0 +1,18 @@
+<div class="input-field">
+    <select data-bind="options: stores,
+                       optionsValue: 'id',
+                       optionsText: 'name',
+                       value: selectedStoreId,
+                       optionsCaption: 'Choose your shop...',
+                       event: {change: onStoreChange}">
+   </select>
+</div>
+
+<div class="input-field">
+    <input type="hidden" data-bind="enable: selectedStoreId, afterRender: initDatePicker" />
+    <p data-bind="click: showPicker, text: getDatePickerLabel()"></p>
+</div>
+
+<div class="input-action">
+    <button data-bind="enable: canValidate(), text: 'OK', click: validate"></button>
+</div>

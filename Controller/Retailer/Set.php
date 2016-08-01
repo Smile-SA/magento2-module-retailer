@@ -15,7 +15,8 @@ namespace Smile\Retailer\Controller\Retailer;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
-use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\Controller\ResultFactory;
+use Smile\Retailer\CustomerData\RetailerData;
 
 /**
  * Frontend Controller meant to set current Retailer to customer session
@@ -27,21 +28,20 @@ use Magento\Customer\Model\Session as CustomerSession;
 class Set extends Action
 {
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var \Smile\Retailer\CustomerData\RetailerData;
      */
-    private $customerSession;
+    private $retailerData;
 
     /**
      * Set constructor.
      *
-     * @param \Magento\Framework\App\Action\Context $context         Application context
-     * @param \Magento\Customer\Model\Session       $customerSession Customre Session
+     * @param \Magento\Framework\App\Action\Context     $context      Application context
+     * @param \Smile\Retailer\CustomerData\RetailerData $retailerData Retailer data management.
      */
-    public function __construct(Context $context, CustomerSession $customerSession)
+    public function __construct(Context $context, RetailerData $retailerData)
     {
-        $this->customerSession = $customerSession;
-
         parent::__construct($context);
+        $this->retailerData = $retailerData;
     }
 
     /**
@@ -52,18 +52,14 @@ class Set extends Action
      */
     public function execute()
     {
-        if ($this->getRequest()->isPost()) {
-            $retailerId = $this->getRequest()->getParam("retailer_id", false);
-            if ($retailerId) {
-                $this->customerSession->setRetailerId($retailerId);
-            }
+        $retailerId = $this->getRequest()->getParam("retailer_id", false);
+        $pickupDate = $this->getRequest()->getParam("pickup_date", false);
 
-            $pickupDate = $this->getRequest()->getParam("pickup_date", false);
-            if ($pickupDate) {
-                $this->customerSession->setRetailerPickupDate($pickupDate);
-            }
+        $this->retailerData->setParams($retailerId, $pickupDate);
 
-            $this->getResponse()->sendResponse();
-        }
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $resultRedirect->setUrl($this->_redirect->getRefererUrl());
+
+        return $resultRedirect;
     }
 }

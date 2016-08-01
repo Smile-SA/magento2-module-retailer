@@ -12,10 +12,6 @@
  */
 namespace Smile\Retailer\CustomerData;
 
-use Magento\Customer\CustomerData\SectionSourceInterface;
-use Magento\Customer\Model\Session as CustomerSession;
-use Magento\Framework\Stdlib\DateTime;
-
 /**
  * Retailer Section for frontend usage
  *
@@ -23,44 +19,68 @@ use Magento\Framework\Stdlib\DateTime;
  * @package  Smile\Retailer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class RetailerData implements SectionSourceInterface
+class RetailerData
 {
     /**
-     * @var CustomerSession
+     * @var CheckoutSession
      */
-    private $customerSession;
-
-    private $dateTime;
+    private $checkoutSession;
 
     /**
-     * @param CustomerSession $customerSession The Customer Session
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface
      */
-    public function __construct(CustomerSession $customerSession, DateTime $dateTime)
-    {
-        $this->customerSession = $customerSession;
-        $this->dateTime        = $dateTime;
-    }
+    private $cookieManager;
 
     /**
-     * {@inheritdoc}
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
      */
-    public function getSectionData()
-    {
-        return [
-            'retailer_id' => $this->customerSession->getRetailerId(),
-            'pickup_date' => $this->getPickupDate(),
-        ];
+    private $cookieMetadataFactory;
+
+    /**
+     * @param \Magento\Checkout\Model\Session                        $checkoutSession The checkout session
+     * @param \Magento\Framework\Stdlib\CookieManagerInterface       $cookieManager
+     * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
+     *
+     */
+    public function __construct(
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
+        \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
+    ) {
+        $this->checkoutSession       = $checkoutSession;
+        $this->cookieManager         = $cookieManager;
+        $this->cookieMetadataFactory = $cookieMetadataFactory;
     }
 
-    private function getPickupDate()
+    public function setParams($retailerId, $pickupDate)
     {
-        $pickupDate = $this->customerSession->getRetailerPickupDate();
+        $this->checkoutSession->setRetailerId($retailerId);
+        $this->checkoutSession->setPickupDate($pickupDate);
 
-        if ($pickupDate === null) {
-            $now = new \DateTime();
-            $pickupDate = $this->dateTime->formatDate($now, false);
-        }
+        $this->updateCookies();
+
+        return $this;
+    }
+
+    public function getRetailerId()
+    {
+        return $this->checkoutSession->getRetailerId();
+    }
+
+    public function getPickupDate()
+    {
+        $pickupDate = $this->checkoutSession->getPickupDate();
 
         return $pickupDate;
+    }
+
+    private function updateCookies()
+    {
+        $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
+        $metadata->setPath($this->checkoutSession->getCookiePath());
+        $metadata->setDomain($this->checkoutSession->getCookieDomain());
+        $metadata->setDuration($this->checkoutSession->getCookieLifetime());
+        $this->cookieManager->setPublicCookie('smile_retailer_id', $this->getRetailerId(), $metadata);
+        $this->cookieManager->setPublicCookie('smile_retailer_pickupdate', $this->getPickupDate(), $metadata);
     }
 }

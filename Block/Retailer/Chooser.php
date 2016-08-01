@@ -1,144 +1,167 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
 namespace Smile\Retailer\Block\Retailer;
 
-use Magento\Framework\App\Cache\Type\Collection;
-use Magento\Framework\View\Element\Template;
-use Magento\Framework\View\Element\Template\Context;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Stdlib\DateTime;
 
-/**
- * Retailer picker
- *
- * @category Smile
- * @package  Smile\Retailer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
- */
-class Chooser extends Template
+class Chooser extends \Magento\Framework\View\Element\Template
 {
-    /** @var \Smile\Seller\Model\ResourceModel\Seller\Collection  */
-    private $collection = null;
+    const JS_COMPONENT = "Smile_Retailer/js/retailer/chooser";
+
+    const JS_TEMPLATE  = "Smile_Retailer/retailer/chooser";
+
+    const DEFAULT_NUMBER_OF_DAY = '60';
 
     /**
-     * @var array The default attributes to add to our select
-     */
-    private $defaultAttributesToSelect = ['name'];
-
-    /**
-     * @var array Configuration for the input, can be passed by layouting.
-     */
-    private $inputData = [];
-
-    /**
-     * @var null|\Magento\Framework\View\Element\Html\Select
-     */
-    private $input = null;
-
-    /**
-     * @var Collection
-     */
-    private $collectionCache;
-
-    /**
-     * Chooser constructor. Iniitializes the retailer collection and possible input attributes.
+     * The Data role, used for Javascript mapping of slider Widget
      *
-     * @param \Magento\Framework\View\Element\Template\Context $context         Application context
-     * @param \Magento\Framework\App\Cache\Type\Collection     $collectionCache Collection Cache
-     * @param array                                            $data            Constructor Data
+     * @var string
+     */
+    private $dataScope = "retailer-pickup";
+
+    /**
+     * @var \Magento\Framework\Json\EncoderInterface
+     */
+    private $jsonEncoder;
+
+    /**
+     * @var \Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory
+     */
+    private $retailerCollectionFactory;
+
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime
+     */
+    private $dateTime;
+
+    /**
+     * @var \Smile\Retailer\Api\RetailerScheduleManagementInterface
+     */
+    private $scheduleManagement;
+
+
+    private $openingDaysCache = [];
+
+    /**
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param Context          $context      Template context.
+     * @param EncoderInterface $jsonEncoder  JSON Encoder.
+     * @param array            $data         Custom data.
      */
     public function __construct(
-        Context $context,
-        Collection $collectionCache,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
+        \Smile\Seller\Model\ResourceModel\Seller\CollectionFactory $retailerCollectionFactory,
+        \Smile\Retailer\Api\RetailerScheduleManagementInterface $scheduleManagement,
+        \Magento\Framework\Stdlib\DateTime $datetime,
         array $data = []
     ) {
-        parent::__construct($context, $data);
-
-        if (!isset($data['collection'])) {
-            throw new \InvalidArgumentException("Cannot instantiate Chooser block without collection instance");
-        }
-        $this->collection = $data['collection'];
-        $this->collectionCache = $collectionCache;
-
-        $this->collection->setStoreId($this->_storeManager->getStore()->getId());
-        if (isset($data['collectionAttributes']) && !empty($data['collectionAttributes'])) {
-            $this->collection->addAttributeToSelect(array_merge($data['collectionAttributes'], $this->defaultAttributesToSelect));
-        }
-
-        if (isset($data['input']) && !empty($data['input'])) {
-            $this->inputData = array_merge($data['input'], $this->inputData);
-        }
+            parent::__construct($context, $data);
+            $this->jsonEncoder               = $jsonEncoder;
+            $this->retailerCollectionFactory = $retailerCollectionFactory;
+            $this->scheduleManagement        = $scheduleManagement;
+            $this->dateTime                  = $datetime;
     }
 
     /**
-     * Prepare HTML Input for rendering
+     * Return the config of the price slider JS widget.
      *
-     * @SuppressWarnings(PHPMD.ElseExpression)
-     *
-     * @return \Magento\Framework\View\Element\Html\Select
+     * @return string
      */
-    public function getChooserInput()
+    public function getJsonConfig()
     {
-        if (null == $this->input) {
-            $cacheKey = 'SMILE_RETAILER_RETAILER_COLLECTION' . $this->_storeManager->getStore()->getId();
-            $cache = $this->collectionCache->load($cacheKey);
+        $config = [
+            'component' => self::JS_COMPONENT,
+            'template'  => self::JS_TEMPLATE,
+            'stores'    => $this->getStoresConfig(),
+            'updateUrl' => $this->getUpdateUrl(),
+        ];
 
-            if ($cache) {
-                $options = unserialize($cache);
-            } else {
-                $options = $this->collection->toOptionArray();
-                $this->collectionCache->save(serialize($options), $cacheKey);
-            }
+        return $this->jsonEncoder->encode([$this->getDataScope() => $config]);
+    }
 
-            $defaultOption = [
-                'value' => '',
-                'label' => __("Select Retailer..."),
-                'params' => ['disabled' => true, 'hidden' => true, 'selected' => true],
+   /**
+     * Retrieve the data role
+     *
+     * @return string
+     */
+    public function getDataScope()
+    {
+        return $this->dataScope;
+    }
+
+    private function getUpdateUrl()
+    {
+        return $this->getUrl('retailer/retailer/set');
+    }
+
+    private function getStoresConfig()
+    {
+        $retailers = [];
+        $retailerCollection = $this->retailerCollectionFactory->create(['attributeSetId' => 'Retailer']);
+        $retailerCollection->addAttributeToSelect(['name']);
+
+        foreach ($retailerCollection as $retailer) {
+            $retailers[$retailer->getId()] = [
+                'name'     => $retailer->getName(),
+                'calendar' => $this->getCalendar($retailer)
             ];
-
-            array_unshift($options, $defaultOption);
-
-            /** @var \Magento\Framework\View\Element\Html\Select $selectElement */
-            $selectElement = $this->getLayout()->createBlock('Magento\Framework\View\Element\Html\Select')
-                ->setData($this->inputData)
-                ->setValue(intval($this->getRetailerId()))
-                ->setOptions($options)
-                ->setExtraParams('required');
-
-            $this->input = $selectElement;
         }
 
-        return $this->input;
+        return $retailers;
+    }
+
+    private function getCalendar($seller)
+    {
+        $calendar = [];
+        $date = $this->getMinDate($seller);
+
+        while ($date < $this->getMaxDate($seller)) {
+            $date->add(\DateInterval::createFromDateString('+1 day'));
+            if ($this->isValidDate($seller, $date)) {
+                $calendar[] = $this->dateTime->formatDate($date, false);
+            }
+        }
+        return $calendar;
     }
 
     /**
-     * Render Retailer Html Element
      *
-     * @return string
+     * @param unknown $seller
+     * @return \DateTime
      */
-    public function getRetailerHtmlSelect()
+    public function getMinDate($seller)
     {
-        return $this->getChooserInput()->getHtml();
+        $date = new \DateTime();
+        $date->add(\DateInterval::createFromDateString('+1 day'));
+        return $date;
     }
 
-    /**
-     * Retrieve Html Id of the chooser input
-     *
-     * @return string
-     */
-    public function getInputId()
+    public function getMaxDate($seller)
     {
-        return $this->getChooserInput()->getId();
+        $date = $this->getMinDate($seller);
+        $date->add(\DateInterval::createFromDateString(sprintf('+%s day', self::DEFAULT_NUMBER_OF_DAY)));
+        return $date;
+    }
+
+    public function isValidDate($seller, $date)
+    {
+        $openingDays = $this->getOpeningDays($seller);
+        return in_array($date->format('w'), $openingDays);
+    }
+
+    public function getOpeningDays($seller)
+    {
+        if (!isset($this->openingDaysCache[$seller->getId()])) {
+            $this->scheduleManagement->loadOpeningHours($seller);
+            $this->openingDaysCache[$seller->getId()] = [];
+            foreach ($seller->getExtensionAttributes()->getOpeningHours()->getTimeRanges() as $dayData) {
+                if (isset($dayData['time_ranges'])) {
+                    $this->openingDaysCache[$seller->getId()][] = $dayData['date'];
+                }
+            }
+        }
+
+        return $this->openingDaysCache[$seller->getId()];
     }
 }
