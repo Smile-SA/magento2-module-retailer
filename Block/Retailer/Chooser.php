@@ -1,15 +1,47 @@
 <?php
+/**
+ * DISCLAIMER
+ * Do not edit or add to this file if you wish to upgrade this module to newer
+ * versions in the future.
+ *
+ * @category  Smile
+ * @package   Smile\Retailer
+ * @author    Romain Ruaud <romain.ruaud@smile.fr>
+ * @copyright 2016 Smile
+ * @license   Open Software License ("OSL") v. 3.0
+ */
 
 namespace Smile\Retailer\Block\Retailer;
 
+use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Smile\Retailer\Api\RetailerScheduleManagementInterface;
+use Smile\Seller\Model\ResourceModel\Seller\CollectionFactory;
 
-class Chooser extends \Magento\Framework\View\Element\Template
+/**
+ * Retailer Picker component
+ *
+ * @category Smile
+ * @package  Smile\Retailer
+ * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ */
+class Chooser extends Template
 {
+    /**
+     * Javascript component path.
+     */
     const JS_COMPONENT = "Smile_Retailer/js/retailer/chooser";
 
+    /**
+     * Javascript template path.
+     */
     const JS_TEMPLATE  = "Smile_Retailer/retailer/chooser";
 
+    /**
+     * Default number of days (interval) to retrieve dates for.
+     */
     const DEFAULT_NUMBER_OF_DAY = '60';
 
     /**
@@ -20,7 +52,7 @@ class Chooser extends \Magento\Framework\View\Element\Template
     private $dataScope = "retailer-pickup";
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface
+     * @var EncoderInterface
      */
     private $jsonEncoder;
 
@@ -35,32 +67,38 @@ class Chooser extends \Magento\Framework\View\Element\Template
     private $dateTime;
 
     /**
-     * @var \Smile\Retailer\Api\RetailerScheduleManagementInterface
+     * @var RetailerScheduleManagementInterface
      */
     private $scheduleManagement;
 
-
+    /**
+     * @var array
+     */
     private $openingDaysCache = [];
 
     /**
+     * Block Constructor
      *
-     * @param Context          $context      Template context.
-     * @param EncoderInterface $jsonEncoder  JSON Encoder.
-     * @param array            $data         Custom data.
+     * @param Context                             $context                   Template context.
+     * @param EncoderInterface                    $jsonEncoder               JSON Encoder.
+     * @param CollectionFactory                   $retailerCollectionFactory Retailer Collection Factory
+     * @param RetailerScheduleManagementInterface $scheduleManagement        Retailer Schedule Manager
+     * @param \Magento\Framework\Stdlib\DateTime  $datetime                  DateTime Manager
+     * @param array                               $data                      Custom data.
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Smile\Seller\Model\ResourceModel\Seller\CollectionFactory $retailerCollectionFactory,
-        \Smile\Retailer\Api\RetailerScheduleManagementInterface $scheduleManagement,
+        Context $context,
+        EncoderInterface $jsonEncoder,
+        CollectionFactory $retailerCollectionFactory,
+        RetailerScheduleManagementInterface $scheduleManagement,
         \Magento\Framework\Stdlib\DateTime $datetime,
         array $data = []
     ) {
-            parent::__construct($context, $data);
-            $this->jsonEncoder               = $jsonEncoder;
-            $this->retailerCollectionFactory = $retailerCollectionFactory;
-            $this->scheduleManagement        = $scheduleManagement;
-            $this->dateTime                  = $datetime;
+        parent::__construct($context, $data);
+        $this->jsonEncoder               = $jsonEncoder;
+        $this->retailerCollectionFactory = $retailerCollectionFactory;
+        $this->scheduleManagement        = $scheduleManagement;
+        $this->dateTime                  = $datetime;
     }
 
     /**
@@ -80,7 +118,7 @@ class Chooser extends \Magento\Framework\View\Element\Template
         return $this->jsonEncoder->encode([$this->getDataScope() => $config]);
     }
 
-   /**
+    /**
      * Retrieve the data role
      *
      * @return string
@@ -90,27 +128,50 @@ class Chooser extends \Magento\Framework\View\Element\Template
         return $this->dataScope;
     }
 
+    /**
+     * Retrieve Retailer Update Url
+     *
+     * @return string
+     */
     private function getUpdateUrl()
     {
         return $this->getUrl('retailer/retailer/set');
     }
 
+    /**
+     * Retrieve Retailers Data
+     *
+     * @return array
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     private function getStoresConfig()
     {
         $retailers = [];
+        /** @var \Smile\Seller\Model\ResourceModel\Seller\Collection $retailerCollection */
         $retailerCollection = $this->retailerCollectionFactory->create(['attributeSetId' => 'Retailer']);
         $retailerCollection->addAttributeToSelect(['name']);
+        $retailerCollection->addAttributeToFilter('is_active', true);
 
         foreach ($retailerCollection as $retailer) {
             $retailers[$retailer->getId()] = [
                 'name'     => $retailer->getName(),
-                'calendar' => $this->getCalendar($retailer)
+                'calendar' => $this->getCalendar($retailer),
             ];
         }
 
         return $retailers;
     }
 
+    /**
+     * Retrieve Calendar for a given seller
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess) Cannot inject properly \DateInterval
+     *
+     * @param \Smile\Seller\Api\Data\SellerInterface $seller The retailer
+     *
+     * @return array
+     */
     private function getCalendar($seller)
     {
         $calendar = [];
@@ -122,35 +183,63 @@ class Chooser extends \Magento\Framework\View\Element\Template
                 $calendar[] = $this->dateTime->formatDate($date, false);
             }
         }
+
         return $calendar;
     }
 
     /**
+     * Retrieve Min Date
      *
-     * @param unknown $seller
+     * @SuppressWarnings(PHPMD.StaticAccess) Cannot inject properly \DateInterval
+     *
      * @return \DateTime
      */
-    public function getMinDate($seller)
+    private function getMinDate()
     {
         $date = new \DateTime();
         $date->add(\DateInterval::createFromDateString('+1 day'));
+
         return $date;
     }
 
-    public function getMaxDate($seller)
+    /**
+     * Retrieve Max Date
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess) Cannot inject properly \DateInterval
+     *
+     * @return \DateTime
+     */
+    private function getMaxDate()
     {
-        $date = $this->getMinDate($seller);
+        $date = $this->getMinDate();
         $date->add(\DateInterval::createFromDateString(sprintf('+%s day', self::DEFAULT_NUMBER_OF_DAY)));
+
         return $date;
     }
 
-    public function isValidDate($seller, $date)
+    /**
+     * Check if date is valid for a given seller.
+     *
+     * @param \Smile\Seller\Api\Data\SellerInterface $seller The retailer
+     * @param DateTime                               $date   The date
+     *
+     * @return boolean
+     */
+    private function isValidDate($seller, $date)
     {
         $openingDays = $this->getOpeningDays($seller);
+
         return in_array($date->format('w'), $openingDays);
     }
 
-    public function getOpeningDays($seller)
+    /**
+     * Retrieve opening days for a given seller.
+     *
+     * @param \Smile\Seller\Api\Data\SellerInterface $seller The retailer
+     *
+     * @return mixed
+     */
+    private function getOpeningDays($seller)
     {
         if (!isset($this->openingDaysCache[$seller->getId()])) {
             $this->scheduleManagement->loadOpeningHours($seller);
