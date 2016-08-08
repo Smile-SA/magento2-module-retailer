@@ -52,11 +52,6 @@ class Chooser extends Template
     private $dataScope = "retailer-pickup";
 
     /**
-     * @var EncoderInterface
-     */
-    private $jsonEncoder;
-
-    /**
      * @var \Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory
      */
     private $retailerCollectionFactory;
@@ -75,6 +70,11 @@ class Chooser extends Template
      * @var array
      */
     private $openingDaysCache = [];
+
+    /**
+     * @var EncoderInterface
+     */
+    protected $jsonEncoder;
 
     /**
      * Block Constructor
@@ -133,7 +133,7 @@ class Chooser extends Template
      *
      * @return string
      */
-    private function getUpdateUrl()
+    protected function getUpdateUrl()
     {
         return $this->getUrl('retailer/retailer/set');
     }
@@ -145,7 +145,7 @@ class Chooser extends Template
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function getStoresConfig()
+    protected function getStoresConfig()
     {
         $retailers = [];
         /** @var \Smile\Seller\Model\ResourceModel\Seller\Collection $retailerCollection */
@@ -163,15 +163,6 @@ class Chooser extends Template
         return $retailers;
     }
 
-    /**
-     * Retrieve Calendar for a given seller
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess) Cannot inject properly \DateInterval
-     *
-     * @param \Smile\Seller\Api\Data\SellerInterface $seller The retailer
-     *
-     * @return array
-     */
     private function getCalendar($seller)
     {
         $calendar = [];
@@ -183,63 +174,35 @@ class Chooser extends Template
                 $calendar[] = $this->dateTime->formatDate($date, false);
             }
         }
-
         return $calendar;
     }
 
     /**
-     * Retrieve Min Date
      *
-     * @SuppressWarnings(PHPMD.StaticAccess) Cannot inject properly \DateInterval
-     *
+     * @param unknown $seller
      * @return \DateTime
      */
-    private function getMinDate()
+    public function getMinDate($seller)
     {
         $date = new \DateTime();
         $date->add(\DateInterval::createFromDateString('+1 day'));
-
         return $date;
     }
 
-    /**
-     * Retrieve Max Date
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess) Cannot inject properly \DateInterval
-     *
-     * @return \DateTime
-     */
-    private function getMaxDate()
+    public function getMaxDate($seller)
     {
-        $date = $this->getMinDate();
+        $date = $this->getMinDate($seller);
         $date->add(\DateInterval::createFromDateString(sprintf('+%s day', self::DEFAULT_NUMBER_OF_DAY)));
-
         return $date;
     }
 
-    /**
-     * Check if date is valid for a given seller.
-     *
-     * @param \Smile\Seller\Api\Data\SellerInterface $seller The retailer
-     * @param DateTime                               $date   The date
-     *
-     * @return boolean
-     */
-    private function isValidDate($seller, $date)
+    public function isValidDate($seller, $date)
     {
         $openingDays = $this->getOpeningDays($seller);
-
         return in_array($date->format('w'), $openingDays);
     }
 
-    /**
-     * Retrieve opening days for a given seller.
-     *
-     * @param \Smile\Seller\Api\Data\SellerInterface $seller The retailer
-     *
-     * @return mixed
-     */
-    private function getOpeningDays($seller)
+    public function getOpeningDays($seller)
     {
         if (!isset($this->openingDaysCache[$seller->getId()])) {
             $this->scheduleManagement->loadOpeningHours($seller);
