@@ -10,7 +10,7 @@ define(['uiComponent', 'jquery', 'mage/template', 'mage/calendar', 'mage/cookies
         getPickupDate : function() {
             var date = $.mage.cookies.get('smile_retailer_pickupdate');
             if (date) {
-                date = $.datepicker.parseDate($.datepicker.ISO_8601, date); 
+                date = $.datepicker.parseDate($.datepicker.ISO_8601, date);
             }
             return date;
         }
@@ -27,7 +27,7 @@ define(['uiComponent', 'jquery', 'mage/template', 'mage/calendar', 'mage/cookies
             displayDateFormat  : 'dd/mm/yy',
             internalDateFormat : $.datepicker.ISO_8601,
             selectedStoreId    : null,
-            pickupDate         : null,
+            pickupDate         : null
         },
 
         initialize: function() {
@@ -41,7 +41,7 @@ define(['uiComponent', 'jquery', 'mage/template', 'mage/calendar', 'mage/cookies
         initStores: function() {
             var stores    = [];
             this.storeById = {};
-            
+
             for (var key in this.stores) {
                 if (this.stores.hasOwnProperty(key)) {
                     var currentStore = new Store(key, this.stores[key]);
@@ -65,7 +65,7 @@ define(['uiComponent', 'jquery', 'mage/template', 'mage/calendar', 'mage/cookies
             if (pickerNode) {
                 this.pickerNode = pickerNode;
             }
-            
+
             $(pickerNode).datepicker("destroy");
             $(pickerNode).datepicker({
                 beforeShowDay : this.filterAvailableDates.bind(this),
@@ -86,10 +86,9 @@ define(['uiComponent', 'jquery', 'mage/template', 'mage/calendar', 'mage/cookies
             var currentDate = this.pickupDate();
             var pickerLabel = 'Choose your delivery date ...';
             if (currentDate) {
-                console.log(currentDate);
                 pickerLabel = 'Delivery date : ' + $.datepicker.formatDate(this.displayDateFormat, currentDate);
             }
-            
+
             return pickerLabel;
         },
 
@@ -97,11 +96,10 @@ define(['uiComponent', 'jquery', 'mage/template', 'mage/calendar', 'mage/cookies
             var calendar      = this.getCurrentStore() ? this.getCurrentStore().calendar : [];
             var formattedDate = $.datepicker.formatDate(this.internalDateFormat, date);
             var isValidDate   = $.inArray(formattedDate, calendar) != -1;
-            console.log([isValidDate, "", ""]);
             return [isValidDate, "", ""];
         },
 
-        canValidate : function() {
+        canValidate : function() {
             return this.pickupDate() !== null && this.selectedStoreId() !== null;
         },
 
@@ -110,7 +108,7 @@ define(['uiComponent', 'jquery', 'mage/template', 'mage/calendar', 'mage/cookies
                 'pickup_date' : $.datepicker.formatDate(this.internalDateFormat, this.pickupDate()),
                 'retailer_id' : this.selectedStoreId()
             }
-
+            
             window.location = [this.updateUrl, $.param(params)].join('?');
         }
     });
