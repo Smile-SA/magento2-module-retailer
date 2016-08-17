@@ -107,9 +107,22 @@ define(['uiComponent', 'jquery', 'mage/template', 'mage/calendar', 'mage/cookies
             var params = {
                 'pickup_date' : $.datepicker.formatDate(this.internalDateFormat, this.pickupDate()),
                 'retailer_id' : this.selectedStoreId()
-            }
-            
-            window.location = [this.updateUrl, $.param(params)].join('?');
+            };
+
+            $.ajax({
+                url: this.updateUrl,
+                data: params,
+                type: 'post',
+                beforeSend: function () {
+                    $('body').trigger('processStart');
+                },
+                success: function () {
+                    location.reload();
+                },
+                error : function() {
+                    $('body').trigger('processStop');
+                }
+            });
         }
     });
 });
