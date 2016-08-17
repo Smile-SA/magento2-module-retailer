@@ -55,7 +55,11 @@ class Set extends Action
         $retailerId = $this->getRequest()->getParam("retailer_id", false);
         $pickupDate = $this->getRequest()->getParam("pickup_date", false);
 
-        $this->retailerData->setParams($retailerId, $pickupDate);
+        try {
+            $this->retailerData->setParams($retailerId, $pickupDate);
+        } catch (\Exception $exception) {
+            $this->messageManager->addExceptionMessage($exception, __("We are sorry, an error occured when switching retailer."));
+        }
 
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setUrl($this->_redirect->getRefererUrl());
