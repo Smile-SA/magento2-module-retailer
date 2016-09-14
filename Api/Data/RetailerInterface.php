@@ -60,20 +60,18 @@ interface RetailerInterface extends SellerInterface
     /**
      * Check if a retailer is open at a given date time
      *
-     * @param \Smile\Retailer\Api\Data\RetailerInterface $retailer The retailer
-     * @param string                                     $dateTime A date time
+     * @param \DateTime $dateTime A date time
      *
      * @return bool
      */
-    public function isOpen($retailer, $dateTime = null);
+    public function isOpen($dateTime = null);
 
     /**
      * Check if a retailer is closed at a given date time
      *
-     * @param \Smile\Retailer\Api\Data\RetailerInterface $retailer The retailer
-     * @param string                                     $dateTime A date time
+     * @param string $dateTime A date time
      *
      * @return bool
      */
-    public function isClosed($retailer, $dateTime = null);
+    public function isClosed($dateTime = null);
 }

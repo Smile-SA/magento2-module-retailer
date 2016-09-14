@@ -98,17 +98,55 @@ class Retailer extends Seller implements RetailerInterface
     /**
      * {@inheritdoc}
      */
-    public function isOpen($retailer, $dateTime = null)
+    public function isOpen($dateTime = null)
     {
-        // TODO: Implement isOpen() method.
+        if ($dateTime == null) {
+            $dateTime = new \DateTime();
+        }
+        if (is_string($dateTime)) {
+            $dateTime = \DateTime::createFromFormat('Y-m-d', $dateTime);
+        }
+
+        $dayOfWeek = $dateTime->format('w');
+        $date      = $dateTime->format('Y-m-d');
+
+        $openingHours = $this->getOpeningHours();
+        $specialOpeningHours = $this->getSpecialOpeningHours();
+
+        $openingDays = [];
+        $specialOpeningDays = $specialOpeningHours->getTimeRanges();
+        foreach ($openingHours->getTimeRanges() as $dayData) {
+            if (isset($dayData['time_ranges'])) {
+                $openingDays[(int) $dayData['date']] = (int) $dayData['date'];
+            }
+        }
+
+        $result = true;
+        // Given week day is closed.
+        if (!in_array($dayOfWeek, $openingDays)) {
+            $result = false;
+            if (in_array($date, array_keys($specialOpeningDays))) {
+                if (isset($specialOpeningDays[$date]['time_ranges']) && !empty($specialOpeningDays[$date]['time_ranges'])) {
+                    // Given precise date is a special opening date.
+                    $result = true;
+                }
+            }
+        } elseif (isset($specialOpeningDays[$date])
+            && (!isset($specialOpeningDays[$date]['time_ranges']) || empty($specialOpeningDays[$date]['time_ranges']))
+        ) {
+            // Given weekday is not closed, and precise date is not a special closing date.
+            $result = false;
+        }
+
+        return $result;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isClosed($retailer, $dateTime = null)
+    public function isClosed($dateTime = null)
     {
-        return !$this->isOpen($retailer, $dateTime);
+        return !$this->isOpen($dateTime);
     }
 
     /**
