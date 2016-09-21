@@ -29,7 +29,7 @@ interface TimeSlotsInterface
     /**
      * Retrieve time ranges as array
      *
-     * @return null|array
+     * @return mixed[]
      */
     public function getTimeRanges();
 
@@ -38,14 +38,14 @@ interface TimeSlotsInterface
      *
      * @param array $rangesData Time ranges data coming from a post request
      *
-     * @return mixed
+     * @return TimeSlotsInterface
      */
     public function loadPostData($rangesData);
 
     /**
      * Retrieve retailer Id of this object
      *
-     * @return null|int
+     * @return int
      */
     public function getRetailerId();
 
@@ -54,7 +54,7 @@ interface TimeSlotsInterface
      *
      * @param int $retailerId The retailer Id
      *
-     * @return mixed
+     * @return TimeSlotsInterface
      */
     public function setRetailerId($retailerId);
 }
