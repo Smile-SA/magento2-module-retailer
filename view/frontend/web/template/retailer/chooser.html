@@ -8,7 +8,7 @@
    </select>
 </div>
 
-<div class="input-field">
+<div class="input-field" data-bind="if: isPickupDateDisplayed()">
     <input type="hidden" data-bind="enable: selectedStoreId, afterRender: initDatePicker" />
     <p data-bind="click: showPicker, text: getDatePickerLabel()"></p>
 </div>
