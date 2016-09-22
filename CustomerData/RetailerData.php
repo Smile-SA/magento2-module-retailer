@@ -15,6 +15,8 @@ namespace Smile\Retailer\CustomerData;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\Stdlib\DateTime;
+use Smile\Retailer\Helper\Settings;
 
 /**
  * Retailer Section for frontend usage
@@ -41,19 +43,34 @@ class RetailerData
     private $cookieMetadataFactory;
 
     /**
+     * @var \Smile\Retailer\CustomerData\SettingsHelper|\Smile\Retailer\Helper\Settings
+     */
+    private $settingsHelper;
+
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime
+     */
+    private $dateTime;
+
+    /**
      * @param Session                $checkoutSession       The checkout session
      * @param CookieManagerInterface $cookieManager         Cookie Manager
      * @param CookieMetadataFactory  $cookieMetadataFactory Cookie Metadata Factory
-     *
+     * @param Settings               $settingsHelper        Retailer Settings Helper
+     * @param DateTime               $dateTime              DateTime
      */
     public function __construct(
         Session $checkoutSession,
         CookieManagerInterface $cookieManager,
-        CookieMetadataFactory $cookieMetadataFactory
+        CookieMetadataFactory $cookieMetadataFactory,
+        Settings $settingsHelper,
+        DateTime $dateTime
     ) {
         $this->checkoutSession       = $checkoutSession;
         $this->cookieManager         = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
+        $this->settingsHelper        = $settingsHelper;
+        $this->dateTime              = $dateTime;
     }
 
     /**
@@ -91,6 +108,12 @@ class RetailerData
      */
     public function getPickupDate()
     {
+        if (!$this->settingsHelper->isPickupDateDisplayed()) {
+            $date = new \DateTime();
+
+            return $this->dateTime->formatDate($date, false);
+        }
+
         $pickupDate = $this->checkoutSession->getPickupDate();
 
         return $pickupDate;

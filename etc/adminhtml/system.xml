@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Smile_Retailer admin configuration UI fields.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this module to newer
+ * versions in the future.
+ *
+ *
+ * @category  Smile
+ * @package   Smile\Retailer
+ * @author    Romain Ruaud <romain.ruaud@smile.fr>
+ * @copyright 2016 Smile
+ * @license   Open Software License ("OSL") v. 3.0
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+
+        <tab id="smile_retailersuite" translate="label" sortOrder="215">
+            <label>Smile RetailerSuite</label>
+        </tab>
+
+        <section id="smile_retailersuite_retailer_base_settings" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Retailer Base settings</label>
+            <tab>smile_retailersuite</tab>
+            <resource>Magento_Backend::config_smile_retailersuite_retailer_base_settings</resource>
+
+            <group id="navigation_settings" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Navigation Settings</label>
+                <field id="display_pickup_date" translate="label comment" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Display Pickup Date in Front-office</label>
+                    <comment>When enabled, the customer will be able to choose the pickup date of his order in Front Office.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

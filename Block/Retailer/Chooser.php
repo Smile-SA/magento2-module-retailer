@@ -19,6 +19,7 @@ use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Smile\Retailer\Api\RetailerScheduleManagementInterface;
 use Smile\Seller\Model\ResourceModel\Seller\CollectionFactory;
+use Smile\Retailer\Helper\Settings as SettingsHelper;
 
 /**
  * Retailer Picker component
@@ -72,6 +73,11 @@ class Chooser extends Template
     private $openingDaysCache = [];
 
     /**
+     * @var SettingsHelper
+     */
+    private $settingsHelper;
+
+    /**
      * @var EncoderInterface
      */
     protected $jsonEncoder;
@@ -84,6 +90,7 @@ class Chooser extends Template
      * @param CollectionFactory                   $retailerCollectionFactory Retailer Collection Factory
      * @param RetailerScheduleManagementInterface $scheduleManagement        Retailer Schedule Manager
      * @param \Magento\Framework\Stdlib\DateTime  $datetime                  DateTime Manager
+     * @param SettingsHelper                      $settingsHelper            Retailer Settings Helper.
      * @param array                               $data                      Custom data.
      */
     public function __construct(
@@ -92,6 +99,7 @@ class Chooser extends Template
         CollectionFactory $retailerCollectionFactory,
         RetailerScheduleManagementInterface $scheduleManagement,
         \Magento\Framework\Stdlib\DateTime $datetime,
+        SettingsHelper $settingsHelper,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -99,6 +107,7 @@ class Chooser extends Template
         $this->retailerCollectionFactory = $retailerCollectionFactory;
         $this->scheduleManagement        = $scheduleManagement;
         $this->dateTime                  = $datetime;
+        $this->settingsHelper            = $settingsHelper;
     }
 
     /**
@@ -109,10 +118,11 @@ class Chooser extends Template
     public function getJsonConfig()
     {
         $config = [
-            'component' => self::JS_COMPONENT,
-            'template'  => self::JS_TEMPLATE,
-            'stores'    => $this->getStoresConfig(),
-            'updateUrl' => $this->getUpdateUrl(),
+            'component'         => self::JS_COMPONENT,
+            'template'          => self::JS_TEMPLATE,
+            'stores'            => $this->getStoresConfig(),
+            'updateUrl'         => $this->getUpdateUrl(),
+            'displayPickupDate' => $this->isPickupDateDisplayed(),
         ];
 
         return $this->jsonEncoder->encode([$this->getDataScope() => $config]);
@@ -126,6 +136,71 @@ class Chooser extends Template
     public function getDataScope()
     {
         return $this->dataScope;
+    }
+
+    /**
+     * Retrieve the minimum Opening Date
+     *
+     * @return \DateTime
+     */
+    public function getMinDate()
+    {
+        $date = new \DateTime();
+        $date->add(\DateInterval::createFromDateString('+1 day'));
+
+        return $date;
+    }
+
+    /**
+     * Retrieve the maximum Opening Date for a Seller
+     *
+     * @param \Smile\Seller\Api\Data\SellerInterface $seller The Seller
+     *
+     * @return \DateTime
+     */
+    public function getMaxDate($seller)
+    {
+        $date = $this->getMinDate($seller);
+        $date->add(\DateInterval::createFromDateString(sprintf('+%s day', self::DEFAULT_NUMBER_OF_DAY)));
+
+        return $date;
+    }
+
+    /**
+     * Check if a date is valid for a seller.
+     *
+     * @param \Smile\Seller\Api\Data\SellerInterface $seller The Seller
+     * @param \DateTime                              $date   The date
+     *
+     * @return bool
+     */
+    public function isValidDate($seller, $date)
+    {
+        $openingDays = $this->getOpeningDays($seller);
+
+        return in_array($date->format('w'), $openingDays);
+    }
+
+    /**
+     * Retrive the opening days of a seller
+     *
+     * @param \Smile\Seller\Api\Data\SellerInterface $seller The Seller
+     *
+     * @return mixed
+     */
+    public function getOpeningDays($seller)
+    {
+        if (!isset($this->openingDaysCache[$seller->getId()])) {
+            $this->scheduleManagement->loadOpeningHours($seller);
+            $this->openingDaysCache[$seller->getId()] = [];
+            foreach ($seller->getExtensionAttributes()->getOpeningHours()->getTimeRanges() as $dayData) {
+                if (isset($dayData['time_ranges'])) {
+                    $this->openingDaysCache[$seller->getId()][] = $dayData['date'];
+                }
+            }
+        }
+
+        return $this->openingDaysCache[$seller->getId()];
     }
 
     /**
@@ -154,15 +229,23 @@ class Chooser extends Template
         $retailerCollection->addAttributeToFilter('is_active', true);
 
         foreach ($retailerCollection as $retailer) {
-            $retailers[$retailer->getId()] = [
-                'name'     => $retailer->getName(),
-                'calendar' => $this->getCalendar($retailer),
-            ];
+            $retailers[$retailer->getId()] = ['name' => $retailer->getName()];
+
+            if ($this->isPickupDateDisplayed()) {
+                $retailers[$retailer->getId()]['calendar'] = $this->getCalendar($retailer);
+            }
         }
 
         return $retailers;
     }
 
+    /**
+     * Retrieve all Opening Dates of a given Seller.
+     *
+     * @param \Smile\Seller\Api\Data\SellerInterface $seller The Seller
+     *
+     * @return array
+     */
     private function getCalendar($seller)
     {
         $calendar = [];
@@ -174,46 +257,17 @@ class Chooser extends Template
                 $calendar[] = $this->dateTime->formatDate($date, false);
             }
         }
+
         return $calendar;
     }
 
     /**
+     * Check if we should display the pickup date.
      *
-     * @param unknown $seller
-     * @return \DateTime
+     * @return bool
      */
-    public function getMinDate($seller)
+    private function isPickupDateDisplayed()
     {
-        $date = new \DateTime();
-        $date->add(\DateInterval::createFromDateString('+1 day'));
-        return $date;
-    }
-
-    public function getMaxDate($seller)
-    {
-        $date = $this->getMinDate($seller);
-        $date->add(\DateInterval::createFromDateString(sprintf('+%s day', self::DEFAULT_NUMBER_OF_DAY)));
-        return $date;
-    }
-
-    public function isValidDate($seller, $date)
-    {
-        $openingDays = $this->getOpeningDays($seller);
-        return in_array($date->format('w'), $openingDays);
-    }
-
-    public function getOpeningDays($seller)
-    {
-        if (!isset($this->openingDaysCache[$seller->getId()])) {
-            $this->scheduleManagement->loadOpeningHours($seller);
-            $this->openingDaysCache[$seller->getId()] = [];
-            foreach ($seller->getExtensionAttributes()->getOpeningHours()->getTimeRanges() as $dayData) {
-                if (isset($dayData['time_ranges'])) {
-                    $this->openingDaysCache[$seller->getId()][] = $dayData['date'];
-                }
-            }
-        }
-
-        return $this->openingDaysCache[$seller->getId()];
+        return $this->settingsHelper->isPickupDateDisplayed();
     }
 }
