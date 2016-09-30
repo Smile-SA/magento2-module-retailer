@@ -1,0 +1,56 @@
+// /**
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Smile Elastic Suite to newer
+//  * versions in the future.
+//  *
+//  *
+//  * @category  Smile
+//  * @package   Smile\Retailer
+//  * @author    Aurélien FOUCRET <aurelien.foucret@smile.fr>
+//  * @copyright 2016 Smile
+//  * @license   Open Software License ("OSL") v. 3.0
+//  */
+
+@icon-marker: '\e60A';
+@header-panel-icon-color: @color-white;
+
+.smile-es-retailer-picker-wrapper {
+
+    .lib-dropdown(
+        @_toggle-selector: ~'.action.showpicker',
+        @_options-selector: ~'.block-retailer-picker',
+        @_dropdown-toggle-icon-content: @icon-marker,
+        @_dropdown-toggle-active-icon-content: @icon-marker,
+        @_dropdown-list-item-padding: false,
+        @_dropdown-list-item-hover: false,
+        @_icon-font-position: before,
+        @_icon-font-size: 20px,
+        @_icon-font-line-height: 20px,
+        @_icon-font-color: @header-panel-icon-color,
+        @_icon-font-color-hover: @header-panel-icon-color,
+        @_icon-font-color-active: @header-panel-icon-color
+    );
+
+    .smile-es-retailer-picker-content-wrapper {
+        
+        padding: 10px;
+        width: 300px;
+        
+        .input-field, .input-action {
+            display: inline-block;
+        }
+        
+        .input-field {
+            width: 240px;
+        }
+    }
+    
+    .action.showpicker .text {
+        padding: 0 4px;
+        font-size: 12px;
+        line-height: 18px;
+    }
+
+    float: left;
+}

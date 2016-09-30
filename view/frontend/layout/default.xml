@@ -16,8 +16,8 @@
  -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceContainer name="header-wrapper">
-            <block class="Smile\Retailer\Block\Retailer\Chooser" name="top.smileretailer.pickup.retailer.chooser" as="top.smileretailer.pickup.retailer.chooser" template="Smile_Retailer::retailer/chooser.phtml">
+        <referenceContainer name="header.panel">
+            <block class="Smile\Retailer\Block\Retailer\Chooser" name="top.smileretailer.pickup.retailer.chooser" as="top.smileretailer.pickup.retailer.chooser" template="Smile_Retailer::retailer/chooser.phtml" before="-">
             </block>
         </referenceContainer>
     </body>

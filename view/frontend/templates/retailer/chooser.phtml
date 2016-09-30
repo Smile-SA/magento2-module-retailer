@@ -19,10 +19,29 @@
 /** @var \Smile\Retailer\Block\Retailer\Chooser $block */
 ?>
 
-<div class="smile-es-retailer-picker" data-bind="scope: '<?php /* @noEscape */ echo $block->getDataScope(); ?>'">
-<!-- ko template: getTemplate() --><!-- /ko -->
-</div>
+<?php $dataScope = $block->getDataScope(); ?>
 
-<script type="text/x-magento-init">
-    {"*" : {"Magento_Ui/js/core/app": {"components": <?php echo  /* @noEscape */ $block->getJsonConfig(); ?> }}}
-</script>
+<div data-block="smile-es-retailer-picker" class="smile-es-retailer-picker-wrapper">
+    <div class="action showpicker" data-bind="scope: '<?php /* @noEscape */ echo $dataScope; ?>'">
+        <span class="text" data-bind="text: getLinkLabel()"></span>
+    </div>
+    <div class="block block-retailer-picker"
+         data-role="dropdownDialog"
+         data-mage-init='{"dropdownDialog":{
+            "appendTo":"[data-block=smile-es-retailer-picker]",
+            "triggerTarget":".showpicker",
+            "timeout": "2000",
+            "closeOnMouseLeave": false,
+            "closeOnEscape": true,
+            "triggerClass":"active",
+            "parentClass":"active",
+            "buttons":[]}}'>
+        <div class="smile-es-retailer-picker-content-wrapper" data-bind="scope: '<?php /* @noEscape */ echo $dataScope; ?>'">
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        </div>
+    </div>
+
+    <script type="text/x-magento-init">
+        {"*" : {"Magento_Ui/js/core/app": {"components": <?php echo  /* @noEscape */ $block->getJsonConfig(); ?> }}}
+    </script>
+</div>

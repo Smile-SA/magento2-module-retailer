@@ -62,7 +62,13 @@ define(['uiComponent', 'jquery', 'mage/template', 'mage/calendar', 'mage/cookies
             displayDateFormat  : 'dd/mm/yy',
             internalDateFormat : $.datepicker.ISO_8601,
             selectedStoreId    : null,
-            pickupDate         : null
+            pickupDate         : null,
+            templates : {
+                validationButton   : 'OK',
+                chooserDefault     : 'Choose your shop ...',
+                emptyDeliveryDate  : 'Choose your delivery date ...',
+                deliveryDate       : 'Delivery date : %s'
+            }
         },
 
         /**
@@ -72,7 +78,7 @@ define(['uiComponent', 'jquery', 'mage/template', 'mage/calendar', 'mage/cookies
             this._super();
             this.observe(['selectedStoreId', 'pickupDate']);
             this.initStores();
-            console.log(this.displayPickupDate);
+
             this.selectedStoreId(RetailerSession.getSelectedStoreId());
             if (this.isPickupDateDisplayed()) {
                 this.pickupDate(RetailerSession.getPickupDate());
@@ -157,12 +163,45 @@ define(['uiComponent', 'jquery', 'mage/template', 'mage/calendar', 'mage/cookies
          */
         getDatePickerLabel: function() {
             var currentDate = this.pickupDate();
-            var pickerLabel = 'Choose your delivery date ...';
+            var pickerLabel = $.mage.__(this.templates['emptyDeliveryDate']);
             if (currentDate) {
                 pickerLabel = 'Delivery date : ' + $.datepicker.formatDate(this.displayDateFormat, currentDate);
             }
 
             return pickerLabel;
+        },
+
+        /**
+         * Retrieve The validation button label.
+         *
+         * @returns {string}
+         */
+        getValidationLabel: function() {
+            return $.mage.__(this.templates['validationButton']);
+        },
+
+        /**
+         * Retrieve The empty option label.
+         *
+         * @returns {string}
+         */
+        getEmptyOptionLabel: function() {
+            return $.mage.__(this.templates['chooserDefault']);
+        },
+
+        /**
+         * Retrieve the link label.
+         *
+         * @returns {string}
+         */
+        getLinkLabel: function() {
+            var label = this.getEmptyOptionLabel();
+            
+            if (this.selectedStoreId() != undefined) {
+                label = $.mage.__('My shop : %s').replace('%s', this.storeById[this.selectedStoreId()].name);
+            }
+
+            return label;
         },
 
         /**
@@ -186,9 +225,10 @@ define(['uiComponent', 'jquery', 'mage/template', 'mage/calendar', 'mage/cookies
          */
         canValidate : function() {
             if (this.isPickupDateDisplayed()) {
-                return this.pickupDate() !== null && this.selectedStoreId() !== null;
+                return this.pickupDate() !== undefined && this.selectedStoreId() !== undefined;
             }
-            return this.selectedStoreId() !== null;
+
+            return this.selectedStoreId() !== undefined;
         },
 
         /**
