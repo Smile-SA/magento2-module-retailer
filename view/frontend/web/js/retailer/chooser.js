@@ -197,7 +197,7 @@ define(['uiComponent', 'jquery', 'mage/template', 'mage/calendar', 'mage/cookies
         getLinkLabel: function() {
             var label = this.getEmptyOptionLabel();
             
-            if (this.selectedStoreId() != undefined) {
+            if (this.selectedStoreId() != undefined && this.storeById[this.selectedStoreId()] != undefined) {
                 label = $.mage.__('My shop : %s').replace('%s', this.storeById[this.selectedStoreId()].name);
             }
 
