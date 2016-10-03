@@ -13,9 +13,15 @@
 //  */
 
 @icon-marker: '\e60A';
-@header-panel-icon-color: @color-white;
+
+//
+//  All media
+//  _____________________________________________
 
 .smile-es-retailer-picker-wrapper {
+
+    float: right;
+    margin-right: @indent__s;
 
     .lib-dropdown(
         @_toggle-selector: ~'.action.showpicker',
@@ -25,18 +31,29 @@
         @_dropdown-list-item-padding: false,
         @_dropdown-list-item-hover: false,
         @_icon-font-position: before,
-        @_icon-font-size: 20px,
-        @_icon-font-line-height: 20px,
-        @_icon-font-color: @header-panel-icon-color,
-        @_icon-font-color-hover: @header-panel-icon-color,
-        @_icon-font-color-active: @header-panel-icon-color
+        @_icon-font-size: 22px,
+        @_icon-font-line-height: 28px,
+        @_icon-font-color: @minicart-icons-color,
+        @_icon-font-color-hover: @minicart-icons-color,
+        @_icon-font-color-active: @minicart-icons-color
     );
 
-    .smile-es-retailer-picker-content-wrapper {
+    .block-retailer-picker {
         
+        width: 320px;
         padding: 10px;
-        width: 300px;
-        
+        right: -22px;
+
+        &:after {
+            left: auto;
+            right: 25px;
+        }
+
+        &:before {
+            left: auto;
+            right: 26px;
+        }
+
         .input-field, .input-action {
             display: inline-block;
         }
@@ -47,10 +64,39 @@
     }
     
     .action.showpicker .text {
-        padding: 0 4px;
-        font-size: 12px;
-        line-height: 18px;
+        padding: 0 5px 0 0;
+        font-size: 14px;
+        line-height: 31px;
     }
+}
 
-    float: left;
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+    .smile-es-retailer-picker-wrapper {
+        margin-top: @indent__s;
+    }
+}
+
+//
+//  Tablet + Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .action.showpicker .text {
+        display: none;
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .smile-es-retailer-picker-wrapper {
+        margin-left: @indent__s;
+        margin-right: 0;
+    }
 }
