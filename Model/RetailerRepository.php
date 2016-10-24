@@ -30,12 +30,17 @@ class RetailerRepository extends SellerRepository implements RetailerRepositoryI
     /**
      * RetailerRepository constructor.
      *
-     * @param \Magento\Framework\EntityManager\EntityManager $entityManager    The entity manager
-     * @param \Smile\Seller\Model\SellerFactory              $sellerFactory    The Seller Factory
-     * @param null|string                                    $attributeSetName The attribute set name
+     * @param \Magento\Framework\EntityManager\EntityManager $entityManager           The entity manager
+     * @param \Smile\Seller\Model\SellerFactory              $sellerFactory           The Seller Factory
+     * @param \Smile\Seller\Model\CollectionFactory          $sellerCollectionFactory The Seller Collecrtion Factory
+     * @param null|string                                    $attributeSetName        The attribute set name
      */
-    public function __construct(EntityManager $entityManager, SellerFactory $sellerFactory, $attributeSetName = RetailerInterface::ATTRIBUTE_SET_RETAILER)
-    {
-        parent::__construct($entityManager, $sellerFactory, $attributeSetName);
+    public function __construct(
+        EntityManager $entityManager,
+        SellerFactory $sellerFactory,
+        CollectionFactory $sellerCollectionFactory,
+        $attributeSetName = RetailerInterface::ATTRIBUTE_SET_RETAILER
+    ) {
+        parent::__construct($entityManager, $sellerFactory, $sellerCollectionFactory, $attributeSetName);
     }
 }
