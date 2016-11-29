@@ -14,12 +14,10 @@ namespace Smile\Retailer\Model\Retailer;
 
 use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\Stdlib\DateTime;
-use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Smile\Retailer\Api\Data\SpecialOpeningHoursInterface;
 use Smile\Retailer\Model\ResourceModel\Retailer\TimeSlots;
 use Smile\Retailer\Model\Retailer\TimeSlots\AbstractTimeSlots;
-use Magento\Framework\Stdlib\DateTime\Filter\Date as DateFilter;
 
 /**
  * Special Opening Hours Model

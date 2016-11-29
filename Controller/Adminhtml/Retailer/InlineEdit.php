@@ -15,7 +15,6 @@ namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\Retailer\Api\RetailerScheduleManagementInterface;
 use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
-use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Registry;

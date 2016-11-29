@@ -12,8 +12,6 @@
  */
 namespace Smile\Retailer\Block\Adminhtml\Retailer\Edit\Button;
 
-use Magento\Ui\Component\Control\Container;
-
 /**
  * Save Button for retailer edition
  *

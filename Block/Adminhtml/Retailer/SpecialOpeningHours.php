@@ -12,9 +12,7 @@
  */
 namespace Smile\Retailer\Block\Adminhtml\Retailer;
 
-use Magento\Framework\Stdlib\DateTime;
 use Smile\Retailer\Api\Data\RetailerInterface;
-use Zend_Date;
 
 /**
  * Special Opening Hours rendering block

@@ -12,7 +12,6 @@
  */
 namespace Smile\Retailer\Block\Adminhtml\Retailer\Edit\Button;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;

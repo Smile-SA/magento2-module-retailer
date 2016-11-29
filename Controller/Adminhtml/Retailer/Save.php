@@ -14,7 +14,6 @@
 
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
-use Magento\Backend\App\Action;
 use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
 
 /**

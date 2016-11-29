@@ -14,9 +14,7 @@ namespace Smile\Retailer\Block\Adminhtml\Retailer\SpecialOpeningHours\Container;
 
 use Magento\Backend\Block\Template;
 use Magento\Framework\Data\Form\Element\AbstractElement;
-use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Smile\Retailer\Api\Data\TimeSlotsInterface;
 use Zend_Date;
 
