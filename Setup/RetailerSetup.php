@@ -65,15 +65,12 @@ class RetailerSetup extends SellerSetup
     public function getAttributeSetDefinition()
     {
         return [
-            RetailerInterface::ATTRIBUTE_SET_RETAILER => [
+            ucfirst(RetailerInterface::ATTRIBUTE_SET_RETAILER) => [
                 'General' => [
                     'name',
                     'seller_code',
                     'is_active',
                     'description',
-                ],
-                'Images' => [
-                    'image',
                 ],
                 'Meta Data' => [
                     'meta_title',
