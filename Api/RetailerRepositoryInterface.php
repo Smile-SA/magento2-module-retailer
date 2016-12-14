@@ -13,8 +13,6 @@
 
 namespace Smile\Retailer\Api;
 
-use Smile\Seller\Api\SellerRepositoryInterface;
-
 /**
  * Retailer Repository interface
  *
@@ -22,10 +20,21 @@ use Smile\Seller\Api\SellerRepositoryInterface;
  * @package  Smile\Retailer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-interface RetailerRepositoryInterface extends SellerRepositoryInterface
+interface RetailerRepositoryInterface
 {
     /**
-     * Get info about retailer by seller id
+     * Create retailer service
+     *
+     * @param \Smile\Retailer\Api\Data\RetailerInterface $retailer The retailer
+     *
+     * @return \Smile\Retailer\Api\Data\RetailerInterface
+     *
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     */
+    public function save(\Smile\Retailer\Api\Data\RetailerInterface $retailer);
+
+    /**
+     * Get info about retailer by retailer id
      *
      * @param int $retailerId The retailer Id
      * @param int $storeId    The store Id
@@ -35,4 +44,30 @@ interface RetailerRepositoryInterface extends SellerRepositoryInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function get($retailerId, $storeId = null);
+
+    /**
+     * Delete retailer by identifier
+     *
+     * @param \Smile\Retailer\Api\Data\RetailerInterface $retailer retailer which will deleted
+     *
+     * @return bool Will returned True if deleted
+     *
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\StateException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function delete(\Smile\Retailer\Api\Data\RetailerInterface $retailer);
+
+    /**
+     * Delete retailer by identifier
+     *
+     * @param int $retailerId The retailer id
+     *
+     * @return bool Will returned True if deleted
+     *
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\StateException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function deleteByIdentifier($retailerId);
 }

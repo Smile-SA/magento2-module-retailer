@@ -12,11 +12,9 @@
  */
 namespace Smile\Retailer\Model;
 
-use Magento\Framework\EntityManager\EntityManager;
 use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\Retailer\Api\RetailerRepositoryInterface;
-use Smile\Seller\Model\SellerFactory;
-use Smile\Seller\Model\SellerRepository;
+use Smile\Seller\Model\SellerRepositoryFactory;
 
 /**
  * Retailer Repository
@@ -25,17 +23,58 @@ use Smile\Seller\Model\SellerRepository;
  * @package  Smile\Retailer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class RetailerRepository extends SellerRepository implements RetailerRepositoryInterface
+class RetailerRepository implements RetailerRepositoryInterface
 {
     /**
-     * RetailerRepository constructor.
-     *
-     * @param \Magento\Framework\EntityManager\EntityManager $entityManager    The entity manager
-     * @param \Smile\Seller\Model\SellerFactory              $sellerFactory    The Seller Factory
-     * @param null|string                                    $attributeSetName The attribute set name
+     * @var \Smile\Seller\Model\SellerRepository
      */
-    public function __construct(EntityManager $entityManager, SellerFactory $sellerFactory, $attributeSetName = RetailerInterface::ATTRIBUTE_SET_RETAILER)
+    private $sellerRepository;
+
+    /**
+     * Constructor.
+     *
+     * @param \Smile\Seller\Model\SellerRepositoryFactory       $sellerRepositoryFactory Seller repository.
+     * @param \Smile\Retailer\Api\Data\RetailerInterfaceFactory $retailerFactory         Retailer factory.
+     */
+    public function __construct(
+        \Smile\Seller\Model\SellerRepositoryFactory $sellerRepositoryFactory,
+        \Smile\Retailer\Api\Data\RetailerInterfaceFactory $retailerFactory
+    ) {
+        $this->sellerRepository = $sellerRepositoryFactory->create([
+            'sellerFactory'    => $retailerFactory,
+            'attributeSetName' => RetailerInterface::ATTRIBUTE_SET_RETAILER,
+        ]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function save(\Smile\Retailer\Api\Data\RetailerInterface $retailer)
     {
-        parent::__construct($entityManager, $sellerFactory, $attributeSetName);
+        return $this->sellerRepository->save($retailer);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function get($retailerId, $storeId = null)
+    {
+        return $this->sellerRepository->get($retailerId, $storeId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function delete(\Smile\Retailer\Api\Data\RetailerInterface $retailer)
+    {
+        return $this->sellerRepository->delete($retailer);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function deleteByIdentifier($retailerId)
+    {
+        return $this->sellerRepository->deleteByIdentifier($retailerId);
     }
 }
