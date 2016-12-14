@@ -26,6 +26,35 @@ use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
 class Save extends AbstractRetailer
 {
     /**
+     * @var \Smile\Retailer\Model\Retailer\PostDataHandlerInterface[]
+     */
+    private $postDataHandlers;
+
+    /**
+     * Constructor.
+     *
+     * @param \Magento\Backend\App\Action\Context                       $context              Application context.
+     * @param \Magento\Framework\View\Result\PageFactory                $resultPageFactory    Result Page factory.
+     * @param \Magento\Framework\Controller\Result\ForwardFactory       $resultForwardFactory Result forward factory.
+     * @param \Magento\Framework\Registry                               $coreRegistry         Application registry.
+     * @param \Smile\Retailer\Api\RetailerRepositoryInterface           $retailerRepository   Retailer Repository
+     * @param \Smile\Retailer\Api\Data\RetailerInterfaceFactory         $retailerFactory      Retailer Factory.
+     * @param \Smile\Retailer\Model\Retailer\PostDataHandlerInterface[] $postDataHandlers     Form data handlers.
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
+        \Magento\Framework\Registry $coreRegistry,
+        \Smile\Retailer\Api\RetailerRepositoryInterface $retailerRepository,
+        \Smile\Retailer\Api\Data\RetailerInterfaceFactory $retailerFactory,
+        array $postDataHandlers = []
+    ) {
+        parent::__construct($context, $resultPageFactory, $resultForwardFactory, $coreRegistry, $retailerRepository, $retailerFactory);
+        $this->postDataHandlers = $postDataHandlers;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function execute()
@@ -50,10 +79,12 @@ class Save extends AbstractRetailer
                 }
             }
 
+            foreach ($this->postDataHandlers as $handler) {
+                $data = $handler->getData($model, $data);
+            }
+
             $model->setData($data);
             $model->setStoreId($storeId);
-
-            $this->scheduleManagement->setPostScheduleData($model, $data);
 
             try {
                 $this->retailerRepository->save($model);

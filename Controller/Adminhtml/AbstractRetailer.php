@@ -13,13 +13,6 @@
 namespace Smile\Retailer\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
-use Magento\Backend\App\Action\Context;
-use Magento\Framework\Controller\Result\ForwardFactory;
-use Magento\Framework\Registry;
-use Magento\Framework\View\Result\PageFactory;
-use Smile\Retailer\Api\RetailerRepositoryInterface;
-use Smile\Retailer\Api\RetailerScheduleManagementInterface;
-use Smile\Seller\Model\SellerFactory;
 
 /**
  * Abstract Retailer controller
@@ -43,19 +36,19 @@ abstract class AbstractRetailer extends Action
     /**
      * Core registry
      *
-     * @var Registry
+     * @var \Magento\Framework\Registry
      */
     protected $coreRegistry;
 
     /**
-     * @var RetailerRepositoryInterface
+     * @var \Smile\Retailer\Api\Data\RetailerInterfaceFactory
      */
     protected $retailerRepository;
 
     /**
      * Retailer Factory
      *
-     * @var SellerFactory
+     * @var \Smile\Retailer\Api\Data\RetailerInterfaceFactory
      */
     protected $retailerFactory;
 
@@ -67,29 +60,26 @@ abstract class AbstractRetailer extends Action
     /**
      * Abstract constructor.
      *
-     * @param Context                             $context              Application context
-     * @param PageFactory                         $resultPageFactory    Result Page factory
-     * @param ForwardFactory                      $resultForwardFactory Result forward factory
-     * @param Registry                            $coreRegistry         Application registry
-     * @param RetailerRepositoryInterface         $retailerRepository   Retailer Repository
-     * @param SellerFactory                       $retailerFactory      Retailer Factory
-     * @param RetailerScheduleManagementInterface $scheduleManagement   Schedule Management
+     * @param \Magento\Backend\App\Action\Context                 $context              Application context.
+     * @param \Magento\Framework\View\Result\PageFactory          $resultPageFactory    Result Page factory.
+     * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory Result forward factory.
+     * @param \Magento\Framework\Registry                         $coreRegistry         Application registry.
+     * @param \Smile\Retailer\Api\RetailerRepositoryInterface     $retailerRepository   Retailer Repository
+     * @param \Smile\Retailer\Api\Data\RetailerInterfaceFactory   $retailerFactory      Retailer Factory.
      */
     public function __construct(
-        Context $context,
-        PageFactory $resultPageFactory,
-        ForwardFactory $resultForwardFactory,
-        Registry $coreRegistry,
-        RetailerRepositoryInterface $retailerRepository,
-        SellerFactory $retailerFactory,
-        RetailerScheduleManagementInterface $scheduleManagement
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
+        \Magento\Framework\Registry $coreRegistry,
+        \Smile\Retailer\Api\RetailerRepositoryInterface $retailerRepository,
+        \Smile\Retailer\Api\Data\RetailerInterfaceFactory $retailerFactory
     ) {
         $this->resultPageFactory    = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->coreRegistry         = $coreRegistry;
         $this->retailerRepository   = $retailerRepository;
         $this->retailerFactory      = $retailerFactory;
-        $this->scheduleManagement   = $scheduleManagement;
 
         parent::__construct($context);
     }
