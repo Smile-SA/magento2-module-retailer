@@ -18,58 +18,68 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
-    <preference for="Smile\Retailer\Api\RetailerRepositoryInterface" type="Smile\Retailer\Model\RetailerRepository" />
     <preference for="Smile\Retailer\Api\Data\RetailerInterface" type="Smile\Retailer\Model\Retailer" />
-    <preference for="Smile\Retailer\Api\Data\OpeningHoursInterface" type="Smile\Retailer\Model\Retailer\OpeningHours" />
-    <preference for="Smile\Retailer\Api\Data\SpecialOpeningHoursInterface" type="Smile\Retailer\Model\Retailer\SpecialOpeningHours" />
-
-    <preference for="Smile\Retailer\Api\OpeningHoursRepositoryInterface" type="Smile\Retailer\Model\Retailer\OpeningHoursRepository" />
-    <preference for="Smile\Retailer\Api\SpecialOpeningHoursRepositoryInterface" type="Smile\Retailer\Model\Retailer\SpecialOpeningHoursRepository" />
-
-    <preference for="Smile\Retailer\Api\RetailerScheduleManagementInterface" type="Smile\Retailer\Model\Retailer\ScheduleManagement" />
-
-    <virtualType name="Smile\Retailer\Model\ResourceModel\Retailer\Collection" type="Smile\Seller\Model\ResourceModel\Seller\Collection">
+    <preference for="Smile\Retailer\Api\RetailerRepositoryInterface" type="Smile\Retailer\Model\RetailerRepository" />
+    
+    
+    <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
-            <argument name="attributeSetName" xsi:type="string">Retailer</argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory" type="Smile\Seller\Model\ResourceModel\Seller\CollectionFactory">
-        <arguments>
-            <argument name="instanceName" xsi:type="string">Smile\Retailer\Model\ResourceModel\Retailer\Collection</argument>
-        </arguments>
-    </virtualType>
-
-    <type name="Smile\Retailer\Model\RetailerRepository">
-        <arguments>
-            <argument name="sellerFactory" xsi:type="object">Smile\Retailer\Model\RetailerFactory</argument>
-        </arguments>
-    </type>
-
-    <virtualType name="Smile\Retailer\Model\RetailerFactory" type="Smile\Seller\Model\SellerFactory">
-        <arguments>
-            <argument name="instanceName" xsi:type="string">Smile\Retailer\Model\Retailer</argument>
-        </arguments>
-    </virtualType>
-
-    <type name="Magento\Framework\EntityManager\Operation\ExtensionPool">
-        <arguments>
-            <argument name="extensionActions" xsi:type="array">
-                <item name="Smile\Seller\Api\Data\SellerInterface" xsi:type="array">
-                    <item name="create" xsi:type="array">
-                        <item name="create_opening_hours" xsi:type="string">Smile\Retailer\Model\Retailer\OpeningHours\SaveHandler</item>
-                        <item name="create_special_opening_hours" xsi:type="string">Smile\Retailer\Model\Retailer\SpecialOpeningHours\SaveHandler</item>
-                    </item>
-                    <item name="update" xsi:type="array">
-                        <item name="update_opening_hours" xsi:type="string">Smile\Retailer\Model\Retailer\OpeningHours\SaveHandler</item>
-                        <item name="update_special_opening_hours" xsi:type="string">Smile\Retailer\Model\Retailer\SpecialOpeningHours\SaveHandler</item>
-                    </item>
-                    <item name="read" xsi:type="array">
-                        <item name="read_opening_hours" xsi:type="string">Smile\Retailer\Model\Retailer\OpeningHours\ReadHandler</item>
-                        <item name="read_special_opening_hours" xsi:type="string">Smile\Retailer\Model\Retailer\SpecialOpeningHours\ReadHandler</item>
+            <argument name="metadata" xsi:type="array">
+                <item name="Smile\Retailer\Api\Data\RetailerInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">smile_seller_entity</item>
+                    <item name="eavEntityType" xsi:type="string">smile_seller</item>
+                    <item name="identifierField" xsi:type="string">entity_id</item>
+                    <item name="entityContext" xsi:type="array">
+                        <item name="store" xsi:type="string">Magento\Store\Model\StoreScopeProvider</item>
                     </item>
                 </item>
             </argument>
         </arguments>
     </type>
+
+    <virtualType name="Smile\Seller\EntityCreator\MetadataPool" type="Magento\Framework\EntityManager\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="Smile\Retailer\Api\Data\RetailerInterface" xsi:type="array">
+                    <item name="entityContext" xsi:type="array">
+                        <item name="store" xsi:type="string">Magento\Store\Model\DefaultStoreScopeProvider</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Framework\EntityManager\Operation\AttributePool">
+        <arguments>
+            <argument name="extensionActions" xsi:type="array">
+                <item name="eav" xsi:type="array">
+                    <item name="Smile\Retailer\Api\Data\RetailerInterface" xsi:type="array">
+                        <item name="create" xsi:type="string">Smile\Seller\Model\ResourceModel\CreateHandler</item>
+                        <item name="update" xsi:type="string">Smile\Seller\Model\ResourceModel\UpdateHandler</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\EntityManager\HydratorPool">
+        <arguments>
+            <argument name="hydrators" xsi:type="array">
+                <item name="Smile\Retailer\Api\Data\RetailerInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Smile\Retailer\Ui\Component\Retailer\Form\FieldMapper" type="Smile\Seller\Ui\Component\Seller\Form\FieldMapper">
+        <arguments>
+            <argument name="attributeSetId" xsi:type="string">retailer</argument>
+        </arguments>
+    </virtualType>
+    
+    <virtualType name="Smile\Retailer\Ui\Component\Retailer\Form\DataProvider" type="Smile\Seller\Ui\Component\Seller\Form\DataProvider">
+        <arguments>
+            <argument name="fieldMapper" xsi:type="object">Smile\Retailer\Ui\Component\Retailer\Form\FieldMapper</argument>
+        </arguments>
+    </virtualType>
+
 </config>
