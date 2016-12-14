@@ -23,55 +23,21 @@ use Smile\Seller\Api\Data\SellerInterface;
  */
 interface RetailerInterface extends SellerInterface
 {
-    const ATTRIBUTE_SET_RETAILER = "Retailer";
+    const ATTRIBUTE_SET_RETAILER = "retailer";
 
     /**
-     * Retrieve Opening Hours of this Retailer
+     * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Smile\Retailer\Api\Data\OpeningHoursInterface
+     * @return \Smile\Retailer\Api\Data\RetailerExtensionInterface|null
      */
-    public function getOpeningHours();
+    public function getExtensionAttributes();
 
     /**
-     * Set Opening Hours of this Retailer
+     * Set an extension attributes object.
      *
-     * @param array $openingHours The opening hours
+     * @param \Smile\Retailer\Api\Data\RetailerExtensionInterface $extensionAttributes The additional attributes
      *
-     * @return \Smile\Retailer\Api\Data\RetailerInterface
+     * @return $this
      */
-    public function setOpeningHours($openingHours);
-
-    /**
-     * Retrieve Opening Hours of this Retailer
-     *
-     * @return \Smile\Retailer\Api\Data\SpecialOpeningHoursInterface
-     */
-    public function getSpecialOpeningHours();
-
-    /**
-     * Set Opening Hours of this Retailer
-     *
-     * @param array $specialOpeningHours The opening hours
-     *
-     * @return \Smile\Retailer\Api\Data\RetailerInterface
-     */
-    public function setSpecialOpeningHours($specialOpeningHours);
-
-    /**
-     * Check if a retailer is open at a given date time
-     *
-     * @param \DateTime $dateTime A date time
-     *
-     * @return bool
-     */
-    public function isOpen($dateTime = null);
-
-    /**
-     * Check if a retailer is closed at a given date time
-     *
-     * @param string $dateTime A date time
-     *
-     * @return bool
-     */
-    public function isClosed($dateTime = null);
+    public function setExtensionAttributes(\Smile\Retailer\Api\Data\RetailerExtensionInterface $extensionAttributes);
 }

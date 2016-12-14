@@ -13,7 +13,6 @@
 namespace Smile\Retailer\Model;
 
 use Smile\Retailer\Api\Data\RetailerInterface;
-use Smile\Retailer\Model\Retailer\OpeningHours;
 use Smile\Seller\Model\Seller;
 
 /**
@@ -21,144 +20,28 @@ use Smile\Seller\Model\Seller;
  *
  * @category Smile
  * @package  Smile\Retailer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * @author   Aurelien FOUCRET <aurelien.foucret@smile.fr>
  */
 class Retailer extends Seller implements RetailerInterface
 {
     /**
-     * @var null
+     * {@inheritDoc}
      */
-    private $openingHours = null;
-
-    /**
-     * @var null
-     */
-    private $specialOpeningHours = null;
-
-    /**
-     * Get opening hours for this retailer
-     *
-     * @return \Smile\Retailer\Api\Data\OpeningHoursInterface
-     */
-    public function getOpeningHours()
+    public function getExtensionAttributes()
     {
-        if ($this->openingHours === null) {
-            $this->openingHours = $this->getExtensionAttributes()->getOpeningHours();
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (!$extensionAttributes) {
+            return $this->extensionAttributesFactory->create('Smile\Retailer\Api\Data\RetailerInterface');
         }
 
-        return $this->openingHours;
+        return $extensionAttributes;
     }
 
     /**
-     * Opening Hours setter
-     *
-     * @param \Smile\Retailer\Api\Data\OpeningHoursInterface $openingHours The opening hours of this retailer
-     *
-     * @return \Smile\Retailer\Api\Data\RetailerInterface
+     * {@inheritDoc}
      */
-    public function setOpeningHours($openingHours)
+    public function setExtensionAttributes(\Smile\Retailer\Api\Data\RetailerExtensionInterface $extensionAttributes)
     {
-        $extension = $this->getExtensionAttributes();
-        $extension->setOpeningHours($openingHours);
-        $this->setExtensionAttributes($extension);
-
-        return $this;
-    }
-
-    /**
-     * Get opening hours for this retailer
-     *
-     * @return \Smile\Retailer\Api\Data\OpeningHoursInterface
-     */
-    public function getSpecialOpeningHours()
-    {
-        if ($this->specialOpeningHours === null) {
-            $this->specialOpeningHours = $this->getExtensionAttributes()->getSpecialOpeningHours();
-        }
-
-        return $this->specialOpeningHours;
-    }
-
-    /**
-     * Special Opening Hours setter
-     *
-     * @param \Smile\Retailer\Api\Data\SpecialOpeningHoursInterface $specialOpeningHours The special opening hours of this retailer
-     *
-     * @return \Smile\Retailer\Api\Data\RetailerInterface
-     */
-    public function setSpecialOpeningHours($specialOpeningHours)
-    {
-        $extension = $this->getExtensionAttributes();
-        $extension->setSpecialOpeningHours($specialOpeningHours);
-        $this->setExtensionAttributes($extension);
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isOpen($dateTime = null)
-    {
-        if ($dateTime == null) {
-            $dateTime = new \DateTime();
-        }
-        if (is_string($dateTime)) {
-            $dateTime = \DateTime::createFromFormat('Y-m-d', $dateTime);
-        }
-
-        $dayOfWeek = $dateTime->format('w');
-        $date      = $dateTime->format('Y-m-d');
-
-        $openingHours = $this->getOpeningHours();
-        $specialOpeningHours = $this->getSpecialOpeningHours();
-
-        $openingDays = [];
-        $specialOpeningDays = $specialOpeningHours->getTimeRanges();
-        foreach ($openingHours->getTimeRanges() as $dayData) {
-            if (isset($dayData['time_ranges'])) {
-                $openingDays[(int) $dayData['date']] = (int) $dayData['date'];
-            }
-        }
-
-        $result = true;
-        // Given week day is closed.
-        if (!in_array($dayOfWeek, $openingDays)) {
-            $result = false;
-            if (in_array($date, array_keys($specialOpeningDays))) {
-                if (isset($specialOpeningDays[$date]['time_ranges']) && !empty($specialOpeningDays[$date]['time_ranges'])) {
-                    // Given precise date is a special opening date.
-                    $result = true;
-                }
-            }
-        } elseif (isset($specialOpeningDays[$date])
-            && (!isset($specialOpeningDays[$date]['time_ranges']) || empty($specialOpeningDays[$date]['time_ranges']))
-        ) {
-            // Given weekday is not closed, and precise date is not a special closing date.
-            $result = false;
-        }
-
-        return $result;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isClosed($dateTime = null)
-    {
-        return !$this->isOpen($dateTime);
-    }
-
-    /**
-     * Retrieve custom attributes codes list
-     *
-     * @return array
-     */
-    protected function getCustomAttributesCodes()
-    {
-        $attributesCodes = parent::getCustomAttributesCodes();
-        $attributesCodes[] = "opening_hours";
-
-        return $attributesCodes;
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }
