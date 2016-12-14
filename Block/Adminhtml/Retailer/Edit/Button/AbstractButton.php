@@ -12,10 +12,7 @@
  */
 namespace Smile\Retailer\Block\Adminhtml\Retailer\Edit\Button;
 
-use Magento\Framework\Registry;
-use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
-use Smile\Retailer\Api\Data\RetailerInterface;
 
 /**
  * Abstract Retailer edit button
@@ -43,14 +40,14 @@ class AbstractButton implements ButtonProviderInterface
     /**
      * Generic constructor
      *
-     * @param Context  $context  Application context
-     * @param Registry $registry Application registry
+     * @param \Magento\Framework\View\Element\UiComponent\Context $context  Application context
+     * @param \Magento\Framework\Registry                         $registry Application registry
      */
     public function __construct(
-        Context $context,
-        Registry $registry
+        \Magento\Framework\View\Element\UiComponent\Context $context,
+        \Magento\Framework\Registry $registry
     ) {
-        $this->context = $context;
+        $this->context  = $context;
         $this->registry = $registry;
     }
 
@@ -70,7 +67,7 @@ class AbstractButton implements ButtonProviderInterface
     /**
      * Get retailer
      *
-     * @return RetailerInterface
+     * @return \Smile\Retailer\Api\Data\RetailerInterface
      */
     public function getRetailer()
     {
