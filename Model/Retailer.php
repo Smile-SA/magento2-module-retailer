@@ -44,4 +44,14 @@ class Retailer extends Seller implements RetailerInterface
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
+    /**
+     * Retrieve AttributeSetName
+     *
+     * @return string
+     */
+    public function getAttributeSetName()
+    {
+        return ucfirst(self::ATTRIBUTE_SET_RETAILER);
+    }
 }
