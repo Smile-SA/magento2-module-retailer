@@ -13,6 +13,9 @@
 
 namespace Smile\Retailer\Api;
 
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Smile\Retailer\Api\Data\RetailerSearchResultsInterface;
+
 /**
  * Retailer Repository interface
  *
@@ -44,6 +47,15 @@ interface RetailerRepositoryInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function get($retailerId, $storeId = null);
+
+    /**
+     * Get relation list
+     *
+     * @param SearchCriteriaInterface $criteria Search criterai for collection
+     *
+     * @return RetailerSearchResultsInterface
+     */
+    public function getList(SearchCriteriaInterface $criteria);
 
     /**
      * Delete retailer by identifier

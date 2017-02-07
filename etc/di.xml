@@ -20,8 +20,9 @@
 
     <preference for="Smile\Retailer\Api\Data\RetailerInterface" type="Smile\Retailer\Model\Retailer" />
     <preference for="Smile\Retailer\Api\RetailerRepositoryInterface" type="Smile\Retailer\Model\RetailerRepository" />
-    
-    
+    <preference for="Smile\Retailer\Api\Data\RetailerSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
+
+
     <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
             <argument name="metadata" xsi:type="array">
