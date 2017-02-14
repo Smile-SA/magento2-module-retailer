@@ -12,9 +12,15 @@
  */
 namespace Smile\Retailer\Model;
 
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SortOrder;
+
 use Smile\Retailer\Api\Data\RetailerInterface;
+use Smile\Retailer\Api\Data\RetailerSearchResultsInterface;
 use Smile\Retailer\Api\RetailerRepositoryInterface;
-use Smile\Seller\Model\SellerRepositoryFactory;
+use Smile\Retailer\Api\Data\RetailerSearchResultsInterfaceFactory;
+use Smile\Retailer\Model\ResourceModel\Retailer\Collection;
+use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory;
 
 /**
  * Retailer Repository
@@ -31,19 +37,36 @@ class RetailerRepository implements RetailerRepositoryInterface
     private $sellerRepository;
 
     /**
+     * @var RetailerSearchResultsInterfaceFactory
+     */
+    private $searchResultFactory;
+
+    /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
      * Constructor.
      *
      * @param \Smile\Seller\Model\SellerRepositoryFactory       $sellerRepositoryFactory Seller repository.
      * @param \Smile\Retailer\Api\Data\RetailerInterfaceFactory $retailerFactory         Retailer factory.
+     * @param RetailerSearchResultsInterfaceFactory             $searchResultFactory     Search Result factory.
+     * @param CollectionFactory $retailerFactory                $collectionFactory       Collection factory.
      */
     public function __construct(
         \Smile\Seller\Model\SellerRepositoryFactory $sellerRepositoryFactory,
-        \Smile\Retailer\Api\Data\RetailerInterfaceFactory $retailerFactory
+        \Smile\Retailer\Api\Data\RetailerInterfaceFactory $retailerFactory,
+        RetailerSearchResultsInterfaceFactory $searchResultFactory,
+        CollectionFactory $collectionFactory
     ) {
         $this->sellerRepository = $sellerRepositoryFactory->create([
             'sellerFactory'    => $retailerFactory,
             'attributeSetName' => RetailerInterface::ATTRIBUTE_SET_RETAILER,
         ]);
+
+        $this->searchResultFactory = $searchResultFactory;
+        $this->collectionFactory = $collectionFactory;
     }
 
     /**
@@ -60,6 +83,64 @@ class RetailerRepository implements RetailerRepositoryInterface
     public function get($retailerId, $storeId = null)
     {
         return $this->sellerRepository->get($retailerId, $storeId);
+    }
+
+    /**
+     * Search for retailers.
+     *
+     * @param SearchCriteriaInterface $criteria
+     *
+     * @return RetailerSearchResultsInterface
+     */
+    public function getList(SearchCriteriaInterface $searchCriteria)
+    {
+        /** @var Collection $collection */
+        $collection = $this->collectionFactory->create();
+
+        //Add filters from root filter group to the collection
+        foreach ($searchCriteria->getFilterGroups() as $group) {
+            $this->addFilterGroupToCollection($group, $collection);
+        }
+        /** @var SortOrder $sortOrder */
+        foreach ((array)$searchCriteria->getSortOrders() as $sortOrder) {
+            $field = $sortOrder->getField();
+            $collection->addOrder(
+                $field,
+                ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
+            );
+        }
+        $collection->setCurPage($searchCriteria->getCurrentPage());
+        $collection->setPageSize($searchCriteria->getPageSize());
+        $collection->load();
+
+        $searchResult = $this->searchResultFactory->create();
+        $searchResult->setSearchCriteria($searchCriteria);
+        $searchResult->setItems($collection->getItems());
+        $searchResult->setTotalCount($collection->getSize());
+        return $searchResult;
+    }
+
+    /**
+     * Helper function that adds a FilterGroup to the collection.
+     *
+     * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
+     * @param Collection $collection
+     * @return void
+     */
+    protected function addFilterGroupToCollection(
+        \Magento\Framework\Api\Search\FilterGroup $filterGroup,
+        Collection $collection
+    ) {
+        $fields = [];
+        foreach ($filterGroup->getFilters() as $filter) {
+            $conditionType = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+
+            $fields[] = ['attribute' => $filter->getField(), $conditionType => $filter->getValue()];
+        }
+
+        if ($fields) {
+            $collection->addFieldToFilter($fields);
+        }
     }
 
     /**
