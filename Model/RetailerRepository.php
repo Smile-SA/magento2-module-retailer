@@ -52,7 +52,7 @@ class RetailerRepository implements RetailerRepositoryInterface
      * @param \Smile\Seller\Model\SellerRepositoryFactory       $sellerRepositoryFactory Seller repository.
      * @param \Smile\Retailer\Api\Data\RetailerInterfaceFactory $retailerFactory         Retailer factory.
      * @param RetailerSearchResultsInterfaceFactory             $searchResultFactory     Search Result factory.
-     * @param CollectionFactory $retailerFactory                $collectionFactory       Collection factory.
+     * @param CollectionFactory                                 $collectionFactory       Collection factory.
      */
     public function __construct(
         \Smile\Seller\Model\SellerRepositoryFactory $sellerRepositoryFactory,
@@ -88,7 +88,7 @@ class RetailerRepository implements RetailerRepositoryInterface
     /**
      * Search for retailers.
      *
-     * @param SearchCriteriaInterface $criteria
+     * @param SearchCriteriaInterface $searchCriteria Search criteria
      *
      * @return RetailerSearchResultsInterface
      */
@@ -97,12 +97,13 @@ class RetailerRepository implements RetailerRepositoryInterface
         /** @var Collection $collection */
         $collection = $this->collectionFactory->create();
 
-        //Add filters from root filter group to the collection
+        // Add filters from root filter group to the collection.
         foreach ($searchCriteria->getFilterGroups() as $group) {
             $this->addFilterGroupToCollection($group, $collection);
         }
+
         /** @var SortOrder $sortOrder */
-        foreach ((array)$searchCriteria->getSortOrders() as $sortOrder) {
+        foreach ((array) $searchCriteria->getSortOrders() as $sortOrder) {
             $field = $sortOrder->getField();
             $collection->addOrder(
                 $field,
@@ -117,30 +118,8 @@ class RetailerRepository implements RetailerRepositoryInterface
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($collection->getItems());
         $searchResult->setTotalCount($collection->getSize());
+
         return $searchResult;
-    }
-
-    /**
-     * Helper function that adds a FilterGroup to the collection.
-     *
-     * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
-     * @param Collection $collection
-     * @return void
-     */
-    protected function addFilterGroupToCollection(
-        \Magento\Framework\Api\Search\FilterGroup $filterGroup,
-        Collection $collection
-    ) {
-        $fields = [];
-        foreach ($filterGroup->getFilters() as $filter) {
-            $conditionType = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-
-            $fields[] = ['attribute' => $filter->getField(), $conditionType => $filter->getValue()];
-        }
-
-        if ($fields) {
-            $collection->addFieldToFilter($fields);
-        }
     }
 
     /**
@@ -157,5 +136,29 @@ class RetailerRepository implements RetailerRepositoryInterface
     public function deleteByIdentifier($retailerId)
     {
         return $this->sellerRepository->deleteByIdentifier($retailerId);
+    }
+
+    /**
+     * Helper function that adds a FilterGroup to the collection.
+     *
+     * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup Filter Group
+     * @param Collection                                $collection  Retailer collection
+     *
+     * @return void
+     */
+    protected function addFilterGroupToCollection(
+        \Magento\Framework\Api\Search\FilterGroup $filterGroup,
+        Collection $collection
+    ) {
+        $fields = [];
+        foreach ($filterGroup->getFilters() as $filter) {
+            $conditionType = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+
+            $fields[] = ['attribute' => $filter->getField(), $conditionType => $filter->getValue()];
+        }
+
+        if ($fields) {
+            $collection->addFieldToFilter($fields);
+        }
     }
 }
