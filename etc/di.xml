@@ -77,9 +77,34 @@
         </arguments>
     </virtualType>
     
-    <virtualType name="Smile\Retailer\Ui\Component\Retailer\Form\DataProvider" type="Smile\Seller\Ui\Component\Seller\Form\DataProvider">
+    <virtualType name="Smile\Retailer\Ui\Component\Retailer\Form\Modifier\Eav" type="Smile\Seller\Ui\Component\Seller\Form\Modifier\Eav">
         <arguments>
             <argument name="fieldMapper" xsi:type="object">Smile\Retailer\Ui\Component\Retailer\Form\FieldMapper</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Smile\Retailer\Controller\Adminhtml\Retailer\Save">
+        <arguments>
+            <argument name="postDataHandlers" xsi:type="array">
+                <item name="eavDataHandler" xsi:type="object">Smile\Retailer\Model\Retailer\EavPostDataHandler</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Smile\Retailer\Ui\Component\Retailer\Form\Modifier\Pool" type="Magento\Ui\DataProvider\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="eav" xsi:type="array">
+                    <item name="class" xsi:type="string">Smile\Retailer\Ui\Component\Retailer\Form\Modifier\Eav</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Smile\Retailer\Ui\Component\Retailer\Form\DataProvider" type="Smile\Seller\Ui\Component\Seller\Form\DataProvider">
+        <arguments>
+            <argument name="pool" xsi:type="object">Smile\Retailer\Ui\Component\Retailer\Form\Modifier\Pool</argument>
         </arguments>
     </virtualType>
 
