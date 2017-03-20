@@ -15,7 +15,7 @@
         "magento/module-store": "*",
         "magento/module-eav": "*",
         "magento/magento-composer-installer": "*",
-        "smile/module-seller" : "1.2.x-dev"
+        "smile/module-seller" : "^1.2.0"
     },
     "require-dev": {
         "smile/magento2-smilelab-quality-suite": "1.0.0"
