@@ -49,6 +49,18 @@ interface RetailerRepositoryInterface
     public function get($retailerId, $storeId = null);
 
     /**
+     * Get info about retailer by retailer code
+     *
+     * @param int $retailerCode The retailer Code
+     * @param int $storeId      The store Id
+     *
+     * @return \Smile\Retailer\Api\Data\RetailerInterface
+     *
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getByCode($retailerCode, $storeId = null);
+
+    /**
      * Get relation list
      *
      * @param SearchCriteriaInterface $criteria Search criterai for collection

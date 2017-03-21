@@ -86,6 +86,14 @@ class RetailerRepository implements RetailerRepositoryInterface
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function getByCode($retailerCode, $storeId = null)
+    {
+        return $this->sellerRepository->getByCode($retailerCode, $storeId);
+    }
+
+    /**
      * Search for retailers.
      *
      * @param SearchCriteriaInterface $searchCriteria Search criteria
