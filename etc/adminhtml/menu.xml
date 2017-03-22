@@ -16,13 +16,20 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
+        <!-- Manage Sellers -->
+        <add id="Smile_Retailer::retailers_menu"
+             title="Retailers"
+             module="Smile_Seller"
+             sortOrder="10"
+             parent="Smile_Seller::sellers"
+             resource="Smile_Seller::seller_menu"/>
 
         <!-- Manage Retailers -->
         <add id="Smile_Retailer::retailers"
              title="Retailers"
              module="Smile_Retailer"
              sortOrder="20"
-             parent="Smile_Seller::sellers_menu"
+             parent="Smile_Retailer::retailers_menu"
              action="smile_retailer/retailer/"
              resource="Magento_Catalog::retailers"/>
     </menu>
