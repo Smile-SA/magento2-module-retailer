@@ -107,6 +107,6 @@ abstract class AbstractRetailer extends Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Smile_Retailer::manage');
+        return $this->_authorization->isAllowed('Smile_Retailer::retailers');
     }
 }
