@@ -1,0 +1,30 @@
+Back,Back
+Delete,Delete
+"Are you sure you want to do this?","Are you sure you want to do this?"
+Save,Save
+"Save and Continue Edit","Save and Continue Edit"
+Sellers,Sellers
+Retailers,Retailers
+"New Retailer","New Retailer"
+"This retailer no longer exists.","This retailer no longer exists."
+"You deleted the retailer %1.","You deleted the retailer %1."
+"Edit %1","Edit %1"
+"Something went wrong while editing the retailer.","Something went wrong while editing the retailer."
+Retailer,Retailer
+"Retailers List","Retailers List"
+"You saved the retailer %1.","You saved the retailer %1."
+Edit,Edit
+"Delete ${ $.$data.name }","Delete ${ $.$data.name }"
+"Are you sure you want to delete ${ $.$data.name } ?","Are you sure you want to delete ${ $.$data.name } ?"
+"Retailer Information","Retailer Information"
+"Retailer Name","Retailer Name"
+"Seller Code","Seller Code"
+"Enable Retailer","Enable Retailer"
+"Add New Retailer","Add New Retailer"
+"All Store Views","All Store Views"
+"Store View","Store View"
+ID,ID
+Name,Name
+Active,Active
+Inactive,Inactive
+Status,Status

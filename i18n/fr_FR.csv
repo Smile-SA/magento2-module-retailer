@@ -1,0 +1,30 @@
+Back,Retour
+Delete,Supprimer
+"Are you sure you want to do this?","Êtes-vous sur de vouloir faire cela?"
+Save,Sauvegarder
+"Save and Continue Edit","Sauvegarder et continuer l'édition"
+Sellers,Vendeurs
+Retailers,Magasins
+"New Retailer","Nouveau Magasin"
+"This retailer no longer exists.","Ce magasin n'existe plus."
+"You deleted the retailer %1.","Vous avez supprimé le magasin %1."
+"Edit %1","Éditer %1"
+"Something went wrong while editing the retailer.","Une erreur est survenue durant la sauvegarde du magasin."
+Retailer,Magasin
+"Retailers List","Liste des magasins"
+"You saved the retailer %1.","Vous avez sauvegardé le magasin %1."
+Edit,Éditer
+"Delete ${ $.$data.name }","Supprimer ${ $.$data.name }"
+"Are you sure you want to delete ${ $.$data.name } ?","Êtes-vous sur de vouloir supprimer ${ $.$data.name } ?"
+"Retailer Information","Informations du magasin"
+"Retailer Name","Nom du magasin"
+"Seller Code","Code"
+"Enable Retailer","Activer le magasin"
+"Add New Retailer","Ajouter un magasin"
+"All Store Views","Toutes les vues magasin"
+"Store View","Vue Magasin"
+ID,ID
+Name,Nom
+Active,Activé
+Inactive,Désactivé
+Status,Statut
