@@ -31,7 +31,9 @@ class Retailer extends Seller implements RetailerInterface
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (!$extensionAttributes) {
-            return $this->extensionAttributesFactory->create('Smile\Retailer\Api\Data\RetailerInterface');
+            $extensionAttributes = $this->extensionAttributesFactory
+                ->create('Smile\Retailer\Api\Data\RetailerInterface');
+            $this->_setExtensionAttributes($extensionAttributes);
         }
 
         return $extensionAttributes;
