@@ -4,7 +4,7 @@
     "description": "Smile Retailer Suite - Retailer Module",
     "keywords": ["magento2","retailer suite","retailer","shop","retailer"],
     "require": {
-        "php": "~5.5.0|~5.6.0|~7.0.0",
+        "php": "~5.5.0|~5.6.0|~7.0.0|~7.1.0",
         "magento/framework": "*",
         "magento/module-store": "*",
         "magento/module-eav": "*",
