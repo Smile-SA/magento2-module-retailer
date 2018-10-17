@@ -14,7 +14,8 @@ namespace Smile\Retailer\Model;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
-
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\StoreManagerInterface;
 use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\Retailer\Api\Data\RetailerSearchResultsInterface;
 use Smile\Retailer\Api\RetailerRepositoryInterface;
@@ -47,6 +48,11 @@ class RetailerRepository implements RetailerRepositoryInterface
     private $collectionFactory;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * Constructor.
      *
      * @param \Smile\Seller\Model\SellerRepositoryFactory       $sellerRepositoryFactory Seller repository.
@@ -58,7 +64,8 @@ class RetailerRepository implements RetailerRepositoryInterface
         \Smile\Seller\Model\SellerRepositoryFactory $sellerRepositoryFactory,
         \Smile\Retailer\Api\Data\RetailerInterfaceFactory $retailerFactory,
         RetailerSearchResultsInterfaceFactory $searchResultFactory,
-        CollectionFactory $collectionFactory
+        CollectionFactory $collectionFactory,
+        StoreManagerInterface $storeManager
     ) {
         $this->sellerRepository = $sellerRepositoryFactory->create([
             'sellerFactory'    => $retailerFactory,
@@ -67,6 +74,7 @@ class RetailerRepository implements RetailerRepositoryInterface
 
         $this->searchResultFactory = $searchResultFactory;
         $this->collectionFactory = $collectionFactory;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -98,6 +106,8 @@ class RetailerRepository implements RetailerRepositoryInterface
      *
      * @param SearchCriteriaInterface $searchCriteria Search criteria
      *
+     * @throws NoSuchEntityException
+     *
      * @return RetailerSearchResultsInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
@@ -115,12 +125,16 @@ class RetailerRepository implements RetailerRepositoryInterface
             $field = $sortOrder->getField();
             $collection->addOrder(
                 $field,
-                ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
+                ($sortOrder->getDirection() === SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
             );
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());
         $collection->load();
+
+        foreach ($collection->getItems() as $retailer) {
+            $retailer->setData($this->get($retailer->getId(), $this->storeManager->getStore()->getId())->getData());
+        }
 
         $searchResult = $this->searchResultFactory->create();
         $searchResult->setSearchCriteria($searchCriteria);
