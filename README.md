@@ -1,14 +1,11 @@
 ## Smile Retailer
 
-This module is a plugin for [ElasticSuite](https://github.com/Smile-SA/elasticsuite).
-
 It allows to add retailers info.
 
 ### Requirements
 
 The module requires :
 
-- [ElasticSuite](https://github.com/Smile-SA/elasticsuite) > 2.1.*
 - [Seller](https://github.com/Smile-SA/magento2-module-seller) > 1.2.*
 
 ### How to use
