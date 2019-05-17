@@ -108,4 +108,18 @@
         </arguments>
     </virtualType>
 
+    <virtualType name="Smile\Retailer\Model\Api\SearchCriteria\RetailerCollectionProcessor" type="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="filters" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
+                <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Smile\Retailer\Model\RetailerRepository">
+        <arguments>
+            <argument name="collectionProcessor" xsi:type="object">Smile\Retailer\Model\Api\SearchCriteria\RetailerCollectionProcessor</argument>
+        </arguments>
+    </type>
 </config>
