@@ -16,7 +16,6 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-
 use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\Retailer\Api\Data\RetailerSearchResultsInterface;
 use Smile\Retailer\Api\RetailerRepositoryInterface;
@@ -30,6 +29,7 @@ use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory;
  * @category Smile
  * @package  Smile\Retailer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RetailerRepository implements RetailerRepositoryInterface
 {
