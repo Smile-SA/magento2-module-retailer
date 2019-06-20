@@ -12,7 +12,8 @@
  * @category  Smile
  * @package   Smile\Retailer
  * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2017 Smile
+ * @author    Fanny DECLERCK <fadec@smile.fr>
+ * @copyright 2019 Smile
  * @license   Open Software License ("OSL") v. 3.0
  */
  -->
@@ -21,7 +22,7 @@
         <resources>
             <resource id="Magento_Backend::admin">
                 <resource id="Smile_Seller::sellers">
-                    <resource id="Smile_Retailer::retailers" title="Manage Retailers"/>
+                    <resource id="Smile_Retailer::retailers" title="Manage Retailers" />
                 </resource>
             </resource>
         </resources>

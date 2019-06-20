@@ -88,6 +88,43 @@
                 </argument>
             </filterSelect>
         </filters>
+        <massaction name="listing_massaction">
+            <action name="enable">
+                <settings>
+                    <url path="smile_retailer/retailer/massEnable"/>
+                    <type>enable</type>
+                    <label translate="true">Enable</label>
+                </settings>
+            </action>
+            <action name="disable">
+                <settings>
+                    <url path="smile_retailer/retailer/massDisable"/>
+                    <type>disable</type>
+                    <label translate="true">Disable</label>
+                </settings>
+            </action>
+            <action name="allow_delivery">
+                <settings>
+                    <url path="smile_retailer/retailer/massAllowDelivery"/>
+                    <type>allow_delivery</type>
+                    <label translate="true">Allow delivery</label>
+                </settings>
+            </action>
+            <action name="disallow_delivery">
+                <settings>
+                    <url path="smile_retailer/retailer/massDisallowDelivery"/>
+                    <type>disallow_delivery</type>
+                    <label translate="true">Disallow delivery</label>
+                </settings>
+            </action>
+            <action name="delete">
+                <settings>
+                    <url path="smile_retailer/retailer/massDelete"/>
+                    <type>delete</type>
+                    <label translate="true">Delete</label>
+                </settings>
+            </action>
+        </massaction>
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="smile_retailer_columns">
