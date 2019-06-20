@@ -14,7 +14,6 @@
 
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action\Context;
 use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
@@ -26,7 +25,7 @@ use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
  * @package  Smile\Retailer
  * @author   Fanny DECLERCK <fadec@smile.fr>
  */
-class MassDisallowDelivery extends AbstractRetailer implements HttpPostActionInterface
+class MassDisallowDelivery extends AbstractRetailer
 {
     /**
      * Execute action
