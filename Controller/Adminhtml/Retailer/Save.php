@@ -15,6 +15,7 @@
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
 use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
+use Smile\Seller\Api\Data\SellerInterface;
 
 /**
  * Retailer Adminhtml Save controller.
@@ -70,6 +71,14 @@ class Save extends AbstractRetailer
             $storeId    = $this->getRequest()->getParam('store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID);
             $model      = $this->retailerFactory->create();
 
+            $media = false;
+            if (!empty($data[SellerInterface::MEDIA_PATH])
+                && isset($data[SellerInterface::MEDIA_PATH][0]['name'])
+            ) {
+                $media = $data[SellerInterface::MEDIA_PATH][0]['name'];
+            }
+            unset($data[SellerInterface::MEDIA_PATH]);
+
             if ($identifier) {
                 $model = $this->retailerRepository->get($identifier);
                 if (!$model->getId()) {
@@ -85,6 +94,9 @@ class Save extends AbstractRetailer
 
             $model->setData($data);
             $model->setStoreId($storeId);
+            if ($media) {
+                $model->setMediaPath($media);
+            }
 
             try {
                 $this->retailerRepository->save($model);
