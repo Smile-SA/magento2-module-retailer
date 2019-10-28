@@ -1,10 +1,23 @@
 <?php
+
+/**
+ * DISCLAIMER
+ * Do not edit or add to this file if you wish to upgrade this module to newer
+ * versions in the future.
+ *
+ * @category  Smile
+ * @package   Smile\Retailer
+ * @author    Ihor KVASNYTSKYI <ihor.kvasnytskyi@smile-ukraine.com>
+ * @copyright 2019 Smile
+ * @license   Open Software License ("OSL") v. 3.0
+ *
+ *
 namespace Smile\Retailer\Controller\Adminhtml\Category\Image;
 
 use Magento\Framework\Controller\ResultFactory;
 
 /**
- * Agorae Adminhtml Category Image Upload Controller
+ *  Retailer Adminhtml Upload Controller
  */
 class Upload extends \Magento\Backend\App\Action
 {
@@ -79,7 +92,7 @@ class Upload extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Vendor_Module::category');
+        return $this->_authorization->isAllowed('Vendor_Module::retailer');
     }
 
     /**

@@ -5,19 +5,19 @@
  * versions in the future.
  *
  * @category  Smile
- * @package   Smile\RetailerPromotion
- * @author    Fanny DECLERCK <fadec@smile.fr>
+ * @package   Smile\Retailer
+ * @author    Ihor KVASNYTSKYI <ihor.kvasnytskyi@smile-ukraine.com>
  * @copyright 2019 Smile
  * @license   Open Software License ("OSL") v. 3.0
  */
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
 /**
- * RetailerPromotion Adminhtml MediaUpload controller.
+ *  MediaUpload controller.
  *
- * @category Smile
- * @package  Smile\RetailerPromotion
- * @author   Fanny DECLERCK <fadec@smile.fr>
+ * @package   Smile\Retailer
+ * @author    Ihor KVASNYTSKYI <ihor.kvasnytskyi@smile-ukraine.com>
+ * @copyright 2019 Smile
  */
 class MediaUpload extends \Magento\Catalog\Controller\Adminhtml\Category\Image\Upload
 {
