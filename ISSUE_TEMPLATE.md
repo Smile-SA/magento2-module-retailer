@@ -7,7 +7,7 @@
 Magento Version :
 
 <!-- Module Map Version : Which exact version of Module Map are you using ? -->
-Module Store Locator Version :
+Module Retailer Version :
 
 <!-- Magento Environment : are you in Developer or Production mode ? -->
 Environment :
