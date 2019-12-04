@@ -11,7 +11,7 @@
  * @copyright 2019 Smile
  * @license   Open Software License ("OSL") v. 3.0
  *
- *
+ */
 namespace Smile\Retailer\Controller\Adminhtml\Category\Image;
 
 use Magento\Framework\Controller\ResultFactory;
@@ -92,7 +92,7 @@ class Upload extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Vendor_Module::retailer');
+        return $this->_authorization->isAllowed('Smile_Retailer::retailers');
     }
 
     /**
