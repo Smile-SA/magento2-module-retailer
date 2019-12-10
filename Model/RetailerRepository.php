@@ -14,7 +14,8 @@ namespace Smile\Retailer\Model;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
-
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\Retailer\Api\Data\RetailerSearchResultsInterface;
 use Smile\Retailer\Api\RetailerRepositoryInterface;
@@ -28,6 +29,7 @@ use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory;
  * @category Smile
  * @package  Smile\Retailer
  * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RetailerRepository implements RetailerRepositoryInterface
 {
@@ -47,18 +49,34 @@ class RetailerRepository implements RetailerRepositoryInterface
     private $collectionFactory;
 
     /**
+     * @var CollectionProcessorInterface
+     */
+    private $collectionProcessor;
+
+    /**
+     * @var JoinProcessorInterface
+     */
+    private $joinProcessor;
+
+    /**
      * Constructor.
      *
      * @param \Smile\Seller\Model\SellerRepositoryFactory       $sellerRepositoryFactory Seller repository.
      * @param \Smile\Retailer\Api\Data\RetailerInterfaceFactory $retailerFactory         Retailer factory.
      * @param RetailerSearchResultsInterfaceFactory             $searchResultFactory     Search Result factory.
      * @param CollectionFactory                                 $collectionFactory       Collection factory.
+     * @param CollectionProcessorInterface                      $collectionProcessor     Search criteria collection
+     *                                                                                   processor.
+     * @param JoinProcessorInterface                            $joinProcessor           Extension attriubute join
+     *                                                                                   processor.
      */
     public function __construct(
         \Smile\Seller\Model\SellerRepositoryFactory $sellerRepositoryFactory,
         \Smile\Retailer\Api\Data\RetailerInterfaceFactory $retailerFactory,
         RetailerSearchResultsInterfaceFactory $searchResultFactory,
-        CollectionFactory $collectionFactory
+        CollectionFactory $collectionFactory,
+        CollectionProcessorInterface $collectionProcessor,
+        JoinProcessorInterface $joinProcessor
     ) {
         $this->sellerRepository = $sellerRepositoryFactory->create([
             'sellerFactory'    => $retailerFactory,
@@ -66,7 +84,9 @@ class RetailerRepository implements RetailerRepositoryInterface
         ]);
 
         $this->searchResultFactory = $searchResultFactory;
-        $this->collectionFactory = $collectionFactory;
+        $this->collectionFactory   = $collectionFactory;
+        $this->collectionProcessor = $collectionProcessor;
+        $this->joinProcessor       = $joinProcessor;
     }
 
     /**
@@ -102,8 +122,12 @@ class RetailerRepository implements RetailerRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
+
         /** @var Collection $collection */
         $collection = $this->collectionFactory->create();
+        $this->joinProcessor->process($collection);
+        $collection->addAttributeToSelect('*');
+        $this->collectionProcessor->process($searchCriteria, $collection);
 
         // Add filters from root filter group to the collection.
         foreach ($searchCriteria->getFilterGroups() as $group) {
