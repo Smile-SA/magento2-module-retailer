@@ -71,10 +71,8 @@ class Save extends AbstractRetailer
             $storeId    = $this->getRequest()->getParam('store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID);
             $model      = $this->retailerFactory->create();
 
-            $media = false;
-            if (!empty($data[SellerInterface::MEDIA_PATH])
-                && isset($data[SellerInterface::MEDIA_PATH][0]['name'])
-            ) {
+            $media = '';
+            if(isset($data[SellerInterface::MEDIA_PATH][0]['name'])) {
                 $media = $data[SellerInterface::MEDIA_PATH][0]['name'];
             }
             unset($data[SellerInterface::MEDIA_PATH]);
@@ -94,9 +92,8 @@ class Save extends AbstractRetailer
 
             $model->setData($data);
             $model->setStoreId($storeId);
-            if ($media) {
-                $model->setMediaPath($media);
-            }
+
+            $model->setMediaPath($media);
 
             try {
                 $this->retailerRepository->save($model);
