@@ -12,7 +12,7 @@
  * @license   Open Software License ("OSL") v. 3.0
  *
  */
-namespace Smile\Retailer\Controller\Adminhtml\Category\Image;
+namespace Smile\Retailer\Controller\Adminhtml\Retailer\Image;
 
 use Magento\Framework\Controller\ResultFactory;
 
