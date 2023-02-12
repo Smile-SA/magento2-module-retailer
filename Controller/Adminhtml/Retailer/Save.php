@@ -14,6 +14,7 @@
 
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
+use Magento\Framework\Api\SimpleDataObjectConverter;
 use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
 use Smile\Seller\Api\Data\SellerInterface;
 
@@ -93,6 +94,12 @@ class Save extends AbstractRetailer
             }
 
             $model->setData($data);
+            if (isset($model['extension_attributes_list'])) {
+                foreach ($model['extension_attributes_list'] as $extensionAttribute => $value) {
+                    $model->getExtensionAttributes()->{'set'. SimpleDataObjectConverter::snakeCaseToUpperCamelCase($extensionAttribute)}($value);
+                }
+                unset($model['extension_attributes_list']);
+            }
             $model->setStoreId($storeId);
             if ($media) {
                 $model->setMediaPath($media);
