@@ -23,4 +23,11 @@
         </resources>
     </route>
 
+    <route url="/V1/retailer/save/" method="POST">
+        <service class="Smile\Retailer\Api\RetailerRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Smile_Retailer::retailers"/>
+        </resources>
+    </route>
+
 </routes>
