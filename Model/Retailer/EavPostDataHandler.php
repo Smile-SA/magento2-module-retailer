@@ -12,6 +12,8 @@
  */
 namespace Smile\Retailer\Model\Retailer;
 
+use Smile\Retailer\Api\Data\RetailerInterface;
+
 /**
  * EAV Post Data handler for retailer edition : will handle values submitted with the "Use Default" checkbox checked.
  *
@@ -24,9 +26,9 @@ class EavPostDataHandler implements PostDataHandlerInterface
     /**
      * {@inheritDoc}
      */
-    public function getData(\Smile\Retailer\Api\Data\RetailerInterface $retailer, $data)
+    public function getData(RetailerInterface $retailer, mixed $data): mixed
     {
-        if (isset($data['use_default']) && !empty($data['use_default'])) {
+        if (!empty($data['use_default'])) {
             foreach ($data['use_default'] as $attributeCode => $attributeValue) {
                 if ($attributeValue && isset($data[$attributeCode])) {
                     $data[$attributeCode] = null;

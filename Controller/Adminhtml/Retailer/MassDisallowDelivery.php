@@ -14,8 +14,11 @@
 
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
 use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
 
 /**
@@ -30,12 +33,12 @@ class MassDisallowDelivery extends AbstractRetailer
     /**
      * Execute action
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return Redirect
      * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
-    public function execute()
+    public function execute(): Redirect|ResponseInterface|ResultInterface
     {
-        $retailerIds = $this->getRequest()->getParam('selected');
+        $retailerIds = $this->getAllSelectedIds();
         foreach ($retailerIds as $id) {
             $model = $this->retailerRepository->get($id);
             $model->setData('allow_store_delivery', false);

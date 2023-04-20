@@ -14,7 +14,19 @@
 
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Ui\Component\MassAction\Filter;
+use Smile\Retailer\Api\Data\RetailerInterfaceFactory;
+use Smile\Retailer\Api\RetailerRepositoryInterface;
 use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
+use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory;
+use Smile\Retailer\Model\Retailer\PostDataHandlerInterface;
 use Smile\Seller\Api\Data\SellerInterface;
 
 /**
@@ -27,38 +39,51 @@ use Smile\Seller\Api\Data\SellerInterface;
 class Save extends AbstractRetailer
 {
     /**
-     * @var \Smile\Retailer\Model\Retailer\PostDataHandlerInterface[]
+     * @var PostDataHandlerInterface[]
      */
-    private $postDataHandlers;
+    private array $postDataHandlers;
 
     /**
      * Constructor.
      *
-     * @param \Magento\Backend\App\Action\Context                       $context              Application context.
-     * @param \Magento\Framework\View\Result\PageFactory                $resultPageFactory    Result Page factory.
-     * @param \Magento\Framework\Controller\Result\ForwardFactory       $resultForwardFactory Result forward factory.
-     * @param \Magento\Framework\Registry                               $coreRegistry         Application registry.
-     * @param \Smile\Retailer\Api\RetailerRepositoryInterface           $retailerRepository   Retailer Repository
-     * @param \Smile\Retailer\Api\Data\RetailerInterfaceFactory         $retailerFactory      Retailer Factory.
-     * @param \Smile\Retailer\Model\Retailer\PostDataHandlerInterface[] $postDataHandlers     Form data handlers.
+     * @param Context                       $context              Application context.
+     * @param PageFactory                   $resultPageFactory    Result Page factory.
+     * @param ForwardFactory                $resultForwardFactory Result forward factory.
+     * @param Registry                      $coreRegistry         Application registry.
+     * @param RetailerRepositoryInterface   $retailerRepository   Retailer Repository
+     * @param RetailerInterfaceFactory      $retailerFactory      Retailer Factory.
+     * @param Filter                        $filter               Mass Action Filter.
+     * @param CollectionFactory             $collectionFactory    Retailer collection for Mass Action.
+     * @param PostDataHandlerInterface[]    $postDataHandlers     Form data handlers.
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
-        \Magento\Framework\Registry $coreRegistry,
-        \Smile\Retailer\Api\RetailerRepositoryInterface $retailerRepository,
-        \Smile\Retailer\Api\Data\RetailerInterfaceFactory $retailerFactory,
+        Context $context,
+        PageFactory $resultPageFactory,
+        ForwardFactory $resultForwardFactory,
+        Registry $coreRegistry,
+        RetailerRepositoryInterface $retailerRepository,
+        RetailerInterfaceFactory $retailerFactory,
+        Filter $filter,
+        CollectionFactory $collectionFactory,
         array $postDataHandlers = []
     ) {
-        parent::__construct($context, $resultPageFactory, $resultForwardFactory, $coreRegistry, $retailerRepository, $retailerFactory);
+        parent::__construct(
+            $context,
+            $resultPageFactory,
+            $resultForwardFactory,
+            $coreRegistry,
+            $retailerRepository,
+            $retailerFactory,
+            $filter,
+            $collectionFactory
+        );
         $this->postDataHandlers = $postDataHandlers;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function execute()
+    public function execute(): Redirect|ResponseInterface|ResultInterface
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();

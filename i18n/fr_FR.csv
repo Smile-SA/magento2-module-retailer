@@ -14,8 +14,8 @@ Retailer,Magasin
 "Retailers List","Liste des magasins"
 "You saved the retailer %1.","Vous avez sauvegardé le magasin %1."
 Edit,Éditer
-"Delete ${ $.$data.name }","Supprimer ${ $.$data.name }"
-"Are you sure you want to delete ${ $.$data.name } ?","Êtes-vous sur de vouloir supprimer ${ $.$data.name } ?"
+"Delete %1","Supprimer %1"
+"Are you sure you want to delete %1 ?","Êtes-vous sur de vouloir supprimer %1 ?"
 "Retailer Information","Informations du magasin"
 "Retailer Name","Nom du magasin"
 "Seller Code","Code"
@@ -28,3 +28,4 @@ Name,Nom
 Active,Activé
 Inactive,Désactivé
 Status,Statut
+"Entity ID : ","Entité ID : "

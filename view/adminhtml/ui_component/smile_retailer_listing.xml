@@ -88,7 +88,9 @@
                 </argument>
             </filterSelect>
         </filters>
-        <massaction name="listing_massaction">
+        <massaction name="listing_massaction"
+                    component="Magento_Ui/js/grid/tree-massactions"
+                    class="\Magento\Catalog\Ui\Component\Product\MassAction">
             <action name="enable">
                 <settings>
                     <url path="smile_retailer/retailer/massEnable"/>
@@ -142,15 +144,22 @@
                 </item>
             </item>
         </argument>
-        <selectionsColumn name="ids">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="resizeEnabled" xsi:type="boolean">false</item>
-                    <item name="resizeDefaultWidth" xsi:type="string">55</item>
-                    <item name="indexField" xsi:type="string">entity_id</item>
-                </item>
-            </argument>
+        <selectionsColumn name="ids" sortOrder="0">
+            <settings>
+                <indexField>entity_id</indexField>
+                <resizeEnabled>false</resizeEnabled>
+                <resizeDefaultWidth>55</resizeDefaultWidth>
+            </settings>
         </selectionsColumn>
+<!--        <selectionsColumn name="ids">-->
+<!--            <argument name="data" xsi:type="array">-->
+<!--                <item name="config" xsi:type="array">-->
+<!--                    <item name="resizeEnabled" xsi:type="boolean">false</item>-->
+<!--                    <item name="resizeDefaultWidth" xsi:type="string">55</item>-->
+<!--                    <item name="indexField" xsi:type="string">entity_id</item>-->
+<!--                </item>-->
+<!--            </argument>-->
+<!--        </selectionsColumn>-->
         <column name="entity_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

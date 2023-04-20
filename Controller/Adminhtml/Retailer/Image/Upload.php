@@ -14,72 +14,91 @@
  */
 namespace Smile\Retailer\Controller\Adminhtml\Category\Image;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Catalog\Model\ImageUploader;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\MediaStorage\Model\File\UploaderFactory;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  *  Retailer Adminhtml Upload Controller
  */
-class Upload extends \Magento\Backend\App\Action
+class Upload extends Action
 {
     /**
      * Image uploader
      *
-     * @var \Magento\Catalog\Model\ImageUploader
+     * @var ImageUploader
      */
-    protected $imageUploader;
+    protected ImageUploader $imageUploader;
 
     /**
      * Uploader factory
      *
-     * @var \Magento\MediaStorage\Model\File\UploaderFactory
+     * @var UploaderFactory
      */
-    private $uploaderFactory;
+    private UploaderFactory $uploaderFactory;
 
     /**
      * Media directory object (writable).
      *
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var WriteInterface
      */
-    protected $mediaDirectory;
+    protected WriteInterface $mediaDirectory;
 
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
-    protected $storeManager;
+    protected StoreManagerInterface $storeManager;
 
     /**
      * Core file storage database
      *
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @var Database
      */
-    protected $coreFileStorageDatabase;
+    protected Database $coreFileStorageDatabase;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
-    protected $logger;
+    protected LoggerInterface $logger;
 
     /**
      * Upload constructor.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Catalog\Model\ImageUploader $imageUploader
+     * @param Context               $context
+     * @param ImageUploader         $imageUploader
+     * @param UploaderFactory       $uploaderFactory
+     * @param Filesystem            $filesystem
+     * @param StoreManagerInterface $storeManager
+     * @param Database              $coreFileStorageDatabase
+     * @param LoggerInterface       $logger
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Catalog\Model\ImageUploader $imageUploader,
-        \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
-        \Psr\Log\LoggerInterface $logger
+        Context $context,
+        ImageUploader $imageUploader,
+        UploaderFactory $uploaderFactory,
+        Filesystem $filesystem,
+        StoreManagerInterface $storeManager,
+        Database $coreFileStorageDatabase,
+        LoggerInterface $logger
     ) {
         parent::__construct($context);
         $this->imageUploader = $imageUploader;
         $this->uploaderFactory = $uploaderFactory;
-        $this->mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
+        $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->storeManager = $storeManager;
         $this->coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->logger = $logger;
@@ -90,7 +109,7 @@ class Upload extends \Magento\Backend\App\Action
      *
      * @return boolean
      */
-    protected function _isAllowed()
+    protected function _isAllowed(): bool
     {
         return $this->_authorization->isAllowed('Smile_Retailer::retailers');
     }
@@ -98,9 +117,9 @@ class Upload extends \Magento\Backend\App\Action
     /**
      * Upload file controller action
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface|ResponseInterface
      */
-    public function execute()
+    public function execute(): ResultInterface|ResponseInterface
     {
         try {
             $result = $this->imageUploader->saveFileToTmpDir('image');

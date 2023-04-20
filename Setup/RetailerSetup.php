@@ -32,7 +32,7 @@ class RetailerSetup extends SellerSetup
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getDefaultEntities()
+    public function getDefaultEntities(): array
     {
         $entities = parent::getDefaultEntities();
         $entities[RetailerInterface::ENTITY]['attributes'] = array_merge(
@@ -48,7 +48,7 @@ class RetailerSetup extends SellerSetup
      *
      * @return array
      */
-    public function getGroupsDefinition()
+    public function getGroupsDefinition(): array
     {
         return [
             'General'       => 10,
@@ -62,7 +62,7 @@ class RetailerSetup extends SellerSetup
      *
      * @return array
      */
-    public function getAttributeSetDefinition()
+    public function getAttributeSetDefinition(): array
     {
         return [
             ucfirst(RetailerInterface::ATTRIBUTE_SET_RETAILER) => [
@@ -86,7 +86,7 @@ class RetailerSetup extends SellerSetup
      *
      * @return array
      */
-    private function getRetailerAttributes()
+    private function getRetailerAttributes(): array
     {
         $attributes = [];
 

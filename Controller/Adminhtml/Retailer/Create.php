@@ -14,6 +14,9 @@
 
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
+use Magento\Backend\Model\View\Result\Page;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
 
 /**
@@ -28,7 +31,7 @@ class Create extends AbstractRetailer
     /**
      * {@inheritdoc}
      */
-    public function execute()
+    public function execute(): Page|ResponseInterface|ResultInterface
     {
         $resultPage = $this->createPage();
 

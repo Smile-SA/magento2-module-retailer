@@ -12,7 +12,19 @@
  */
 namespace Smile\Retailer\Model\ResourceModel\Retailer;
 
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\EntityFactory as EavEntityFactory;
+use Magento\Eav\Model\ResourceModel\Helper;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Validator\UniversalFactory;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 use Smile\Retailer\Api\Data\RetailerInterface;
+use Smile\Seller\Model\ResourceModel\Seller\Collection as SellerResourceModelCollection;
 
 /**
  * Retailers Collection
@@ -23,37 +35,37 @@ use Smile\Retailer\Api\Data\RetailerInterface;
  * @package  Smile\Retailer
  * @author   Aurelien FOUCRET <aurelien.foucret@smile.fr>
  */
-class Collection extends \Smile\Seller\Model\ResourceModel\Seller\Collection
+class Collection extends SellerResourceModelCollection
 {
     /**
      * Collection constructor.
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList) Parent construct already has 10 arguments.
      *
-     * @param \Magento\Framework\Data\Collection\EntityFactory             $entityFactory    Entity Factory
-     * @param \Psr\Log\LoggerInterface                                     $logger           Logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy    Fetch Strategy
-     * @param \Magento\Framework\Event\ManagerInterface                    $eventManager     Event Manager
-     * @param \Magento\Eav\Model\Config                                    $eavConfig        EAV Config
-     * @param \Magento\Framework\App\ResourceConnection                    $resource         Resource Connection
-     * @param \Magento\Eav\Model\EntityFactory                             $eavEntityFactory EAV Entity Factory
-     * @param \Magento\Eav\Model\ResourceModel\Helper                      $resourceHelper   Resource Helper
-     * @param \Magento\Store\Model\StoreManagerInterface                   $storeManager     The Store Manager
-     * @param \Magento\Framework\Validator\UniversalFactory                $universalFactory Universal Factory
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null          $connection       Database Connection
+     * @param EntityFactory             $entityFactory    Entity Factory
+     * @param LoggerInterface           $logger           Logger
+     * @param FetchStrategyInterface    $fetchStrategy    Fetch Strategy
+     * @param ManagerInterface          $eventManager     Event Manager
+     * @param Config                    $eavConfig        EAV Config
+     * @param ResourceConnection        $resource         Resource Connection
+     * @param EavEntityFactory          $eavEntityFactory EAV Entity Factory
+     * @param Helper                    $resourceHelper   Resource Helper
+     * @param StoreManagerInterface     $storeManager     The Store Manager
+     * @param UniversalFactory          $universalFactory Universal Factory
+     * @param AdapterInterface|null     $connection       Database Connection
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Eav\Model\EntityFactory $eavEntityFactory,
-        \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        EntityFactory $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        Config $eavConfig,
+        ResourceConnection $resource,
+        EavEntityFactory $eavEntityFactory,
+        Helper $resourceHelper,
+        StoreManagerInterface $storeManager,
+        UniversalFactory $universalFactory,
+        AdapterInterface $connection = null
     ) {
         parent::__construct(
             $entityFactory,
@@ -78,7 +90,7 @@ class Collection extends \Smile\Seller\Model\ResourceModel\Seller\Collection
      *
      * @return void
      */
-    protected function _construct()
+    protected function _construct(): void
     {
         $this->_init('Smile\Retailer\Model\Retailer', 'Smile\Seller\Model\ResourceModel\Seller');
 

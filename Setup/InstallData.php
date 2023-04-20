@@ -31,7 +31,7 @@ class InstallData implements InstallDataInterface
     /**
      * @var RetailerSetupFactory
      */
-    private $retailerSetupFactory;
+    private RetailerSetupFactory $retailerSetupFactory;
 
     /**
      * InstallData constructor
@@ -46,7 +46,7 @@ class InstallData implements InstallDataInterface
     /**
      * {@inheritDoc}
      */
-    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context): void
     {
         $setup->startSetup();
 
@@ -65,7 +65,7 @@ class InstallData implements InstallDataInterface
      *
      * @param RetailerSetup $setup The Retailer Setup
      */
-    protected function installRetailerAttributeSet(RetailerSetup $setup)
+    protected function installRetailerAttributeSet(RetailerSetup $setup): void
     {
         $attributeSetsDefinition = $setup->getAttributeSetDefinition();
         $groupsDefinition        = $setup->getGroupsDefinition();

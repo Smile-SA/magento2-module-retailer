@@ -30,7 +30,7 @@ interface RetailerInterface extends SellerInterface
      *
      * @return \Smile\Retailer\Api\Data\RetailerExtensionInterface|null
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes(): \Smile\Retailer\Api\Data\RetailerExtensionInterface|null;
 
     /**
      * Set an extension attributes object.
@@ -39,5 +39,5 @@ interface RetailerInterface extends SellerInterface
      *
      * @return $this
      */
-    public function setExtensionAttributes(\Smile\Retailer\Api\Data\RetailerExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(\Smile\Retailer\Api\Data\RetailerExtensionInterface $extensionAttributes): self;
 }

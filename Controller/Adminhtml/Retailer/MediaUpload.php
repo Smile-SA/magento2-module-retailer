@@ -12,6 +12,8 @@
  */
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
+use Magento\Catalog\Controller\Adminhtml\Category\Image\Upload;
+
 /**
  *  MediaUpload controller.
  *
@@ -19,7 +21,7 @@ namespace Smile\Retailer\Controller\Adminhtml\Retailer;
  * @author    Ihor KVASNYTSKYI <ihor.kvasnytskyi@smile-ukraine.com>
  * @copyright 2019 Smile
  */
-class MediaUpload extends \Magento\Catalog\Controller\Adminhtml\Category\Image\Upload
+class MediaUpload extends Upload
 {
 
 }

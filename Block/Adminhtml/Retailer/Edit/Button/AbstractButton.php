@@ -12,7 +12,10 @@
  */
 namespace Smile\Retailer\Block\Adminhtml\Retailer\Edit\Button;
 
+use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
+use Magento\Framework\Registry;
+use Smile\Retailer\Api\Data\RetailerInterface;
 
 /**
  * Abstract Retailer edit button
@@ -28,24 +31,24 @@ class AbstractButton implements ButtonProviderInterface
      *
      * @var Context
      */
-    protected $context;
+    protected Context $context;
 
     /**
      * Registry
      *
      * @var Registry
      */
-    protected $registry;
+    protected Registry $registry;
 
     /**
      * Generic constructor
      *
-     * @param \Magento\Framework\View\Element\UiComponent\Context $context  Application context
-     * @param \Magento\Framework\Registry                         $registry Application registry
+     * @param Context   $context  Application context
+     * @param Registry  $registry Application registry
      */
     public function __construct(
-        \Magento\Framework\View\Element\UiComponent\Context $context,
-        \Magento\Framework\Registry $registry
+        Context $context,
+        Registry $registry
     ) {
         $this->context  = $context;
         $this->registry = $registry;
@@ -59,7 +62,7 @@ class AbstractButton implements ButtonProviderInterface
      *
      * @return string
      */
-    public function getUrl($route = '', $params = [])
+    public function getUrl(string $route = '', array $params = []): string
     {
         return $this->context->getUrl($route, $params);
     }
@@ -67,9 +70,9 @@ class AbstractButton implements ButtonProviderInterface
     /**
      * Get retailer
      *
-     * @return \Smile\Retailer\Api\Data\RetailerInterface
+     * @return ?RetailerInterface
      */
-    public function getRetailer()
+    public function getRetailer(): ?RetailerInterface
     {
         return $this->registry->registry('current_seller');
     }
@@ -77,7 +80,7 @@ class AbstractButton implements ButtonProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getButtonData()
+    public function getButtonData(): array
     {
         return [];
     }

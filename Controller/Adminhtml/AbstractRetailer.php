@@ -13,6 +13,16 @@
 namespace Smile\Retailer\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Page;
+use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Ui\Component\MassAction\Filter;
+use Smile\Retailer\Api\Data\RetailerInterfaceFactory;
+use Smile\Retailer\Api\RetailerRepositoryInterface;
+use Smile\Retailer\Api\RetailerScheduleManagementInterface;
+use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory;
 
 /**
  * Abstract Retailer controller
@@ -24,62 +34,78 @@ use Magento\Backend\App\Action;
 abstract class AbstractRetailer extends Action
 {
     /**
-     * @var \Magento\Framework\View\Result\PageFactory|null
+     * @var ?PageFactory
      */
-    protected $resultPageFactory = null;
+    protected ?PageFactory $resultPageFactory = null;
 
     /**
-     * @var \Magento\Framework\Controller\Result\ForwardFactory|null
+     * @var ?ForwardFactory
      */
-    protected $resultForwardFactory = null;
+    protected ?ForwardFactory $resultForwardFactory = null;
 
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
-    protected $coreRegistry;
+    protected Registry $coreRegistry;
 
     /**
-     * @var \Smile\Retailer\Api\Data\RetailerInterfaceFactory
+     * @var RetailerRepositoryInterface
      */
-    protected $retailerRepository;
+    protected RetailerRepositoryInterface $retailerRepository;
 
     /**
      * Retailer Factory
      *
-     * @var \Smile\Retailer\Api\Data\RetailerInterfaceFactory
+     * @var RetailerInterfaceFactory
      */
-    protected $retailerFactory;
+    protected RetailerInterfaceFactory $retailerFactory;
 
     /**
-     * @var \Smile\Retailer\Api\RetailerScheduleManagementInterface
+     * @var RetailerScheduleManagementInterface
      */
-    protected $scheduleManagement;
+    protected RetailerScheduleManagementInterface $scheduleManagement;
+
+    /**
+     * @var Filter
+     */
+    protected Filter $filter;
+
+    /**
+     * @var CollectionFactory
+     */
+    protected CollectionFactory $collectionFactory;
 
     /**
      * Abstract constructor.
      *
-     * @param \Magento\Backend\App\Action\Context                 $context              Application context.
-     * @param \Magento\Framework\View\Result\PageFactory          $resultPageFactory    Result Page factory.
-     * @param \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory Result forward factory.
-     * @param \Magento\Framework\Registry                         $coreRegistry         Application registry.
-     * @param \Smile\Retailer\Api\RetailerRepositoryInterface     $retailerRepository   Retailer Repository
-     * @param \Smile\Retailer\Api\Data\RetailerInterfaceFactory   $retailerFactory      Retailer Factory.
+     * @param Context                       $context              Application context.
+     * @param PageFactory                   $resultPageFactory    Result Page factory.
+     * @param ForwardFactory                $resultForwardFactory Result forward factory.
+     * @param Registry                      $coreRegistry         Application registry.
+     * @param RetailerRepositoryInterface   $retailerRepository   Retailer Repository
+     * @param RetailerInterfaceFactory      $retailerFactory      Retailer Factory.
+     * @param Filter                        $filter               Mass Action Filter.
+     * @param CollectionFactory             $collectionFactory    Retailer collection for Mass Action.
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
-        \Magento\Framework\Registry $coreRegistry,
-        \Smile\Retailer\Api\RetailerRepositoryInterface $retailerRepository,
-        \Smile\Retailer\Api\Data\RetailerInterfaceFactory $retailerFactory
+        Context $context,
+        PageFactory $resultPageFactory,
+        ForwardFactory $resultForwardFactory,
+        Registry $coreRegistry,
+        RetailerRepositoryInterface $retailerRepository,
+        RetailerInterfaceFactory $retailerFactory,
+        Filter $filter,
+        CollectionFactory $collectionFactory
     ) {
         $this->resultPageFactory    = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->coreRegistry         = $coreRegistry;
         $this->retailerRepository   = $retailerRepository;
         $this->retailerFactory      = $retailerFactory;
+        $this->filter               = $filter;
+        $this->collectionFactory    = $collectionFactory;
 
         parent::__construct($context);
     }
@@ -87,11 +113,11 @@ abstract class AbstractRetailer extends Action
     /**
      * Create result page
      *
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return Page
      */
-    protected function createPage()
+    protected function createPage(): Page
     {
-        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        /** @var Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Smile_Retailer::retailers')
             ->addBreadcrumb(__('Sellers'), __('Retailers'));
@@ -105,8 +131,27 @@ abstract class AbstractRetailer extends Action
      *
      * @return bool
      */
-    protected function _isAllowed()
+    protected function _isAllowed(): bool
     {
         return $this->_authorization->isAllowed('Smile_Retailer::retailers');
+    }
+
+    /**
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    /**
+     * @return array
+     */
+    protected function getAllSelectedIds(): array
+    {
+        $retailerIds = [];
+        try {
+            $collection = $this->filter->getCollection($this->collectionFactory->create());
+            $retailerIds = $collection->getAllIds();
+        } catch (\Exception $e) {
+        }
+
+        return $retailerIds;
     }
 }

@@ -38,12 +38,12 @@ class RetailerActions extends Column
     const RETAILER_URL_PATH_DELETE = 'smile_retailer/retailer/delete';
 
     /** @var UrlInterface */
-    protected $urlBuilder;
+    protected UrlInterface $urlBuilder;
 
     /**
      * @var string
      */
-    private $editUrl;
+    private string $editUrl;
 
     /**
      * @param ContextInterface   $context            Application context
@@ -59,7 +59,7 @@ class RetailerActions extends Column
         UrlInterface $urlBuilder,
         array $components = [],
         array $data = [],
-        $editUrl = self::RETAILER_URL_PATH_EDIT
+        string $editUrl = self::RETAILER_URL_PATH_EDIT
     ) {
         $this->urlBuilder = $urlBuilder;
         $this->editUrl = $editUrl;
@@ -74,11 +74,12 @@ class RetailerActions extends Column
      *
      * @return array
      */
-    public function prepareDataSource(array $dataSource)
+    public function prepareDataSource(array $dataSource): array
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
                 $name = $this->getData('name');
+                $itemName = $item['name'] ?? __('Entity ID : ') . $item['entity_id'] ;
 
                 if (isset($item['entity_id'])) {
                     $item[$name]['edit'] = [
@@ -90,8 +91,8 @@ class RetailerActions extends Column
                         'href'    => $this->urlBuilder->getUrl(self::RETAILER_URL_PATH_DELETE, ['id' => $item['entity_id']]),
                         'label'   => __('Delete'),
                         'confirm' => [
-                            'title'   => __('Delete ${ $.$data.name }'),
-                            'message' => __('Are you sure you want to delete ${ $.$data.name } ?'),
+                            'title'   => __('Delete %1', $itemName),
+                            'message' => __('Are you sure you want to delete %1 ?', $itemName),
                         ],
                     ];
                 }

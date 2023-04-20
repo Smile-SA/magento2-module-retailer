@@ -76,7 +76,7 @@
             <argument name="attributeSetId" xsi:type="string">retailer</argument>
         </arguments>
     </virtualType>
-    
+
     <virtualType name="Smile\Retailer\Ui\Component\Retailer\Form\Modifier\Eav" type="Smile\Seller\Ui\Component\Seller\Form\Modifier\Eav">
         <arguments>
             <argument name="fieldMapper" xsi:type="object">Smile\Retailer\Ui\Component\Retailer\Form\FieldMapper</argument>

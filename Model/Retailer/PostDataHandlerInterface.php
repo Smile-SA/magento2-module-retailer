@@ -12,6 +12,8 @@
 */
 namespace Smile\Retailer\Model\Retailer;
 
+use Smile\Retailer\Api\Data\RetailerInterface;
+
 /**
  * Form data handler interface.
  *
@@ -24,10 +26,11 @@ interface PostDataHandlerInterface
     /**
      * Process form data.
      *
-     * @param \Smile\Retailer\Api\Data\RetailerInterface $retailer Retailer.
-     * @param mixed                                      $data     Original form data.
+     * @param RetailerInterface $retailer Retailer.
+     * @param mixed             $data     Original form data.
      *
+     * @throws \Exception
      * @return mixed
      */
-    public function getData(\Smile\Retailer\Api\Data\RetailerInterface $retailer, $data);
+    public function getData(RetailerInterface $retailer, mixed $data): mixed;
 }

@@ -15,6 +15,7 @@ namespace Smile\Retailer\Ui\Component\Form\Retailer;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\App\RequestInterface;
 use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory;
+use Smile\Seller\Model\ResourceModel\Seller\Collection as SellerResourceModelCollection;
 
 /**
  * Source Model for Retailer Picker
@@ -26,19 +27,19 @@ use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory;
 class Options implements OptionSourceInterface
 {
     /**
-     * @var \Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory
+     * @var CollectionFactory
      */
-    protected $retailerCollectionFactory;
+    protected CollectionFactory $retailerCollectionFactory;
 
     /**
      * @var RequestInterface
      */
-    protected $request;
+    protected RequestInterface $request;
 
     /**
-     * @var array
+     * @var ?array
      */
-    protected $retailersList;
+    protected ?array $retailersList = null;
 
     /**
      * @param CollectionFactory $retailerCollectionFactory The Retailer Collection Factory
@@ -55,7 +56,7 @@ class Options implements OptionSourceInterface
     /**
      * {@inheritdoc}
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         return $this->getRetailerList();
     }
@@ -65,13 +66,13 @@ class Options implements OptionSourceInterface
      *
      * @return array
      */
-    protected function getRetailerList()
+    protected function getRetailerList(): array
     {
         if ($this->retailersList === null) {
             $this->retailersList = [];
             $storeId = $this->request->getParam('store');
 
-            /* @var $collection \Smile\Seller\Model\ResourceModel\Seller\Collection */
+            /* @var $collection SellerResourceModelCollection */
             $collection = $this->retailerCollectionFactory->create();
 
             $collection

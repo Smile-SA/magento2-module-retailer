@@ -12,6 +12,8 @@
  */
 namespace Smile\Retailer\Api\Data;
 
+use Magento\Framework\Api\SearchResultsInterface;
+
 /**
  * Class RetailerSearchResultsInterface
  *
@@ -19,14 +21,14 @@ namespace Smile\Retailer\Api\Data;
  * @package  Smile\Retailer\Api\Data
  * @author   De Cramer Oliver <oldec@smile.fr>
  */
-interface RetailerSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
+interface RetailerSearchResultsInterface extends SearchResultsInterface
 {
     /**
      * Get Retailers list.
      *
      * @return RetailerInterface[]
      */
-    public function getItems();
+    public function getItems(): array;
 
     /**
      * Set Retailers list.
@@ -35,5 +37,5 @@ interface RetailerSearchResultsInterface extends \Magento\Framework\Api\SearchRe
      *
      * @return $this
      */
-    public function setItems(array $items);
+    public function setItems(array $items): self;
 }

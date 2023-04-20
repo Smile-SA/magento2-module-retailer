@@ -6,7 +6,7 @@ It allows to add retailers info.
 
 The module requires :
 
-- [Seller](https://github.com/Smile-SA/magento2-module-seller) > 1.2.*
+- [Seller](https://github.com/Smile-SA/magento2-module-seller) > 2.0.*
 
 ### How to use
 

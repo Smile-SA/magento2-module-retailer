@@ -27,7 +27,7 @@ class Retailer extends Seller implements RetailerInterface
     /**
      * {@inheritDoc}
      */
-    public function getExtensionAttributes()
+    public function getExtensionAttributes(): \Smile\Retailer\Api\Data\RetailerExtensionInterface|null
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (!$extensionAttributes) {
@@ -42,7 +42,7 @@ class Retailer extends Seller implements RetailerInterface
     /**
      * {@inheritDoc}
      */
-    public function setExtensionAttributes(\Smile\Retailer\Api\Data\RetailerExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(\Smile\Retailer\Api\Data\RetailerExtensionInterface $extensionAttributes): self
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
@@ -52,7 +52,7 @@ class Retailer extends Seller implements RetailerInterface
      *
      * @return string
      */
-    public function getAttributeSetName()
+    public function getAttributeSetName(): string
     {
         return ucfirst(self::ATTRIBUTE_SET_RETAILER);
     }
