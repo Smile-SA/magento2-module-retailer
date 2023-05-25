@@ -1,16 +1,4 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Seller
- * @author    Aurelien FOUCRET <aurelien.foucret@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
 
 namespace Smile\Retailer\Setup;
 
@@ -21,32 +9,17 @@ use Smile\Retailer\Api\Data\RetailerInterface;
 
 /**
  * Seller Data install class.
- *
- * @category Smile
- * @package  Smile\Seller
- * @author   Aurelien FOUCRET <aurelien.foucret@smile.fr>
  */
 class InstallData implements InstallDataInterface
 {
-    /**
-     * @var RetailerSetupFactory
-     */
-    private RetailerSetupFactory $retailerSetupFactory;
-
-    /**
-     * InstallData constructor
-     *
-     * @param RetailerSetupFactory $retailerSetupFactory The Retailer Setup factory
-     */
-    public function __construct(RetailerSetupFactory $retailerSetupFactory)
+    public function __construct(private RetailerSetupFactory $retailerSetupFactory)
     {
-        $this->retailerSetupFactory = $retailerSetupFactory;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context): void
+    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
 
@@ -59,11 +32,8 @@ class InstallData implements InstallDataInterface
         $setup->endSetup();
     }
 
-
     /**
      * Initialize the Retailer attribute sets.
-     *
-     * @param RetailerSetup $setup The Retailer Setup
      */
     protected function installRetailerAttributeSet(RetailerSetup $setup): void
     {

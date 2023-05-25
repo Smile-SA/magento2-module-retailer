@@ -1,30 +1,16 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2017 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
 namespace Smile\Retailer\Model\Retailer;
 
 use Smile\Retailer\Api\Data\RetailerInterface;
 
 /**
  * EAV Post Data handler for retailer edition : will handle values submitted with the "Use Default" checkbox checked.
- *
- * @category Smile
- * @package  Smile\Retailer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
 class EavPostDataHandler implements PostDataHandlerInterface
 {
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function getData(RetailerInterface $retailer, mixed $data): mixed
     {

@@ -1,60 +1,26 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    Fanny DECLERCK <fadec@smile.fr>
- * @copyright 2019 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
 namespace Smile\Retailer\Ui\Component\Form\Retailer;
 
-use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory;
-use Smile\Seller\Model\ResourceModel\Seller\Collection as SellerResourceModelCollection;
 
 /**
- * Source Model for Retailer Picker
- *
- * @category Smile
- * @package  Smile\Retailer
- * @author   Fanny DECLERCK <fadec@smile.fr>
+ * Source Model for Retailer Picker.
  */
 class Options implements OptionSourceInterface
 {
-    /**
-     * @var CollectionFactory
-     */
-    protected CollectionFactory $retailerCollectionFactory;
-
-    /**
-     * @var RequestInterface
-     */
-    protected RequestInterface $request;
-
-    /**
-     * @var ?array
-     */
     protected ?array $retailersList = null;
 
-    /**
-     * @param CollectionFactory $retailerCollectionFactory The Retailer Collection Factory
-     * @param RequestInterface  $request                   The application request
-     */
     public function __construct(
-        CollectionFactory $retailerCollectionFactory,
-        RequestInterface $request
+        protected CollectionFactory $retailerCollectionFactory,
+        protected RequestInterface $request
     ) {
-        $this->retailerCollectionFactory = $retailerCollectionFactory;
-        $this->request = $request;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray(): array
     {
@@ -62,9 +28,7 @@ class Options implements OptionSourceInterface
     }
 
     /**
-     * Retrieve retailer tree
-     *
-     * @return array
+     * Retrieve retailer tree.
      */
     protected function getRetailerList(): array
     {
@@ -81,9 +45,9 @@ class Options implements OptionSourceInterface
 
             foreach ($collection as $retailer) {
                 $this->retailersList[$retailer->getId()] = [
-                    'value'     => $retailer->getId(),
+                    'value' => $retailer->getId(),
                     'is_active' => $retailer->getIsActive(),
-                    'label'     => $retailer->getName(),
+                    'label' => $retailer->getName(),
                 ];
             }
         }

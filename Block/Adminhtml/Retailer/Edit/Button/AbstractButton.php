@@ -1,66 +1,25 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
 namespace Smile\Retailer\Block\Adminhtml\Retailer\Edit\Button;
 
+use Magento\Framework\Registry;
 use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
-use Magento\Framework\Registry;
 use Smile\Retailer\Api\Data\RetailerInterface;
 
 /**
- * Abstract Retailer edit button
- *
- * @category Smile
- * @package  Smile\Retailer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * Abstract Retailer edit button.
  */
 class AbstractButton implements ButtonProviderInterface
 {
-    /**
-     * Url Builder
-     *
-     * @var Context
-     */
-    protected Context $context;
-
-    /**
-     * Registry
-     *
-     * @var Registry
-     */
-    protected Registry $registry;
-
-    /**
-     * Generic constructor
-     *
-     * @param Context   $context  Application context
-     * @param Registry  $registry Application registry
-     */
     public function __construct(
-        Context $context,
-        Registry $registry
+        protected Context $context,
+        protected Registry $registry
     ) {
-        $this->context  = $context;
-        $this->registry = $registry;
     }
 
     /**
-     * Generate url by route and parameters
-     *
-     * @param string $route  The route
-     * @param array  $params The params
-     *
-     * @return string
+     * Generate url by route and parameters.
      */
     public function getUrl(string $route = '', array $params = []): string
     {
@@ -69,8 +28,6 @@ class AbstractButton implements ButtonProviderInterface
 
     /**
      * Get retailer
-     *
-     * @return ?RetailerInterface
      */
     public function getRetailer(): ?RetailerInterface
     {
@@ -78,9 +35,9 @@ class AbstractButton implements ButtonProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function getButtonData(): array
+    public function getButtonData()
     {
         return [];
     }

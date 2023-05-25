@@ -1,16 +1,4 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
 
 namespace Smile\Retailer\Setup;
 
@@ -19,20 +7,13 @@ use Smile\Seller\Setup\SellerSetup;
 
 /**
  * Retailer Setup class : contains EAV Attributes declarations.
- *
- * @category Smile
- * @package  Smile\Retailer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
 class RetailerSetup extends SellerSetup
 {
     /**
-     * Default entities and attributes
-     *
-     * @return array
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @inheritdoc
      */
-    public function getDefaultEntities(): array
+    public function getDefaultEntities()
     {
         $entities = parent::getDefaultEntities();
         $entities[RetailerInterface::ENTITY]['attributes'] = array_merge(
@@ -44,23 +25,19 @@ class RetailerSetup extends SellerSetup
     }
 
     /**
-     * Get the group definition
-     *
-     * @return array
+     * Get the group definition.
      */
     public function getGroupsDefinition(): array
     {
         return [
-            'General'       => 10,
-            'Images'        => 20,
-            'Meta Data'     => 30,
+            'General' => 10,
+            'Images' => 20,
+            'Meta Data' => 30,
         ];
     }
 
     /**
-     * Get the attributes set definition for retailers
-     *
-     * @return array
+     * Get the attributes set definition for retailers.
      */
     public function getAttributeSetDefinition(): array
     {
@@ -82,14 +59,10 @@ class RetailerSetup extends SellerSetup
     }
 
     /**
-     * Retrieve retailer specific attributes
-     *
-     * @return array
+     * Retrieve retailer specific attributes.
      */
     private function getRetailerAttributes(): array
     {
-        $attributes = [];
-
-        return $attributes;
+        return [];
     }
 }

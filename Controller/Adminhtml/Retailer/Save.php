@@ -1,61 +1,27 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
 
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
+use Exception;
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\Session;
 use Magento\Backend\Model\View\Result\Redirect;
-use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Store\Model\Store;
 use Magento\Ui\Component\MassAction\Filter;
 use Smile\Retailer\Api\Data\RetailerInterfaceFactory;
 use Smile\Retailer\Api\RetailerRepositoryInterface;
 use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
 use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory;
-use Smile\Retailer\Model\Retailer\PostDataHandlerInterface;
 use Smile\Seller\Api\Data\SellerInterface;
 
 /**
  * Retailer Adminhtml Save controller.
- *
- * @category Smile
- * @package  Smile\Retailer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
 class Save extends AbstractRetailer
 {
-    /**
-     * @var PostDataHandlerInterface[]
-     */
-    private array $postDataHandlers;
-
-    /**
-     * Constructor.
-     *
-     * @param Context                       $context              Application context.
-     * @param PageFactory                   $resultPageFactory    Result Page factory.
-     * @param ForwardFactory                $resultForwardFactory Result forward factory.
-     * @param Registry                      $coreRegistry         Application registry.
-     * @param RetailerRepositoryInterface   $retailerRepository   Retailer Repository
-     * @param RetailerInterfaceFactory      $retailerFactory      Retailer Factory.
-     * @param Filter                        $filter               Mass Action Filter.
-     * @param CollectionFactory             $collectionFactory    Retailer collection for Mass Action.
-     * @param PostDataHandlerInterface[]    $postDataHandlers     Form data handlers.
-     */
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory,
@@ -65,7 +31,7 @@ class Save extends AbstractRetailer
         RetailerInterfaceFactory $retailerFactory,
         Filter $filter,
         CollectionFactory $collectionFactory,
-        array $postDataHandlers = []
+        private array $postDataHandlers = []
     ) {
         parent::__construct(
             $context,
@@ -77,27 +43,27 @@ class Save extends AbstractRetailer
             $filter,
             $collectionFactory
         );
-        $this->postDataHandlers = $postDataHandlers;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function execute(): Redirect|ResponseInterface|ResultInterface
+    public function execute()
     {
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 
-        $data         = $this->getRequest()->getPostValue();
+        $data = $this->getRequest()->getPostValue();
         $redirectBack = $this->getRequest()->getParam('back', false);
 
         if ($data) {
             $identifier = $this->getRequest()->getParam('id');
-            $storeId    = $this->getRequest()->getParam('store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID);
-            $model      = $this->retailerFactory->create();
-
+            $storeId = $this->getRequest()->getParam('store_id', Store::DEFAULT_STORE_ID);
+            $model = $this->retailerFactory->create();
             $media = false;
-            if (!empty($data[SellerInterface::MEDIA_PATH])
+
+            if (
+                !empty($data[SellerInterface::MEDIA_PATH])
                 && isset($data[SellerInterface::MEDIA_PATH][0]['name'])
             ) {
                 $media = $data[SellerInterface::MEDIA_PATH][0]['name'];
@@ -108,7 +74,6 @@ class Save extends AbstractRetailer
                 $model = $this->retailerRepository->get($identifier);
                 if (!$model->getId()) {
                     $this->messageManager->addError(__('This retailer no longer exists.'));
-
                     return $resultRedirect->setPath('*/*/');
                 }
             }
@@ -126,7 +91,7 @@ class Save extends AbstractRetailer
             try {
                 $this->retailerRepository->save($model);
                 $this->messageManager->addSuccessMessage(__('You saved the retailer %1.', $model->getName()));
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
+                $this->_objectManager->get(Session::class)->setFormData(false);
 
                 if ($redirectBack) {
                     $redirectParams = ['id' => $model->getId()];
@@ -138,9 +103,9 @@ class Save extends AbstractRetailer
                 }
 
                 return $resultRedirect->setPath('*/*/');
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData($data);
+                $this->_objectManager->get(Session::class)->setFormData($data);
 
                 $returnParams = ['id' => $model->getId()];
 

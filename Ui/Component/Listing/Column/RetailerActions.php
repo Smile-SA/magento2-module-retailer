@@ -1,78 +1,33 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
 namespace Smile\Retailer\Ui\Component\Listing\Column;
 
-use Magento\Ui\Component\Listing\Columns\Column;
-
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Framework\UrlInterface;
+use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
- * Retailer Actions for Ui Component
- *
- * @category Smile
- * @package  Smile\Retailer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * Retailer Actions for Ui Component.
  */
 class RetailerActions extends Column
 {
-    /**
-     * Edit Url path
-     **/
-    const RETAILER_URL_PATH_EDIT = 'smile_retailer/retailer/edit';
+    private const RETAILER_URL_PATH_EDIT = 'smile_retailer/retailer/edit';
+    private const RETAILER_URL_PATH_DELETE = 'smile_retailer/retailer/delete';
 
-    /**
-     * Delete Url path
-     **/
-    const RETAILER_URL_PATH_DELETE = 'smile_retailer/retailer/delete';
-
-    /** @var UrlInterface */
-    protected UrlInterface $urlBuilder;
-
-    /**
-     * @var string
-     */
-    private string $editUrl;
-
-    /**
-     * @param ContextInterface   $context            Application context
-     * @param UiComponentFactory $uiComponentFactory Ui Component Factory
-     * @param UrlInterface       $urlBuilder         URL Builder
-     * @param array              $components         Components
-     * @param array              $data               Component Data
-     * @param string             $editUrl            Edit Url
-     */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        UrlInterface $urlBuilder,
+        protected UrlInterface $urlBuilder,
         array $components = [],
         array $data = [],
-        string $editUrl = self::RETAILER_URL_PATH_EDIT
+        private string $editUrl = self::RETAILER_URL_PATH_EDIT
     ) {
-        $this->urlBuilder = $urlBuilder;
-        $this->editUrl = $editUrl;
-
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
     /**
-     * Prepare Data Source
-     *
-     * @param array $dataSource The data source
-     *
-     * @return array
+     * Prepare Data Source.
      */
     public function prepareDataSource(array $dataSource): array
     {
@@ -83,15 +38,18 @@ class RetailerActions extends Column
 
                 if (isset($item['entity_id'])) {
                     $item[$name]['edit'] = [
-                        'href'  => $this->urlBuilder->getUrl($this->editUrl, ['id' => $item['entity_id']]),
+                        'href' => $this->urlBuilder->getUrl($this->editUrl, ['id' => $item['entity_id']]),
                         'label' => __('Edit'),
                     ];
 
                     $item[$name]['delete'] = [
-                        'href'    => $this->urlBuilder->getUrl(self::RETAILER_URL_PATH_DELETE, ['id' => $item['entity_id']]),
-                        'label'   => __('Delete'),
+                        'href' => $this->urlBuilder->getUrl(
+                            self::RETAILER_URL_PATH_DELETE,
+                            ['id' => $item['entity_id']]
+                        ),
+                        'label' => __('Delete'),
                         'confirm' => [
-                            'title'   => __('Delete %1', $itemName),
+                            'title' => __('Delete %1', $itemName),
                             'message' => __('Are you sure you want to delete %1 ?', $itemName),
                         ],
                     ];
