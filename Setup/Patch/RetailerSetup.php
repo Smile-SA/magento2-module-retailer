@@ -1,9 +1,11 @@
 <?php
 
-namespace Smile\Retailer\Setup;
+declare(strict_types=1);
+
+namespace Smile\Retailer\Setup\Patch;
 
 use Smile\Retailer\Api\Data\RetailerInterface;
-use Smile\Seller\Setup\SellerSetup;
+use Smile\Seller\Setup\Patch\SellerSetup;
 
 /**
  * Retailer Setup class : contains EAV Attributes declarations.
@@ -13,7 +15,7 @@ class RetailerSetup extends SellerSetup
     /**
      * @inheritdoc
      */
-    public function getDefaultEntities()
+    public function getDefaultEntities(): array
     {
         $entities = parent::getDefaultEntities();
         $entities[RetailerInterface::ENTITY]['attributes'] = array_merge(

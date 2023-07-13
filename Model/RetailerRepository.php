@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\Retailer\Model;
 
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
@@ -26,8 +28,6 @@ use Smile\Seller\Model\SellerRepositoryFactory;
 class RetailerRepository implements RetailerRepositoryInterface
 {
     private SellerRepository $sellerRepository;
-    private SellerRepositoryFactory $sellerRepositoryFactory;
-    private RetailerInterfaceFactory $retailerFactory;
 
     public function __construct(
         SellerRepositoryFactory $sellerRepositoryFactory,
@@ -54,7 +54,7 @@ class RetailerRepository implements RetailerRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function get(int|string $retailerId, ?int $storeId = null)
+    public function get(mixed $retailerId, ?int $storeId = null)
     {
         return $this->sellerRepository->get($retailerId, $storeId);
     }

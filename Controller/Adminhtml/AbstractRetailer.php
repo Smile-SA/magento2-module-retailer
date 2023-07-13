@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\Retailer\Controller\Adminhtml;
 
 use Exception;
@@ -16,6 +18,9 @@ use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory;
 
 /**
  * Abstract Retailer controller.
+ *
+ * @method mixed getData(...$key)
+ * @method mixed setData(...$data)
  */
 abstract class AbstractRetailer extends Action
 {

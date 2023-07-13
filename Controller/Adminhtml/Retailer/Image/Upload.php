@@ -1,12 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\Retailer\Controller\Adminhtml\Category\Image;
 
 use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Model\ImageUploader;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Controller\Result\Json as ResultJson;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
@@ -18,7 +22,7 @@ use Psr\Log\LoggerInterface;
 /**
  *  Retailer Adminhtml Upload Controller
  */
-class Upload extends Action
+class Upload extends Action implements HttpPostActionInterface
 {
     protected WriteInterface $mediaDirectory;
 
@@ -60,6 +64,11 @@ class Upload extends Action
         } catch (Exception $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
         }
-        return $this->resultFactory->create(ResultFactory::TYPE_JSON)->setData($result);
+
+        /** @var ResultJson $resultJson */
+        $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        $resultJson->setData($result);
+
+        return $resultJson;
     }
 }

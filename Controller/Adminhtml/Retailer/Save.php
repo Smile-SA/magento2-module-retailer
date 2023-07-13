@@ -1,12 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
 use Exception;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\Session;
 use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\HTTP\PhpEnvironment\Request;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\Store;
@@ -20,7 +24,7 @@ use Smile\Seller\Api\Data\SellerInterface;
 /**
  * Retailer Adminhtml Save controller.
  */
-class Save extends AbstractRetailer
+class Save extends AbstractRetailer implements HttpPostActionInterface
 {
     public function __construct(
         Context $context,
@@ -47,18 +51,21 @@ class Save extends AbstractRetailer
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
         /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 
-        $data = $this->getRequest()->getPostValue();
-        $redirectBack = $this->getRequest()->getParam('back', false);
+        /** @var Request $request */
+        $request = $this->getRequest();
+        $data = $request->getPostValue();
+        $redirectBack = $request->getParam('back', false);
 
         if ($data) {
-            $identifier = $this->getRequest()->getParam('id');
-            $storeId = $this->getRequest()->getParam('store_id', Store::DEFAULT_STORE_ID);
+            $identifier = $request->getParam('id');
+            $storeId = $request->getParam('store_id', Store::DEFAULT_STORE_ID);
             $model = $this->retailerFactory->create();
             $media = false;
 
@@ -83,7 +90,7 @@ class Save extends AbstractRetailer
             }
 
             $model->setData($data);
-            $model->setStoreId($storeId);
+            $model->setData('store_id', $storeId);
             if ($media) {
                 $model->setMediaPath($media);
             }

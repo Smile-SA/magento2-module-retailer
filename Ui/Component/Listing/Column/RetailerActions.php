@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\Retailer\Ui\Component\Listing\Column;
 
 use Magento\Framework\UrlInterface;

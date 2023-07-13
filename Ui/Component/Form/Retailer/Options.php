@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\Retailer\Ui\Component\Form\Retailer;
 
 use Magento\Framework\App\RequestInterface;

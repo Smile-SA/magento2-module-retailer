@@ -1,15 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
 use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
 
 /**
  * Retailer Adminhtml MassEnable controller.
  */
-class MassEnable extends AbstractRetailer
+class MassEnable extends AbstractRetailer implements HttpPostActionInterface
 {
     /**
      * @inheritdoc

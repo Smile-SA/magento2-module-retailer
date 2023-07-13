@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\Retailer\Block\Adminhtml\Retailer\Edit\Button;
 
 use Magento\Framework\Registry;

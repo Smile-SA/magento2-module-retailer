@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\Retailer\Model;
 
 use Smile\Retailer\Api\Data\RetailerExtensionInterface;
@@ -18,10 +20,12 @@ class Retailer extends Seller implements RetailerInterface
     {
         $extensionAttributes = $this->_getExtensionAttributes();
         if (!$extensionAttributes) {
-            $extensionAttributes = $this->extensionAttributesFactory->create(RetailerInterface::class);
+            $extensionAttributes = $this->extensionAttributesFactory
+                ->create(RetailerInterface::class);
             $this->_setExtensionAttributes($extensionAttributes);
         }
 
+        /** @var RetailerExtensionInterface $extensionAttributes */
         return $extensionAttributes;
     }
 

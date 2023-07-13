@@ -1,35 +1,64 @@
 <?php
 
-namespace Smile\Retailer\Setup;
+declare(strict_types=1);
 
-use Magento\Framework\Setup\InstallDataInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
+namespace Smile\Retailer\Setup\Patch\Data;
+
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\Patch\PatchVersionInterface;
 use Smile\Retailer\Api\Data\RetailerInterface;
+use Smile\Retailer\Setup\Patch\RetailerSetup;
+use Smile\Retailer\Setup\Patch\RetailerSetupFactory;
 
 /**
- * Seller Data install class.
+ * Class default groups and attributes for customer
  */
-class InstallData implements InstallDataInterface
+class DefaultRetailerAttributes implements DataPatchInterface, PatchVersionInterface
 {
-    public function __construct(private RetailerSetupFactory $retailerSetupFactory)
+    public function __construct(
+        private readonly RetailerSetupFactory $retailerSetupFactory,
+        private readonly ModuleDataSetupInterface $moduleDataSetup
+    ) {
+    }
+
+    /**
+     * @inheritdoc
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function apply(): self
     {
+        /** @var RetailerSetup $retailerSetup */
+        $retailerSetup = $this->retailerSetupFactory->create(['setup' => $this->moduleDataSetup]);
+        $retailerSetup->installEntities();
+
+        $this->installRetailerAttributeSet($retailerSetup);
+
+        return $this;
     }
 
     /**
      * @inheritdoc
      */
-    public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    public static function getDependencies(): array
     {
-        $setup->startSetup();
+        return [];
+    }
 
-        /** @var RetailerSetup $retailerSetup */
-        $retailerSetup = $this->retailerSetupFactory->create(['setup' => $setup]);
-        $retailerSetup->installEntities();
+    /**
+     * @inheritdoc
+     */
+    public static function getVersion(): string
+    {
+        return '2.0.1';
+    }
 
-        $this->installRetailerAttributeSet($retailerSetup);
-
-        $setup->endSetup();
+    /**
+     * @inheritdoc
+     */
+    public function getAliases(): array
+    {
+        return [];
     }
 
     /**

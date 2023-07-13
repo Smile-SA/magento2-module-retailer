@@ -1,14 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
 
 /**
  * Retailer Adminhtml MassDelete controller.
  */
-class MassDelete extends AbstractRetailer
+class MassDelete extends AbstractRetailer implements HttpPostActionInterface
 {
     /**
      * @inheritdoc

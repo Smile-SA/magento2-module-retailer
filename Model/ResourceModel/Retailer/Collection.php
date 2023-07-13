@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\Retailer\Model\ResourceModel\Retailer;
 
 use Magento\Eav\Model\Config;
@@ -20,6 +22,9 @@ use Smile\Seller\Model\ResourceModel\Seller\Collection as SellerResourceModelCol
 
 /**
  * Retailers Collection.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class Collection extends SellerResourceModelCollection
 {
@@ -61,8 +66,9 @@ class Collection extends SellerResourceModelCollection
 
         if ($this->sellerAttributeSetId == null) {
             if ($this->sellerAttributeSetName !== null) {
-                $this->sellerAttributeSetId = $this->getResource()
-                    ->getAttributeSetIdByName($this->sellerAttributeSetName);
+                /** @var SellerResource $resourceModel */
+                $resourceModel = $this->getResource();
+                $this->sellerAttributeSetId = $resourceModel->getAttributeSetIdByName($this->sellerAttributeSetName);
             }
         }
     }

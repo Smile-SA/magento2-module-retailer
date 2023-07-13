@@ -1,14 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
 use Exception;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
 
 /**
  * Retailer Adminhtml Delete controller.
  */
-class Delete extends AbstractRetailer
+class Delete extends AbstractRetailer implements HttpGetActionInterface
 {
     /**
      * @inheritdoc
