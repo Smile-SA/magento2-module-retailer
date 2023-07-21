@@ -78,7 +78,7 @@ class Save extends AbstractRetailer implements HttpPostActionInterface
             unset($data[SellerInterface::MEDIA_PATH]);
 
             if ($identifier) {
-                $model = $this->retailerRepository->get($identifier);
+                $model = $this->retailerRepository->get((int) $identifier);
                 if (!$model->getId()) {
                     $this->messageManager->addError(__('This retailer no longer exists.'));
                     return $resultRedirect->setPath('*/*/');

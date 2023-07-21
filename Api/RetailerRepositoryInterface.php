@@ -26,12 +26,12 @@ interface RetailerRepositoryInterface
     /**
      * Get info about retailer by retailer id
      *
-     * @param mixed $retailerId The retailer Id
+     * @param int $retailerId The retailer Id
      * @param ?int  $storeId    The store Id
      * @return RetailerInterface|SellerInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function get(mixed $retailerId, ?int $storeId = null);
+    public function get(int $retailerId, ?int $storeId = null);
 
     /**
      * Get info about retailer by retailer code

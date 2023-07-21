@@ -19,6 +19,7 @@ class Retailer extends Seller implements RetailerInterface
     public function getExtensionAttributes(): ?RetailerExtensionInterface
     {
         $extensionAttributes = $this->_getExtensionAttributes();
+        // @phpstan-ignore-next-line - this if seems not necessary, TODO: test without it
         if (!$extensionAttributes) {
             $extensionAttributes = $this->extensionAttributesFactory
                 ->create(RetailerInterface::class);

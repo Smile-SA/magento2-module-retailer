@@ -24,7 +24,7 @@ class Delete extends AbstractRetailer implements HttpGetActionInterface
         $identifier = $this->getRequest()->getParam('id', false);
         $model = $this->retailerFactory->create();
         if ($identifier) {
-            $model = $this->retailerRepository->get($identifier);
+            $model = $this->retailerRepository->get((int) $identifier);
             if (!$model->getId()) {
                 $this->messageManager->addError(__('This retailer no longer exists.'));
 

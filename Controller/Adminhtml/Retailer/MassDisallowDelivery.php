@@ -20,7 +20,7 @@ class MassDisallowDelivery extends AbstractRetailer implements HttpPostActionInt
     {
         $retailerIds = $this->getAllSelectedIds();
         foreach ($retailerIds as $id) {
-            $model = $this->retailerRepository->get($id);
+            $model = $this->retailerRepository->get((int) $id);
             $model->setData('allow_store_delivery', false);
             $this->retailerRepository->save($model);
         }

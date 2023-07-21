@@ -20,7 +20,7 @@ class MassDelete extends AbstractRetailer implements HttpPostActionInterface
     {
         $retailerIds = $this->getAllSelectedIds();
         foreach ($retailerIds as $id) {
-            $model = $this->retailerRepository->get($id);
+            $model = $this->retailerRepository->get((int) $id);
             $this->retailerRepository->delete($model);
         }
 

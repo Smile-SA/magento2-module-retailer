@@ -18,7 +18,6 @@
         <!-- Ignored rules due to legacy code -->
         <exclude name="Magento2.Exceptions.DirectThrow.FoundDirectThrow"/>
         <exclude name="Magento2.Legacy.InstallUpgrade.ObsoleteInstallDataScript"/>
-        <exclude name="SlevomatCodingStandard.TypeHints.DeclareStrictTypes.DeclareStrictTypesMissing"/>
     </rule>
 
     <file>.</file>

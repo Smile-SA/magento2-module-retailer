@@ -54,9 +54,9 @@ class RetailerRepository implements RetailerRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function get(mixed $retailerId, ?int $storeId = null)
+    public function get(int $retailerId, ?int $storeId = null)
     {
-        return $this->sellerRepository->get($retailerId, $storeId);
+        return $this->sellerRepository->get((int) $retailerId, $storeId);
     }
 
     /**

@@ -20,7 +20,7 @@ class MassDisable extends AbstractRetailer implements HttpPostActionInterface
     {
         $retailerIds = $this->getAllSelectedIds();
         foreach ($retailerIds as $id) {
-            $model = $this->retailerRepository->get($id);
+            $model = $this->retailerRepository->get((int) $id);
             $model->setData('is_active', false);
             $this->retailerRepository->save($model);
         }

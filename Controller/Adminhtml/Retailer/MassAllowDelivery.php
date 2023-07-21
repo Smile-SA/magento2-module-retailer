@@ -20,7 +20,7 @@ class MassAllowDelivery extends AbstractRetailer implements HttpPostActionInterf
     {
         $retailerIds = $this->getAllSelectedIds();
         foreach ($retailerIds as $id) {
-            $model = $this->retailerRepository->get($id);
+            $model = $this->retailerRepository->get((int) $id);
             $model->setData('allow_store_delivery', true);
             $this->retailerRepository->save($model);
         }
