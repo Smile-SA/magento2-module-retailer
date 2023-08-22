@@ -6,6 +6,7 @@ namespace Smile\Retailer\Ui\Component\Form\Retailer;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\OptionSourceInterface;
+use Smile\Seller\Model\ResourceModel\Seller\Collection as SellerResourceModelCollection;
 use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory;
 
 /**
