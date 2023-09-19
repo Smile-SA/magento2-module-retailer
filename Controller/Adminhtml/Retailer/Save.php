@@ -67,7 +67,7 @@ class Save extends AbstractRetailer implements HttpPostActionInterface
             $identifier = $request->getParam('id');
             $storeId = $request->getParam('store_id', Store::DEFAULT_STORE_ID);
             $model = $this->retailerFactory->create();
-            $media = false;
+            $media = '';
 
             if (
                 !empty($data[SellerInterface::MEDIA_PATH])
@@ -91,9 +91,7 @@ class Save extends AbstractRetailer implements HttpPostActionInterface
 
             $model->setData($data);
             $model->setData('store_id', $storeId);
-            if ($media) {
-                $model->setMediaPath($media);
-            }
+            $model->setMediaPath($media);
 
             try {
                 $this->retailerRepository->save($model);
