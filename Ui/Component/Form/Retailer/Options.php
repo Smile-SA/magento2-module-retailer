@@ -6,7 +6,6 @@ namespace Smile\Retailer\Ui\Component\Form\Retailer;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\OptionSourceInterface;
-use Smile\Seller\Model\ResourceModel\Seller\Collection as SellerResourceModelCollection;
 use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory;
 
 /**
@@ -39,7 +38,6 @@ class Options implements OptionSourceInterface
             $this->retailersList = [];
             $storeId = $this->request->getParam('store');
 
-            /* @var $collection SellerResourceModelCollection */
             $collection = $this->retailerCollectionFactory->create();
 
             $collection
