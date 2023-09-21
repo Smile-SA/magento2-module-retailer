@@ -1,97 +1,75 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
 
 namespace Smile\Retailer\Api;
 
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\Retailer\Api\Data\RetailerSearchResultsInterface;
+use Smile\Seller\Api\Data\SellerInterface;
 
 /**
- * Retailer Repository interface
- *
- * @category Smile
- * @package  Smile\Retailer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * @api
  */
 interface RetailerRepositoryInterface
 {
     /**
      * Create retailer service
      *
-     * @param \Smile\Retailer\Api\Data\RetailerInterface $retailer The retailer
-     *
-     * @return \Smile\Retailer\Api\Data\RetailerInterface
-     *
+     * @param RetailerInterface|SellerInterface $retailer The retailer
+     * @return RetailerInterface|SellerInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function save(\Smile\Retailer\Api\Data\RetailerInterface $retailer);
+    public function save(RetailerInterface|SellerInterface $retailer);
 
     /**
      * Get info about retailer by retailer id
      *
      * @param int $retailerId The retailer Id
-     * @param int $storeId    The store Id
-     *
-     * @return \Smile\Retailer\Api\Data\RetailerInterface
-     *
+     * @param ?int  $storeId    The store Id
+     * @return RetailerInterface|SellerInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function get($retailerId, $storeId = null);
+    public function get(int $retailerId, ?int $storeId = null);
 
     /**
      * Get info about retailer by retailer code
      *
-     * @param int $retailerCode The retailer Code
-     * @param int $storeId      The store Id
-     *
-     * @return \Smile\Retailer\Api\Data\RetailerInterface
-     *
+     * @param string $retailerCode The retailer Code
+     * @param ?int $storeId        The store Id
+     * @return RetailerInterface|SellerInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getByCode($retailerCode, $storeId = null);
+    public function getByCode(string $retailerCode, ?int $storeId = null);
 
     /**
      * Get relation list
      *
      * @param SearchCriteriaInterface $criteria Search criterai for collection
-     *
      * @return RetailerSearchResultsInterface
      */
-    public function getList(SearchCriteriaInterface $criteria);
+    public function getList(SearchCriteriaInterface $criteria): RetailerSearchResultsInterface;
 
     /**
      * Delete retailer by identifier
      *
-     * @param \Smile\Retailer\Api\Data\RetailerInterface $retailer retailer which will deleted
-     *
+     * @param RetailerInterface|SellerInterface $retailer retailer which will deleted
      * @return bool Will returned True if deleted
-     *
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function delete(\Smile\Retailer\Api\Data\RetailerInterface $retailer);
+    public function delete(RetailerInterface|SellerInterface $retailer): bool;
 
     /**
      * Delete retailer by identifier
      *
      * @param int $retailerId The retailer id
-     *
      * @return bool Will returned True if deleted
-     *
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function deleteByIdentifier($retailerId);
+    public function deleteByIdentifier(int $retailerId): bool;
 }

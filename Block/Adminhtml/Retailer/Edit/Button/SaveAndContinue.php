@@ -1,30 +1,16 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
+
 namespace Smile\Retailer\Block\Adminhtml\Retailer\Edit\Button;
 
 /**
- * Save and Continue Button for retailer edition
- *
- * @category Smile
- * @package  Smile\Retailer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * Save and Continue Button for retailer edition.
  */
 class SaveAndContinue extends AbstractButton
 {
     /**
-     * {@inheritdoc}
-     *
-     * @return array
+     * @inheritdoc
      */
     public function getButtonData()
     {

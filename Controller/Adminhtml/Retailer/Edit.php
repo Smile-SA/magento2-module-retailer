@@ -1,33 +1,20 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
 
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
 
 /**
  * Retailer Adminhtml Edit controller.
- *
- * @category Smile
- * @package  Smile\Retailer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class Edit extends AbstractRetailer
+class Edit extends AbstractRetailer implements HttpGetActionInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {
@@ -35,7 +22,7 @@ class Edit extends AbstractRetailer
         $resultPage = $this->resultPageFactory->create();
 
         $retailerId = (int) $this->getRequest()->getParam('id');
-        $storeId    = $this->getRequest()->getParam('store', null);
+        $storeId    = (int) $this->getRequest()->getParam('store', null);
         $retailer   = null;
 
         try {

@@ -1,39 +1,29 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    De Cramer Oliver <oldec@smile.fr>
- * @copyright 2017 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
+
 namespace Smile\Retailer\Api\Data;
 
+use Magento\Framework\Api\SearchResultsInterface;
+use Magento\Framework\DataObject;
+
 /**
- * Class RetailerSearchResultsInterface
- *
- * @category Smile
- * @package  Smile\Retailer\Api\Data
- * @author   De Cramer Oliver <oldec@smile.fr>
+ * @api
  */
-interface RetailerSearchResultsInterface extends \Magento\Framework\Api\SearchResultsInterface
+interface RetailerSearchResultsInterface extends SearchResultsInterface
 {
     /**
      * Get Retailers list.
      *
-     * @return RetailerInterface[]
+     * @return RetailerInterface[]|DataObject[]
      */
-    public function getItems();
+    public function getItems(): array;
 
     /**
      * Set Retailers list.
      *
-     * @param RetailerInterface[] $items List of retailers
-     *
+     * @param RetailerInterface[]|DataObject[] $items List of retailers
      * @return $this
      */
-    public function setItems(array $items);
+    public function setItems(array $items): self;
 }

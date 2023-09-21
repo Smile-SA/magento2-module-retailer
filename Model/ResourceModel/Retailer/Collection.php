@@ -1,59 +1,45 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
+
 namespace Smile\Retailer\Model\ResourceModel\Retailer;
 
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\EntityFactory as EavEntityFactory;
+use Magento\Eav\Model\ResourceModel\Helper;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Validator\UniversalFactory;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 use Smile\Retailer\Api\Data\RetailerInterface;
+use Smile\Retailer\Model\Retailer;
+use Smile\Seller\Model\ResourceModel\Seller as SellerResource;
+use Smile\Seller\Model\ResourceModel\Seller\Collection as SellerResourceModelCollection;
 
 /**
- * Retailers Collection
+ * Retailers Collection.
  *
- * @SuppressWarnings(PHPMD.CamelCasePropertyName) The properties are inherited
- *
- * @category Smile
- * @package  Smile\Retailer
- * @author   Aurelien FOUCRET <aurelien.foucret@smile.fr>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
-class Collection extends \Smile\Seller\Model\ResourceModel\Seller\Collection
+class Collection extends SellerResourceModelCollection
 {
-    /**
-     * Collection constructor.
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList) Parent construct already has 10 arguments.
-     *
-     * @param \Magento\Framework\Data\Collection\EntityFactory             $entityFactory    Entity Factory
-     * @param \Psr\Log\LoggerInterface                                     $logger           Logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy    Fetch Strategy
-     * @param \Magento\Framework\Event\ManagerInterface                    $eventManager     Event Manager
-     * @param \Magento\Eav\Model\Config                                    $eavConfig        EAV Config
-     * @param \Magento\Framework\App\ResourceConnection                    $resource         Resource Connection
-     * @param \Magento\Eav\Model\EntityFactory                             $eavEntityFactory EAV Entity Factory
-     * @param \Magento\Eav\Model\ResourceModel\Helper                      $resourceHelper   Resource Helper
-     * @param \Magento\Store\Model\StoreManagerInterface                   $storeManager     The Store Manager
-     * @param \Magento\Framework\Validator\UniversalFactory                $universalFactory Universal Factory
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null          $connection       Database Connection
-     */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Eav\Model\EntityFactory $eavEntityFactory,
-        \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        EntityFactory $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        Config $eavConfig,
+        ResourceConnection $resource,
+        EavEntityFactory $eavEntityFactory,
+        Helper $resourceHelper,
+        StoreManagerInterface $storeManager,
+        UniversalFactory $universalFactory,
+        ?AdapterInterface $connection = null
     ) {
         parent::__construct(
             $entityFactory,
@@ -72,19 +58,17 @@ class Collection extends \Smile\Seller\Model\ResourceModel\Seller\Collection
     }
 
     /**
-     * Init collection and determine table names
-     *
-     * @SuppressWarnings(PHPMD.CamelCaseMethodName) The method is inherited
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
-        $this->_init('Smile\Retailer\Model\Retailer', 'Smile\Seller\Model\ResourceModel\Seller');
+        $this->_init(Retailer::class, SellerResource::class);
 
         if ($this->sellerAttributeSetId == null) {
             if ($this->sellerAttributeSetName !== null) {
-                $this->sellerAttributeSetId = $this->getResource()->getAttributeSetIdByName($this->sellerAttributeSetName);
+                /** @var SellerResource $resourceModel */
+                $resourceModel = $this->getResource();
+                $this->sellerAttributeSetId = $resourceModel->getAttributeSetIdByName($this->sellerAttributeSetName);
             }
         }
     }

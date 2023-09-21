@@ -1,81 +1,43 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
+
 namespace Smile\Retailer\Block\Adminhtml\Retailer\Edit\Button;
 
+use Magento\Framework\Registry;
+use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
+use Smile\Retailer\Api\Data\RetailerInterface;
 
 /**
- * Abstract Retailer edit button
- *
- * @category Smile
- * @package  Smile\Retailer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * Abstract Retailer edit button.
  */
 class AbstractButton implements ButtonProviderInterface
 {
-    /**
-     * Url Builder
-     *
-     * @var Context
-     */
-    protected $context;
-
-    /**
-     * Registry
-     *
-     * @var Registry
-     */
-    protected $registry;
-
-    /**
-     * Generic constructor
-     *
-     * @param \Magento\Framework\View\Element\UiComponent\Context $context  Application context
-     * @param \Magento\Framework\Registry                         $registry Application registry
-     */
     public function __construct(
-        \Magento\Framework\View\Element\UiComponent\Context $context,
-        \Magento\Framework\Registry $registry
+        protected Context $context,
+        protected Registry $registry
     ) {
-        $this->context  = $context;
-        $this->registry = $registry;
     }
 
     /**
-     * Generate url by route and parameters
-     *
-     * @param string $route  The route
-     * @param array  $params The params
-     *
-     * @return string
+     * Generate url by route and parameters.
      */
-    public function getUrl($route = '', $params = [])
+    public function getUrl(string $route = '', array $params = []): string
     {
         return $this->context->getUrl($route, $params);
     }
 
     /**
      * Get retailer
-     *
-     * @return \Smile\Retailer\Api\Data\RetailerInterface
      */
-    public function getRetailer()
+    public function getRetailer(): ?RetailerInterface
     {
         return $this->registry->registry('current_seller');
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getButtonData()
     {

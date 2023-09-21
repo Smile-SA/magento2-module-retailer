@@ -1,104 +1,54 @@
 <?php
 
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    Ihor KVASNYTSKYI <ihor.kvasnytskyi@smile-ukraine.com>
- * @copyright 2019 Smile
- * @license   Open Software License ("OSL") v. 3.0
- *
- */
+declare(strict_types=1);
+
 namespace Smile\Retailer\Controller\Adminhtml\Category\Image;
 
+use Exception;
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Catalog\Model\ImageUploader;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Controller\Result\Json as ResultJson;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\MediaStorage\Model\File\UploaderFactory;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  *  Retailer Adminhtml Upload Controller
  */
-class Upload extends \Magento\Backend\App\Action
+class Upload extends Action implements HttpPostActionInterface
 {
-    /**
-     * Image uploader
-     *
-     * @var \Magento\Catalog\Model\ImageUploader
-     */
-    protected $imageUploader;
+    protected WriteInterface $mediaDirectory;
 
-    /**
-     * Uploader factory
-     *
-     * @var \Magento\MediaStorage\Model\File\UploaderFactory
-     */
-    private $uploaderFactory;
-
-    /**
-     * Media directory object (writable).
-     *
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     */
-    protected $mediaDirectory;
-
-    /**
-     * Store manager
-     *
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * Core file storage database
-     *
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database
-     */
-    protected $coreFileStorageDatabase;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * Upload constructor.
-     *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Catalog\Model\ImageUploader $imageUploader
-     */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Catalog\Model\ImageUploader $imageUploader,
-        \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
-        \Psr\Log\LoggerInterface $logger
+        Context $context,
+        protected ImageUploader $imageUploader,
+        protected UploaderFactory $uploaderFactory,
+        Filesystem $filesystem,
+        protected StoreManagerInterface $storeManager,
+        protected Database $coreFileStorageDatabase,
+        protected LoggerInterface $logger
     ) {
         parent::__construct($context);
-        $this->imageUploader = $imageUploader;
-        $this->uploaderFactory = $uploaderFactory;
-        $this->mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
-        $this->storeManager = $storeManager;
-        $this->coreFileStorageDatabase = $coreFileStorageDatabase;
-        $this->logger = $logger;
+        $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
     }
 
     /**
-     * Check admin permissions for this controller
-     *
-     * @return boolean
+     * @inheritdoc
      */
-    protected function _isAllowed()
+    protected function _isAllowed(): bool
     {
         return $this->_authorization->isAllowed('Smile_Retailer::retailers');
     }
 
     /**
-     * Upload file controller action
-     *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @inheritdoc
      */
     public function execute()
     {
@@ -111,9 +61,14 @@ class Upload extends \Magento\Backend\App\Action
                 'path' => $this->_getSession()->getCookiePath(),
                 'domain' => $this->_getSession()->getCookieDomain(),
             ];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
         }
-        return $this->resultFactory->create(ResultFactory::TYPE_JSON)->setData($result);
+
+        /** @var ResultJson $resultJson */
+        $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        $resultJson->setData($result);
+
+        return $resultJson;
     }
 }

@@ -14,8 +14,8 @@ Retailer,Retailer
 "Retailers List","Retailers List"
 "You saved the retailer %1.","You saved the retailer %1."
 Edit,Edit
-"Delete ${ $.$data.name }","Delete ${ $.$data.name }"
-"Are you sure you want to delete ${ $.$data.name } ?","Are you sure you want to delete ${ $.$data.name } ?"
+"Delete %1","Delete %1"
+"Are you sure you want to delete %1 ?","Are you sure you want to delete %1 ?"
 "Retailer Information","Retailer Information"
 "Retailer Name","Retailer Name"
 "Seller Code","Seller Code"
@@ -28,3 +28,4 @@ Name,Name
 Active,Active
 Inactive,Inactive
 Status,Status
+"Entity ID : ","Entity ID : "

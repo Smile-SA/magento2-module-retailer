@@ -1,27 +1,8 @@
 <?xml version="1.0"?>
-<!--
-/**
- * Smile_Retailer dependency injection configuration.
- *
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
- -->
-
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-
-    <preference for="Smile\Retailer\Api\Data\RetailerInterface" type="Smile\Retailer\Model\Retailer" />
-    <preference for="Smile\Retailer\Api\RetailerRepositoryInterface" type="Smile\Retailer\Model\RetailerRepository" />
-    <preference for="Smile\Retailer\Api\Data\RetailerSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-
+    <preference for="Smile\Retailer\Api\Data\RetailerInterface" type="Smile\Retailer\Model\Retailer"/>
+    <preference for="Smile\Retailer\Api\RetailerRepositoryInterface" type="Smile\Retailer\Model\RetailerRepository"/>
+    <preference for="Smile\Retailer\Api\Data\RetailerSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
 
     <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
@@ -76,7 +57,7 @@
             <argument name="attributeSetId" xsi:type="string">retailer</argument>
         </arguments>
     </virtualType>
-    
+
     <virtualType name="Smile\Retailer\Ui\Component\Retailer\Form\Modifier\Eav" type="Smile\Seller\Ui\Component\Seller\Form\Modifier\Eav">
         <arguments>
             <argument name="fieldMapper" xsi:type="object">Smile\Retailer\Ui\Component\Retailer\Form\FieldMapper</argument>

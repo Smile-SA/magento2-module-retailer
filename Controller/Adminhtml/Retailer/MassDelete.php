@@ -1,43 +1,26 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    Fanny DECLERCK <fadec@smile.fr>
- * @copyright 2019 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
 
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Backend\App\Action\Context;
 use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
 
 /**
  * Retailer Adminhtml MassDelete controller.
- *
- * @category Smile
- * @package  Smile\Retailer
- * @author   Fanny DECLERCK <fadec@smile.fr>
  */
-class MassDelete extends AbstractRetailer
+class MassDelete extends AbstractRetailer implements HttpPostActionInterface
 {
     /**
-     * Execute action
-     *
-     * @return \Magento\Backend\Model\View\Result\Redirect
-     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
+     * @inheritdoc
      */
     public function execute()
     {
-        $retailerIds = $this->getRequest()->getParam('selected');
+        $retailerIds = $this->getAllSelectedIds();
         foreach ($retailerIds as $id) {
-            $model = $this->retailerRepository->get($id);
+            $model = $this->retailerRepository->get((int) $id);
             $this->retailerRepository->delete($model);
         }
 

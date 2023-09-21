@@ -1,43 +1,34 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
+
 namespace Smile\Retailer\Api\Data;
 
 use Smile\Seller\Api\Data\SellerInterface;
 
 /**
- * Retailer Interface
- *
- * @category Smile
- * @package  Smile\Retailer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
+ * @api
+ * @method mixed getData(...$key)
+ * @method mixed setData(...$data)
+ * @phpcs:disable SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly.ReferenceViaFullyQualifiedName
+ * @phpcs:disable Generic.Files.LineLength.TooLong
  */
 interface RetailerInterface extends SellerInterface
 {
-    const ATTRIBUTE_SET_RETAILER = "retailer";
+    public const ATTRIBUTE_SET_RETAILER = "retailer";
 
     /**
-     * Retrieve existing extension attributes object or create a new one.
+     * Retrieve existing extension attributes object or create a new one. - need concrete type declaration to generate RetailerExtensionInterface
      *
      * @return \Smile\Retailer\Api\Data\RetailerExtensionInterface|null
      */
-    public function getExtensionAttributes();
+    public function getExtensionAttributes(): ?RetailerExtensionInterface;
 
     /**
      * Set an extension attributes object.
      *
-     * @param \Smile\Retailer\Api\Data\RetailerExtensionInterface $extensionAttributes The additional attributes
-     *
+     * @param \Smile\Retailer\Api\Data\RetailerExtensionInterface $extensionAttributes The additional attributes - need concrete type declaration
      * @return $this
      */
-    public function setExtensionAttributes(\Smile\Retailer\Api\Data\RetailerExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(\Smile\Retailer\Api\Data\RetailerExtensionInterface $extensionAttributes): self;
 }

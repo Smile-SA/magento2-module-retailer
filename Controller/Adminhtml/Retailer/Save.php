@@ -1,78 +1,76 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
 
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
+use Exception;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\Session;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\HTTP\PhpEnvironment\Request;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Store\Model\Store;
+use Magento\Ui\Component\MassAction\Filter;
+use Smile\Retailer\Api\Data\RetailerInterfaceFactory;
+use Smile\Retailer\Api\RetailerRepositoryInterface;
 use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
+use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory;
 use Smile\Seller\Api\Data\SellerInterface;
 
 /**
  * Retailer Adminhtml Save controller.
- *
- * @category Smile
- * @package  Smile\Retailer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class Save extends AbstractRetailer
+class Save extends AbstractRetailer implements HttpPostActionInterface
 {
-    /**
-     * @var \Smile\Retailer\Model\Retailer\PostDataHandlerInterface[]
-     */
-    private $postDataHandlers;
-
-    /**
-     * Constructor.
-     *
-     * @param \Magento\Backend\App\Action\Context                       $context              Application context.
-     * @param \Magento\Framework\View\Result\PageFactory                $resultPageFactory    Result Page factory.
-     * @param \Magento\Framework\Controller\Result\ForwardFactory       $resultForwardFactory Result forward factory.
-     * @param \Magento\Framework\Registry                               $coreRegistry         Application registry.
-     * @param \Smile\Retailer\Api\RetailerRepositoryInterface           $retailerRepository   Retailer Repository
-     * @param \Smile\Retailer\Api\Data\RetailerInterfaceFactory         $retailerFactory      Retailer Factory.
-     * @param \Smile\Retailer\Model\Retailer\PostDataHandlerInterface[] $postDataHandlers     Form data handlers.
-     */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Controller\Result\ForwardFactory $resultForwardFactory,
-        \Magento\Framework\Registry $coreRegistry,
-        \Smile\Retailer\Api\RetailerRepositoryInterface $retailerRepository,
-        \Smile\Retailer\Api\Data\RetailerInterfaceFactory $retailerFactory,
-        array $postDataHandlers = []
+        Context $context,
+        PageFactory $resultPageFactory,
+        ForwardFactory $resultForwardFactory,
+        Registry $coreRegistry,
+        RetailerRepositoryInterface $retailerRepository,
+        RetailerInterfaceFactory $retailerFactory,
+        Filter $filter,
+        CollectionFactory $collectionFactory,
+        private array $postDataHandlers = []
     ) {
-        parent::__construct($context, $resultPageFactory, $resultForwardFactory, $coreRegistry, $retailerRepository, $retailerFactory);
-        $this->postDataHandlers = $postDataHandlers;
+        parent::__construct(
+            $context,
+            $resultPageFactory,
+            $resultForwardFactory,
+            $coreRegistry,
+            $retailerRepository,
+            $retailerFactory,
+            $filter,
+            $collectionFactory
+        );
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
 
-        $data         = $this->getRequest()->getPostValue();
-        $redirectBack = $this->getRequest()->getParam('back', false);
+        /** @var Request $request */
+        $request = $this->getRequest();
+        $data = $request->getPostValue();
+        $redirectBack = $request->getParam('back', false);
 
         if ($data) {
-            $identifier = $this->getRequest()->getParam('id');
-            $storeId    = $this->getRequest()->getParam('store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID);
-            $model      = $this->retailerFactory->create();
+            $identifier = $request->getParam('id');
+            $storeId = $request->getParam('store_id', Store::DEFAULT_STORE_ID);
+            $model = $this->retailerFactory->create();
+            $media = '';
 
-            $media = false;
-            if (!empty($data[SellerInterface::MEDIA_PATH])
+            if (
+                !empty($data[SellerInterface::MEDIA_PATH])
                 && isset($data[SellerInterface::MEDIA_PATH][0]['name'])
             ) {
                 $media = $data[SellerInterface::MEDIA_PATH][0]['name'];
@@ -80,10 +78,9 @@ class Save extends AbstractRetailer
             unset($data[SellerInterface::MEDIA_PATH]);
 
             if ($identifier) {
-                $model = $this->retailerRepository->get($identifier);
+                $model = $this->retailerRepository->get((int) $identifier);
                 if (!$model->getId()) {
                     $this->messageManager->addError(__('This retailer no longer exists.'));
-
                     return $resultRedirect->setPath('*/*/');
                 }
             }
@@ -93,15 +90,13 @@ class Save extends AbstractRetailer
             }
 
             $model->setData($data);
-            $model->setStoreId($storeId);
-            if ($media) {
-                $model->setMediaPath($media);
-            }
+            $model->setData('store_id', $storeId);
+            $model->setMediaPath($media);
 
             try {
                 $this->retailerRepository->save($model);
                 $this->messageManager->addSuccessMessage(__('You saved the retailer %1.', $model->getName()));
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
+                $this->_objectManager->get(Session::class)->setFormData(false);
 
                 if ($redirectBack) {
                     $redirectParams = ['id' => $model->getId()];
@@ -113,9 +108,9 @@ class Save extends AbstractRetailer
                 }
 
                 return $resultRedirect->setPath('*/*/');
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData($data);
+                $this->_objectManager->get(Session::class)->setFormData($data);
 
                 $returnParams = ['id' => $model->getId()];
 

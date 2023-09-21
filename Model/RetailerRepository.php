@@ -1,128 +1,77 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
+
 namespace Smile\Retailer\Model;
 
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
-use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Smile\Retailer\Api\Data\RetailerInterface;
+use Smile\Retailer\Api\Data\RetailerInterfaceFactory;
 use Smile\Retailer\Api\Data\RetailerSearchResultsInterface;
-use Smile\Retailer\Api\RetailerRepositoryInterface;
 use Smile\Retailer\Api\Data\RetailerSearchResultsInterfaceFactory;
+use Smile\Retailer\Api\RetailerRepositoryInterface;
 use Smile\Retailer\Model\ResourceModel\Retailer\Collection;
 use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory;
+use Smile\Seller\Api\Data\SellerInterface;
+use Smile\Seller\Model\SellerRepository;
+use Smile\Seller\Model\SellerRepositoryFactory;
 
 /**
- * Retailer Repository
+ * Retailer Repository implementation.
  *
- * @category Smile
- * @package  Smile\Retailer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RetailerRepository implements RetailerRepositoryInterface
 {
-    /**
-     * @var \Smile\Seller\Model\SellerRepository
-     */
-    private $sellerRepository;
+    private SellerRepository $sellerRepository;
 
-    /**
-     * @var RetailerSearchResultsInterfaceFactory
-     */
-    private $searchResultFactory;
-
-    /**
-     * @var CollectionFactory
-     */
-    private $collectionFactory;
-
-    /**
-     * @var CollectionProcessorInterface
-     */
-    private $collectionProcessor;
-
-    /**
-     * @var JoinProcessorInterface
-     */
-    private $joinProcessor;
-
-    /**
-     * Constructor.
-     *
-     * @param \Smile\Seller\Model\SellerRepositoryFactory       $sellerRepositoryFactory Seller repository.
-     * @param \Smile\Retailer\Api\Data\RetailerInterfaceFactory $retailerFactory         Retailer factory.
-     * @param RetailerSearchResultsInterfaceFactory             $searchResultFactory     Search Result factory.
-     * @param CollectionFactory                                 $collectionFactory       Collection factory.
-     * @param CollectionProcessorInterface                      $collectionProcessor     Search criteria collection
-     *                                                                                   processor.
-     * @param JoinProcessorInterface                            $joinProcessor           Extension attriubute join
-     *                                                                                   processor.
-     */
     public function __construct(
-        \Smile\Seller\Model\SellerRepositoryFactory $sellerRepositoryFactory,
-        \Smile\Retailer\Api\Data\RetailerInterfaceFactory $retailerFactory,
-        RetailerSearchResultsInterfaceFactory $searchResultFactory,
-        CollectionFactory $collectionFactory,
-        CollectionProcessorInterface $collectionProcessor,
-        JoinProcessorInterface $joinProcessor
+        SellerRepositoryFactory $sellerRepositoryFactory,
+        RetailerInterfaceFactory $retailerFactory,
+        private RetailerSearchResultsInterfaceFactory $searchResultFactory,
+        private CollectionFactory $collectionFactory,
+        private CollectionProcessorInterface $collectionProcessor,
+        private JoinProcessorInterface $joinProcessor
     ) {
         $this->sellerRepository = $sellerRepositoryFactory->create([
-            'sellerFactory'    => $retailerFactory,
+            'sellerFactory' => $retailerFactory,
             'attributeSetName' => RetailerInterface::ATTRIBUTE_SET_RETAILER,
         ]);
-
-        $this->searchResultFactory = $searchResultFactory;
-        $this->collectionFactory   = $collectionFactory;
-        $this->collectionProcessor = $collectionProcessor;
-        $this->joinProcessor       = $joinProcessor;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function save(\Smile\Retailer\Api\Data\RetailerInterface $retailer)
+    public function save(SellerInterface $retailer)
     {
         return $this->sellerRepository->save($retailer);
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function get($retailerId, $storeId = null)
+    public function get(int $retailerId, ?int $storeId = null)
     {
-        return $this->sellerRepository->get($retailerId, $storeId);
+        return $this->sellerRepository->get((int) $retailerId, $storeId);
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function getByCode($retailerCode, $storeId = null)
+    public function getByCode(string $retailerCode, ?int $storeId = null)
     {
         return $this->sellerRepository->getByCode($retailerCode, $storeId);
     }
 
     /**
-     * Search for retailers.
-     *
-     * @param SearchCriteriaInterface $searchCriteria Search criteria
-     *
-     * @return RetailerSearchResultsInterface
+     * @inheritdoc
      */
-    public function getList(SearchCriteriaInterface $searchCriteria)
+    public function getList(SearchCriteriaInterface $searchCriteria): RetailerSearchResultsInterface
     {
-
         /** @var Collection $collection */
         $collection = $this->collectionFactory->create();
         $this->joinProcessor->process($collection);
@@ -139,7 +88,7 @@ class RetailerRepository implements RetailerRepositoryInterface
             $field = $sortOrder->getField();
             $collection->addOrder(
                 $field,
-                ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
+                $sortOrder->getDirection() == SortOrder::SORT_ASC ? 'ASC' : 'DESC'
             );
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());
@@ -155,33 +104,26 @@ class RetailerRepository implements RetailerRepositoryInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function delete(\Smile\Retailer\Api\Data\RetailerInterface $retailer)
+    public function delete(SellerInterface $retailer): bool
     {
         return $this->sellerRepository->delete($retailer);
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function deleteByIdentifier($retailerId)
+    public function deleteByIdentifier(int $retailerId): bool
     {
         return $this->sellerRepository->deleteByIdentifier($retailerId);
     }
 
     /**
      * Helper function that adds a FilterGroup to the collection.
-     *
-     * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup Filter Group
-     * @param Collection                                $collection  Retailer collection
-     *
-     * @return void
      */
-    protected function addFilterGroupToCollection(
-        \Magento\Framework\Api\Search\FilterGroup $filterGroup,
-        Collection $collection
-    ) {
+    protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection): void
+    {
         $fields = [];
         foreach ($filterGroup->getFilters() as $filter) {
             $conditionType = $filter->getConditionType() ? $filter->getConditionType() : 'eq';

@@ -1,58 +1,47 @@
 <?php
-/**
- * DISCLAIMER
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
+
 namespace Smile\Retailer\Model;
 
+use Smile\Retailer\Api\Data\RetailerExtensionInterface;
 use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\Seller\Model\Seller;
 
 /**
- * Retailer Model class
- *
- * @category Smile
- * @package  Smile\Retailer
- * @author   Aurelien FOUCRET <aurelien.foucret@smile.fr>
+ * Retailer Model class.
  */
 class Retailer extends Seller implements RetailerInterface
 {
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function getExtensionAttributes()
+    public function getExtensionAttributes(): ?RetailerExtensionInterface
     {
         $extensionAttributes = $this->_getExtensionAttributes();
+        // @phpstan-ignore-next-line - this if seems not necessary, TODO: test without it
         if (!$extensionAttributes) {
             $extensionAttributes = $this->extensionAttributesFactory
-                ->create('Smile\Retailer\Api\Data\RetailerInterface');
+                ->create(RetailerInterface::class);
             $this->_setExtensionAttributes($extensionAttributes);
         }
 
+        /** @var RetailerExtensionInterface $extensionAttributes */
         return $extensionAttributes;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
-    public function setExtensionAttributes(\Smile\Retailer\Api\Data\RetailerExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(RetailerExtensionInterface $extensionAttributes): self
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
 
     /**
-     * Retrieve AttributeSetName
-     *
-     * @return string
+     * @inheritdoc
      */
-    public function getAttributeSetName()
+    public function getAttributeSetName(): string
     {
         return ucfirst(self::ATTRIBUTE_SET_RETAILER);
     }

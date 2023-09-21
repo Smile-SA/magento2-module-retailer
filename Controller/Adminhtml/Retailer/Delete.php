@@ -1,32 +1,20 @@
 <?php
-/**
- * DISCLAIMER
- *
- * Do not edit or add to this file if you wish to upgrade this module to newer
- * versions in the future.
- *
- * @category  Smile
- * @package   Smile\Retailer
- * @author    Romain Ruaud <romain.ruaud@smile.fr>
- * @copyright 2016 Smile
- * @license   Open Software License ("OSL") v. 3.0
- */
+
+declare(strict_types=1);
 
 namespace Smile\Retailer\Controller\Adminhtml\Retailer;
 
+use Exception;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Smile\Retailer\Controller\Adminhtml\AbstractRetailer;
 
 /**
  * Retailer Adminhtml Delete controller.
- *
- * @category Smile
- * @package  Smile\Retailer
- * @author   Romain Ruaud <romain.ruaud@smile.fr>
  */
-class Delete extends AbstractRetailer
+class Delete extends AbstractRetailer implements HttpGetActionInterface
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {
@@ -36,7 +24,7 @@ class Delete extends AbstractRetailer
         $identifier = $this->getRequest()->getParam('id', false);
         $model = $this->retailerFactory->create();
         if ($identifier) {
-            $model = $this->retailerRepository->get($identifier);
+            $model = $this->retailerRepository->get((int) $identifier);
             if (!$model->getId()) {
                 $this->messageManager->addError(__('This retailer no longer exists.'));
 
@@ -49,7 +37,7 @@ class Delete extends AbstractRetailer
             $this->messageManager->addSuccess(__('You deleted the retailer %1.', $model->getName()));
 
             return $resultRedirect->setPath('*/*/index');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addError($e->getMessage());
 
             return $resultRedirect->setPath('*/*/edit', ['id' => $this->getRequest()->getParam('id')]);
