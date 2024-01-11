@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Smile\Retailer\Controller\Adminhtml\Category\Image;
+namespace Smile\Retailer\Controller\Adminhtml\Retailer\Image;
 
 use Exception;
 use Magento\Backend\App\Action;
