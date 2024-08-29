@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.2] - 2024-05-03
+[2.0.2]: https://github.com/Smile-SA/magento2-module-retailer/compare/2.0.2...2.0.2
+
+- API model docblocks
+
 ## [2.0.1] - 2024-05-03
 [2.0.1]: https://github.com/Smile-SA/magento2-module-retailer/compare/2.0.0...2.0.1
 
