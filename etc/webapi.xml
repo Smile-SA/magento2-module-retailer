@@ -8,4 +8,32 @@
         </resources>
     </route>
 
+    <route url="/V1/retailer/:retailerCode" method="GET">
+        <service class="Smile\Retailer\Api\RetailerRepositoryInterface" method="getByCode"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+
+    <route url="/V1/retailer" method="POST">
+        <service class="Smile\Retailer\Api\RetailerRepositoryInterface" method="save"/>
+        <resources>
+            <resource ref="Smile_Retailer::retailers" />
+        </resources>
+    </route>
+
+    <route url="/V1/retailer/:retailerCode" method="PUT">
+        <service class="Smile\Retailer\Api\RetailerRepositoryInterface" method="save" />
+        <resources>
+            <resource ref="Smile_Retailer::retailers" />
+        </resources>
+    </route>
+
+    <route url="/V1/retailer" method="GET">
+        <service class="Smile\Retailer\Api\RetailerRepositoryInterface" method="getList"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+
 </routes>

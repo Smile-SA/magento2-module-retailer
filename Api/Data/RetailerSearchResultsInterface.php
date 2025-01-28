@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Smile\Retailer\Api\Data;
 
 use Magento\Framework\Api\SearchResultsInterface;
-use Magento\Framework\DataObject;
 
 /**
  * @api
@@ -15,15 +14,15 @@ interface RetailerSearchResultsInterface extends SearchResultsInterface
     /**
      * Get Retailers list.
      *
-     * @return RetailerInterface[]|DataObject[]
+     * @return \Smile\Retailer\Api\Data\RetailerInterface[]
      */
-    public function getItems(): array;
+    public function getItems();
 
     /**
      * Set Retailers list.
      *
-     * @param RetailerInterface[]|DataObject[] $items List of retailers
+     * @param \Smile\Retailer\Api\Data\RetailerInterface[] $items List of retailers
      * @return $this
      */
-    public function setItems(array $items): self;
+    public function setItems(array $items);
 }

@@ -9,6 +9,7 @@ use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Smile\Retailer\Api\Data\RetailerInterface;
 use Smile\Retailer\Api\Data\RetailerInterfaceFactory;
 use Smile\Retailer\Api\Data\RetailerSearchResultsInterface;
@@ -46,8 +47,22 @@ class RetailerRepository implements RetailerRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function save(SellerInterface $retailer)
+    public function save(RetailerInterface $retailer)
     {
+        try {
+            $existing = $retailer->getId() ?
+                $this->get((int) $retailer->getId()) :
+                $this->getByCode($retailer->getSellerCode());
+        } catch (NoSuchEntityException $e) {
+            $existing = null;
+        }
+
+        if ($existing) {
+            $retailer->setId($existing->getId());
+            $retailer->setSellerCode($existing->getSellerCode());
+        }
+
+        // @phpstan-ignore return.type
         return $this->sellerRepository->save($retailer);
     }
 
@@ -56,6 +71,7 @@ class RetailerRepository implements RetailerRepositoryInterface
      */
     public function get(int $retailerId, ?int $storeId = null)
     {
+        // @phpstan-ignore return.type
         return $this->sellerRepository->get((int) $retailerId, $storeId);
     }
 
