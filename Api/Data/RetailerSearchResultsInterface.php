@@ -17,7 +17,7 @@ interface RetailerSearchResultsInterface extends SearchResultsInterface
      *
      * @return RetailerInterface[]|DataObject[]
      */
-    public function getItems(): array;
+    public function getItems();
 
     /**
      * Set Retailers list.
@@ -25,5 +25,5 @@ interface RetailerSearchResultsInterface extends SearchResultsInterface
      * @param RetailerInterface[]|DataObject[] $items List of retailers
      * @return $this
      */
-    public function setItems(array $items): self;
+    public function setItems(array $items);
 }
