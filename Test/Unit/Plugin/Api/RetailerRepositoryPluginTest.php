@@ -6,6 +6,8 @@ namespace Smile\Retailer\Test\Unit\Plugin\Api;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
@@ -23,6 +25,7 @@ class RetailerRepositoryPluginTest extends TestCase
 
     private UserContextInterface&Stub $userContext;
     private SellerResource&Stub $sellerResource;
+    private StoreManagerInterface&Stub $storeManager;
     private RetailerRepositoryPlugin $plugin;
 
     /**
@@ -33,7 +36,8 @@ class RetailerRepositoryPluginTest extends TestCase
         $this->userContext = $this->createStub(UserContextInterface::class);
         $this->sellerResource = $this->createStub(SellerResource::class);
         $this->sellerResource->method('getAttributeSetIdByName')->willReturnMap([['Retailer', self::RETAILER_SET_ID]]);
-        $this->plugin = new RetailerRepositoryPlugin($this->userContext, $this->sellerResource);
+        $this->storeManager = $this->createStub(StoreManagerInterface::class);
+        $this->plugin = new RetailerRepositoryPlugin($this->userContext, $this->sellerResource, $this->storeManager);
     }
 
     /**
@@ -90,6 +94,130 @@ class RetailerRepositoryPluginTest extends TestCase
             'admin' => [UserContextInterface::USER_TYPE_ADMIN],
             'integration' => [UserContextInterface::USER_TYPE_INTEGRATION],
         ];
+    }
+
+    /**
+     * A non-admin caller reads the retailer as the current store view shows it, whatever store id it passes.
+     */
+    #[DataProvider('requestedStoreIds')]
+    public function testNonAdminCallerIsScopedToCurrentStore(?int $requestedStoreId): void
+    {
+        $this->givenUserType(UserContextInterface::USER_TYPE_GUEST);
+        $this->givenCurrentStoreId(3);
+
+        $this->assertSame([5, 3], $this->callBeforeGet(5, $requestedStoreId));
+    }
+
+    /**
+     * Store ids a caller may pass.
+     */
+    public static function requestedStoreIds(): array
+    {
+        return [
+            'none' => [null],
+            'admin store' => [0],
+            'other store view' => [9],
+        ];
+    }
+
+    /**
+     * The "all" store code of the web API does not give a non-admin caller the admin scope.
+     */
+    public function testNonAdminCallerOnAllStoresPathGetsDefaultStoreView(): void
+    {
+        $this->givenUserType(UserContextInterface::USER_TYPE_CUSTOMER);
+        $this->givenCurrentStoreId(0);
+        $this->storeManager->method('getDefaultStoreView')->willReturn($this->createStore(1, true));
+
+        $this->assertSame([5, 1], $this->callBeforeGet(5, 0));
+    }
+
+    /**
+     * Without a default store view a non-admin caller on the "all" store code gets nothing.
+     */
+    public function testNonAdminCallerOnAllStoresPathWithoutDefaultStoreViewGetsNoRetailer(): void
+    {
+        $this->givenUserType(UserContextInterface::USER_TYPE_GUEST);
+        $this->givenCurrentStoreId(0);
+        $this->storeManager->method('getDefaultStoreView')->willReturn(null);
+
+        $this->expectException(NoSuchEntityException::class);
+        $this->callBeforeGet(5, null);
+    }
+
+    /**
+     * A disabled store view is not a scope a non-admin caller can read retailers in.
+     */
+    public function testNonAdminCallerOnDisabledStoreViewGetsNoRetailer(): void
+    {
+        $this->givenUserType(UserContextInterface::USER_TYPE_GUEST);
+        $this->givenCurrentStoreId(3, false);
+
+        $this->expectException(NoSuchEntityException::class);
+        $this->callBeforeGet(5, null);
+    }
+
+    /**
+     * A retailer active in the requested store but inactive in the current one stays hidden.
+     */
+    public function testRetailerInactiveInCurrentStoreIsHiddenWhateverStoreIsRequested(): void
+    {
+        $this->givenUserType(UserContextInterface::USER_TYPE_GUEST);
+        $this->givenCurrentStoreId(3);
+        $repository = $this->createStub(RetailerRepositoryInterface::class);
+        $repository->method('get')->willReturnMap([
+            [5, 3, $this->createRetailer(false, self::RETAILER_SET_ID)],
+            [5, 9, $this->createRetailer(true, self::RETAILER_SET_ID)],
+        ]);
+
+        $arguments = $this->plugin->beforeGet($repository, 5, 9) ?? [5, 9];
+
+        $this->expectException(NoSuchEntityException::class);
+        $this->plugin->afterGet($repository, $repository->get(...$arguments), ...$arguments);
+    }
+
+    /**
+     * Admin users and integrations keep the store id they ask for.
+     */
+    #[DataProvider('backendUserTypes')]
+    public function testBackendCallerKeepsRequestedStore(int $userType): void
+    {
+        $this->givenUserType($userType);
+        $this->givenCurrentStoreId(3);
+
+        $this->assertNull($this->callBeforeGet(5, 0));
+    }
+
+    /**
+     * Set the store the web API request runs in.
+     */
+    private function givenCurrentStoreId(int $storeId, bool $isActive = true): void
+    {
+        $this->storeManager->method('getStore')->willReturn($this->createStore($storeId, $isActive));
+    }
+
+    /**
+     * Create a store stub.
+     */
+    private function createStore(int $storeId, bool $isActive): StoreInterface&Stub
+    {
+        $store = $this->createStub(StoreInterface::class);
+        $store->method('getId')->willReturn((string) $storeId);
+        $store->method('getIsActive')->willReturn((int) $isActive);
+
+        return $store;
+    }
+
+    /**
+     * Call the before plugin as the interceptor would.
+     */
+    private function callBeforeGet(int $retailerId, ?int $storeId): ?array
+    {
+        return $this->plugin->beforeGet(
+            $this->createStub(RetailerRepositoryInterface::class),
+            $retailerId,
+            $storeId
+        );
     }
 
     /**
