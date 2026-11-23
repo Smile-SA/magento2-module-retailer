@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Smile\Retailer\Api\RetailerRepositoryInterface">
+        <plugin name="smile_retailer_hide_inactive" type="Smile\Retailer\Plugin\Api\RetailerRepositoryPlugin"/>
+    </type>
+</config>
