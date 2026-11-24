@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.4] - 2026-11-24
+[2.0.4]: https://github.com/Smile-SA/magento2-module-retailer/compare/2.0.3...2.0.4
+
+- Security: the retailer web API no longer returns inactive retailers or sellers that are not retailers to guests and customers
+- Security: guests and customers read retailers through the web API in the current store view only
+- Add unit tests for the retailer web API plugin
+
 ## [2.0.3] - 2026-04-14
 [2.0.3]: https://github.com/Smile-SA/magento2-module-retailer/compare/2.0.2...2.0.3
 
