@@ -4,6 +4,7 @@
         <sequence>
             <module name="Smile_Seller"/>
             <module name="Magento_Customer"/>
+            <module name="Magento_Authorization"/>
         </sequence>
     </module>
 </config>
