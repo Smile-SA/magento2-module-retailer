@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 
 - Security: the retailer web API no longer returns inactive retailers or sellers that are not retailers to guests and customers
 - Security: guests and customers read retailers through the web API in the current store view only
+- Security: the same restrictions apply to `RetailerRepositoryInterface::get()` on the storefront
 - Add unit tests for the retailer web API plugin
 
 ## [2.0.3] - 2026-04-14

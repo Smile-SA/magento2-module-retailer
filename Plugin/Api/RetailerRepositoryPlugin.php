@@ -13,7 +13,7 @@ use Smile\Seller\Api\Data\SellerInterface;
 use Smile\Seller\Model\ResourceModel\Seller as SellerResource;
 
 /**
- * Hide inactive retailers, and sellers that are not retailers, from anonymous and customer web API callers.
+ * Hide inactive retailers, and sellers that are not retailers, from guests and customers (storefront and web API).
  */
 class RetailerRepositoryPlugin
 {
