@@ -14,7 +14,7 @@ class EavPostDataHandler implements PostDataHandlerInterface
     /**
      * @inheritdoc
      */
-    public function getData(RetailerInterface $retailer, mixed $data): mixed
+    public function getData(RetailerInterface $retailer, $data)
     {
         if (!empty($data['use_default'])) {
             foreach ($data['use_default'] as $attributeCode => $attributeValue) {

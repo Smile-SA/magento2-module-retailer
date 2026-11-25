@@ -18,7 +18,7 @@ interface RetailerRepositoryInterface
      * @return \Smile\Retailer\Api\Data\RetailerInterface|\Smile\Seller\Api\Data\SellerInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function save(\Smile\Retailer\Api\Data\RetailerInterface|\Smile\Seller\Api\Data\SellerInterface $retailer);
+    public function save($retailer);
 
     /**
      * Get info about retailer by retailer id
@@ -58,7 +58,7 @@ interface RetailerRepositoryInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function delete(
-        \Smile\Retailer\Api\Data\RetailerInterface|\Smile\Seller\Api\Data\SellerInterface $retailer
+        $retailer
     ): bool;
 
     /**

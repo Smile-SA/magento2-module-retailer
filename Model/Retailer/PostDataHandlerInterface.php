@@ -17,5 +17,5 @@ interface PostDataHandlerInterface
      *
      * @throws Exception
      */
-    public function getData(RetailerInterface $retailer, mixed $data): mixed;
+    public function getData(RetailerInterface $retailer, $data);
 }
