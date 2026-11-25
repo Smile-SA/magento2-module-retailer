@@ -8,7 +8,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DataProvider as DataProviderAttribute;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Smile\Retailer\Api\RetailerRepositoryInterface;
@@ -75,8 +75,10 @@ class RetailerRepositoryPluginTest extends TestCase
 
     /**
      * Admin users and integrations get any seller.
+     *
+     * @dataProvider backendUserTypes
      */
-    #[DataProvider('backendUserTypes')]
+    #[DataProviderAttribute('backendUserTypes')]
     public function testBackendCallerGetsAnySeller(int $userType): void
     {
         $this->givenUserType($userType);
@@ -98,8 +100,10 @@ class RetailerRepositoryPluginTest extends TestCase
 
     /**
      * A non-admin caller reads the retailer as the current store view shows it, whatever store id it passes.
+     *
+     * @dataProvider requestedStoreIds
      */
-    #[DataProvider('requestedStoreIds')]
+    #[DataProviderAttribute('requestedStoreIds')]
     public function testNonAdminCallerIsScopedToCurrentStore(?int $requestedStoreId): void
     {
         $this->givenUserType(UserContextInterface::USER_TYPE_GUEST);
@@ -178,8 +182,10 @@ class RetailerRepositoryPluginTest extends TestCase
 
     /**
      * Admin users and integrations keep the store id they ask for.
+     *
+     * @dataProvider backendUserTypes
      */
-    #[DataProvider('backendUserTypes')]
+    #[DataProviderAttribute('backendUserTypes')]
     public function testBackendCallerKeepsRequestedStore(int $userType): void
     {
         $this->givenUserType($userType);
