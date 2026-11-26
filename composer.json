@@ -20,7 +20,7 @@
         "magento/module-authorization": ">=100.4.0",
         "magento/module-eav": ">=102.1.4",
         "magento/module-store": ">=101.1.4",
-        "smile/module-seller": "^2.0"
+        "smile/module-seller": "~2.0.2"
     },
     "require-dev": {
         "smile/magento2-smilelab-quality-suite": "^4.0"
