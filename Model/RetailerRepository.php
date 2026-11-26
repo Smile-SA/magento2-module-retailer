@@ -16,7 +16,6 @@ use Smile\Retailer\Api\Data\RetailerSearchResultsInterfaceFactory;
 use Smile\Retailer\Api\RetailerRepositoryInterface;
 use Smile\Retailer\Model\ResourceModel\Retailer\Collection;
 use Smile\Retailer\Model\ResourceModel\Retailer\CollectionFactory;
-use Smile\Seller\Api\Data\SellerInterface;
 use Smile\Seller\Model\SellerRepository;
 use Smile\Seller\Model\SellerRepositoryFactory;
 
@@ -46,7 +45,7 @@ class RetailerRepository implements RetailerRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function save(SellerInterface $retailer)
+    public function save($retailer)
     {
         return $this->sellerRepository->save($retailer);
     }
@@ -106,7 +105,7 @@ class RetailerRepository implements RetailerRepositoryInterface
     /**
      * @inheritdoc
      */
-    public function delete(SellerInterface $retailer): bool
+    public function delete($retailer): bool
     {
         return $this->sellerRepository->delete($retailer);
     }

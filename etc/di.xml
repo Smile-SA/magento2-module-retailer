@@ -2,7 +2,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Smile\Retailer\Api\Data\RetailerInterface" type="Smile\Retailer\Model\Retailer"/>
     <preference for="Smile\Retailer\Api\RetailerRepositoryInterface" type="Smile\Retailer\Model\RetailerRepository"/>
-    <preference for="Smile\Retailer\Api\Data\RetailerSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="Smile\Retailer\Api\Data\RetailerSearchResultsInterface" type="Smile\Retailer\Model\RetailerSearchResults"/>
 
     <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
